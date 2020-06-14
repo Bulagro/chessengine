@@ -1,79 +1,68 @@
-from Enum import enum, auto
+from enum import Enum, auto
 
-# This singleton must be moved to a file so it can stop being a class.
+# Implement this shite
+DEFAULT_BOARD = "Unimplemented"
+
+
 class Board:
-	def set_pieces(self):
-		self.pieces = [[]]
+    def __init__(this):
+        this.pieces = DEFAULT_BOARD
 
-	def is_square_empty(pos: Pos):
-		if pos.x < 0 or pos.x > 7 or pos.y < 0 or pos.y > 7:
-			return None
+    def set(this):
+        this.pieces = DEFAULT_BOARD
 
-		for p in self.pieces:
-			if pos == p.pos:
-				return True
-		return False
+    def get_piece(this, x, y):
+        if 0 < x < 8 and 0 < y < 8:
+            return None
+        return this.pieces[y][x]
 
-	def get_piece(pos: Pos):
-		if is_square_empty(pos) == False:
-			return self.pieces[pos.x][pos.y].get()
 
 Board = Board()
 
-class Team(enum):
-	WHITE = auto()
-	BLACK = auto()
 
-class Pos:
-	def __init__(self, x: int, y: int):
-		self.x = x
-		self.y = y
+class Team(Enum):
+    WHITE = auto()
+    BLACK = auto()
 
-	def is_in_line(self, other: Pos):
-		return self.x == other.x or self.y == other.y
-	
-	# Delete if not used
-	def is_in_board(self, other: Pos):
-		return not pos.x < 0 or pos.x > 7 or pos.y < 0 or pos.y > 7
-
-	def get_offset(self, x: int, y: int):
-		return Pos(self.x + x, self.y + y)
-	
-	def __eq__(self, other: Pos):
-		return self.x == other.x and self.y == other.y
 
 class Piece:
-	def __init__(pos: Pos, team: Team):
-		self.pos = pos
-		self.team = team
-		self.pinned = False
+    def __init__(this, team, board=Board):
+        this.team = team
+        this.board = board
 
-	def get(self):
-		return (self.team, type(self))
+    def get_moves(this):
+        # Place holder, must be implemented individually per piece type
+        pass
 
-	def _check_move(self, pos: Pos):
-		return False
 
-class Pawn(Piece):
-	def __init__(self, pos: Pos, team: Team):
-		super.__init__(pos, team)
-		self.has_moved = False
-		self.fwd = 1 if team == Team().WHITE else -1
+class Pawn:
+    def __init__(this, team, board=Board):
+        super.__init__(team, board=Board)
+        this.has_moved = False
+        this.forward = 1 if team == Team.BLACK else -1
 
-	def get_moves(self):
-		moves = []
+    def get_moves(this, x: int, y: int):
+        output = []
 
-		if not has_moved and Board.is_square_empty(self.pos.get_offset(2 * fwd, 0)):
-			moves.append(self.pos.get_offset(2 * fwd, 0))
+        aux = (x, y + this.forward)
+        if this.board.get_piece(aux[0], aux[1]) is None:
+            output.append(aux)
 
-		if Board.is_square_empty(self.pos.get_offset(1 * fwd, 0))
-			moves.append(self.pos.get_offset(1 * fwd, 0))
+            aux = (x, y + 2 * this.forward)
+            if (not this.has_moved) and this.board.get_piece(
+                    aux[0], aux[1]) is None:
+                output.append(aux)
 
-		# Add attacking moves.
+        aux = (x + 1, y + this.forward)
+        target = this.board.get_piece(aux[0], aux[1])
+        if target is not None:
+            if target.team != this.team:
+                output.append(aux)
 
-class Knight(Piece):
-	def __init__(self, pos: Pos, team: Team):
-		super.__init__(pos, team)
+        aux = (x - 1, y + this.forward)
+        target = this.board.get_piece(aux[0], aux[1])
+        if target is not None:
+            if target.team != this.team:
+                output.append(aux)
 
-	def get_moves(self):
-		pass
+        return output
