@@ -13,7 +13,7 @@ class Board:
 
     def get_piece(this, x, y):
         if 0 < x < 8 and 0 < y < 8:
-            raise Exception("Invalid coordinate.")
+            return False
 
         return this.pieces[y][x]
 
