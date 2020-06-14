@@ -45,21 +45,25 @@ class Pawn:
     def get_moves(this, x: int, y: int):
         output = []
 
+        # Forward one square
         aux = (x, y + this.forward)
         if this.board.get_piece(aux[0], aux[1]) is None:
             output.append(aux)
 
+            # Forward two sqwares
             aux = (x, y + 2 * this.forward)
             if (not this.has_moved) and this.board.get_piece(
                     aux[0], aux[1]) is None:
                 output.append(aux)
 
+        # Attack diagonal right
         aux = (x + 1, y + this.forward)
         target = this.board.get_piece(aux[0], aux[1])
         if target is not None:
             if target.team != this.team:
                 output.append(aux)
 
+        # Attack diagonal left
         aux = (x - 1, y + this.forward)
         target = this.board.get_piece(aux[0], aux[1])
         if target is not None:
