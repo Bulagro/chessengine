@@ -59,15 +59,13 @@ class Pawn:
         # Attack diagonal right
         aux = (x + 1, y + this.forward)
         target = this.board.get_piece(aux[0], aux[1])
-        if target is not None:
-            if target.team != this.team:
-                output.append(aux)
+        if target and target.team != this.team:
+            output.append(aux)
 
         # Attack diagonal left
         aux = (x - 1, y + this.forward)
         target = this.board.get_piece(aux[0], aux[1])
-        if target is not None:
-            if target.team != this.team:
-                output.append(aux)
+        if target and target.team != this.team:
+            output.append(aux)
 
         return output
