@@ -1,7 +1,14 @@
 from enum import Enum, auto
 
-# Implement this shite
-DEFAULT_BOARD = "Unimplemented"
+# This is a placeholder :)
+DEFAULT_BOARD = [
+    ['WRook', 'WKnight', 'WBishop', 'WQueen', 'WKing', 'WBishop', 'WKnight', 'WRook'],
+    [None] * 8,
+    [None] * 8,
+    [None] * 8,
+    [None] * 8,
+    ['BRook', 'BKnight', 'BBishop', 'BQueen', 'BKing', 'BBishop', 'BKnight', 'BRook'],
+    ]
 
 
 class Board:
