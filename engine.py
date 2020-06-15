@@ -9,12 +9,12 @@ class Board:
         # This is a placeholder :)
         this.pieces = [
             [Rook(Team.WHITE, this), 'WKnight', 'WBishop', 'WQueen', 'WKing', 'WBishop', 'WKnight', Rook(Team.WHITE, this)],
-            [Pawn(Team.BLACK, this)] * 8
-            [None] * 8,
-            [None] * 8,
-            [None] * 8,
-            [None] * 8,
             [Pawn(Team.WHITE, this)] * 8
+            [None] * 8,
+            [None] * 8,
+            [None] * 8,
+            [None] * 8,
+            [Pawn(Team.BLACK, this)] * 8
             [Rook(Team.BLACK, this), 'BKnight', 'BBishop', 'BQueen', 'BKing', 'BBishop', 'BKnight', Rook(Team.BLACK, this)],
         ]
 
@@ -23,9 +23,6 @@ class Board:
             return False
 
         return this.pieces[y][x]
-
-
-Board = Board()
 
 
 class Team(Enum):
