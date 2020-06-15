@@ -15,11 +15,6 @@ class PieceEnum(Enum):
 class Board:
     def __init__(this):
         this.set()
-        this.move_map = {
-            PieceEnum.PAWN : this.get_pawn_moves,
-            PieceEnum.ROOK : this.get_rook_moves,
-            None : [],
-            }
 
     def set(this):
         # This is NOT a placeholder :)
@@ -112,6 +107,12 @@ class Board:
         return None
 
     def move_piece(this, x, y):
+        move_map = {
+            PieceEnum.PAWN : this.get_pawn_moves,
+            PieceEnum.ROOK : this.get_rook_moves,
+            None : [],
+            }
+
         piece = this.get_piece(x ,y)
 
         return move_map[piece[0]](x, y, piece[1]) if piece else []
