@@ -1,25 +1,25 @@
 from enum import Enum, auto
 
-# This is a placeholder :)
-DEFAULT_BOARD = [
-    ['WRook', 'WKnight', 'WBishop', 'WQueen', 'WKing', 'WBishop', 'WKnight', 'WRook'],
-    [None] * 8,
-    [None] * 8,
-    [None] * 8,
-    [None] * 8,
-    ['BRook', 'BKnight', 'BBishop', 'BQueen', 'BKing', 'BBishop', 'BKnight', 'BRook'],
-    ]
-
 
 class Board:
     def __init__(this):
-        this.pieces = DEFAULT_BOARD
+        this.set()
 
     def set(this):
-        this.pieces = DEFAULT_BOARD
+        # This is a placeholder :)
+        this.pieces = [
+            [Rook(Team.WHITE, this), 'WKnight', 'WBishop', 'WQueen', 'WKing', 'WBishop', 'WKnight', Rook(Team.WHITE, this)],
+            [Pawn(Team.BLACK, this)] * 8
+            [None] * 8,
+            [None] * 8,
+            [None] * 8,
+            [None] * 8,
+            [Pawn(Team.WHITE, this)] * 8
+            [Rook(Team.BLACK, this), 'BKnight', 'BBishop', 'BQueen', 'BKing', 'BBishop', 'BKnight', Rook(Team.BLACK, this)],
+        ]
 
     def get_piece(this, x, y):
-        if 0 < x < 8 and 0 < y < 8:
+        if not (0 <= x <= 7 and 0 <= y <= 7):
             return False
 
         return this.pieces[y][x]
@@ -34,7 +34,7 @@ class Team(Enum):
 
 
 class Piece:
-    def __init__(this, team, board=Board):
+    def __init__(this, team, board):
         this.team = team
         this.board = board
 
@@ -44,8 +44,8 @@ class Piece:
 
 
 class Pawn:
-    def __init__(this, team, board=Board):
-        super.__init__(team, board=Board)
+    def __init__(this, team, board):
+        super.__init__(team, board)
         this.has_moved = False
         this.forward = 1 if team == Team.BLACK else -1
 
@@ -76,3 +76,22 @@ class Pawn:
             output.append(aux)
 
         return output
+
+
+class Rook(Piece):
+    def __init__(this, team, board):
+        super.__init__(team, board)
+
+    def get_moves(this, x, y):
+        output = []
+        for tempname in [[1, 0], [0, 1], [-1, 0], [0, -1]]:
+            i = 1
+            while (target := this.board.get_piece(
+                (tx := x + tempname[0] * i),
+                (ty := y + tempname[1] * i))
+            ) is None:
+                i += 1
+                output.append((tx, ty))
+            else:
+                if target and target.team != this.team:
+                    output.append((tx, ty))
