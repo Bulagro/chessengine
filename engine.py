@@ -5,12 +5,12 @@ class Team(Enum):
     BLACK = auto()
 
 class PieceEnum(Enum):
-    PAWN =   auto()
-    ROOK =   auto()
+    PAWN   = auto()
+    ROOK   = auto()
     KNIGHT = auto()
     BISHOP = auto()
-    QUEEN =  auto()
-    KING =   auto()
+    QUEEN  = auto()
+    KING   = auto()
     
 class Board:
     def __init__(this):
@@ -117,7 +117,6 @@ class Board:
 
         return move_map[piece[0]](x, y, piece[1]) if piece else []
 
-@dataclass
 class Piece:
     def __init__(this, name: PieceEnum, team: Team):
         this.name = name
