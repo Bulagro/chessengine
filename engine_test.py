@@ -2,7 +2,7 @@ import engine
 import unittest
 
 
-def custom_board(placement: str):
+def custom_board(board: str):
     pieces_dict = {
         # Upper case for white team
         'K': engine.Piece(engine.PieceEnum.KING, engine.Team.WHITE),
@@ -22,11 +22,11 @@ def custom_board(placement: str):
 
         '.': None,
     }
-    placement = placement.replace(' ', '').replace('\n', '').replace('\t', '')
+    board = board.replace(' ', '').replace('\n', '').replace('\t', '')
     valid_pieces = tuple('KkQqBbNnRrPp.')
 
     return [
-        [pieces_dict[placement[8 * i + j]] for j in range(8) if placement[8 * i + j] in valid_pieces]
+        [pieces_dict[board[8 * i + j]] for j in range(8) if board[8 * i + j] in valid_pieces]
         for i in range(8)
         ]
 
