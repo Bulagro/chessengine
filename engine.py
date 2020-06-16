@@ -1,17 +1,20 @@
 from enum import Enum, auto
 
+
 class Team(Enum):
     WHITE = auto()
     BLACK = auto()
 
+
 class PieceEnum(Enum):
-    PAWN   = auto()
-    ROOK   = auto()
+    PAWN = auto()
+    ROOK = auto()
     KNIGHT = auto()
     BISHOP = auto()
-    QUEEN  = auto()
-    KING   = auto()
-    
+    QUEEN = auto()
+    KING = auto()
+
+
 class Board:
     def __init__(this):
         this.set()
@@ -20,14 +23,14 @@ class Board:
         # This is NOT a placeholder :)
         this.pieces = [
             [
-            Piece(PieceEnum.ROOK,   Team.WHITE),
-            Piece(PieceEnum.KNIGHT, Team.WHITE),
-            Piece(PieceEnum.BISHOP, Team.WHITE),
-            Piece(PieceEnum.QUEEN,  Team.WHITE),
-            Piece(PieceEnum.KING,   Team.WHITE),
-            Piece(PieceEnum.BISHOP, Team.WHITE),
-            Piece(PieceEnum.KNIGHT, Team.WHITE),
-            Piece(PieceEnum.ROOK,   Team.WHITE),            
+                Piece(PieceEnum.ROOK, Team.WHITE),
+                Piece(PieceEnum.KNIGHT, Team.WHITE),
+                Piece(PieceEnum.BISHOP, Team.WHITE),
+                Piece(PieceEnum.QUEEN, Team.WHITE),
+                Piece(PieceEnum.KING, Team.WHITE),
+                Piece(PieceEnum.BISHOP, Team.WHITE),
+                Piece(PieceEnum.KNIGHT, Team.WHITE),
+                Piece(PieceEnum.ROOK, Team.WHITE),
             ],
             [Piece(PieceEnum.PAWN, Team.WHITE)] * 8,
             [None] * 8,
@@ -36,14 +39,14 @@ class Board:
             [None] * 8,
             [Piece(PieceEnum.PAWN, Team.BLACK)] * 8,
             [
-            Piece(PieceEnum.ROOK,   Team.WHITE),
-            Piece(PieceEnum.KNIGHT, Team.WHITE),
-            Piece(PieceEnum.BISHOP, Team.WHITE),
-            Piece(PieceEnum.QUEEN,  Team.WHITE),
-            Piece(PieceEnum.KING,   Team.WHITE),
-            Piece(PieceEnum.BISHOP, Team.WHITE),
-            Piece(PieceEnum.KNIGHT, Team.WHITE),
-            Piece(PieceEnum.ROOK,   Team.WHITE),            
+                Piece(PieceEnum.ROOK, Team.WHITE),
+                Piece(PieceEnum.KNIGHT, Team.WHITE),
+                Piece(PieceEnum.BISHOP, Team.WHITE),
+                Piece(PieceEnum.QUEEN, Team.WHITE),
+                Piece(PieceEnum.KING, Team.WHITE),
+                Piece(PieceEnum.BISHOP, Team.WHITE),
+                Piece(PieceEnum.KNIGHT, Team.WHITE),
+                Piece(PieceEnum.ROOK, Team.WHITE),
             ],
         ]
 
@@ -96,7 +99,7 @@ class Board:
                 while (target := this.get_piece(
                     (tx := x + tempname[0] * i),
                     (ty := y + tempname[1] * i))
-                    ) is None:
+                ) is None:
                     i += 1
                     output.append((tx, ty))
                 else:
@@ -108,14 +111,15 @@ class Board:
 
     def move_piece(this, x, y):
         move_map = {
-            PieceEnum.PAWN : this.get_pawn_moves,
-            PieceEnum.ROOK : this.get_rook_moves,
-            None : [],
-            }
+            PieceEnum.PAWN: this.get_pawn_moves,
+            PieceEnum.ROOK: this.get_rook_moves,
+            None: [],
+        }
 
-        piece = this.get_piece(x ,y)
+        piece = this.get_piece(x, y)
 
         return move_map[piece[0]](x, y, piece[1]) if piece else []
+
 
 class Piece:
     def __init__(this, name: PieceEnum, team: Team):
@@ -124,7 +128,6 @@ class Piece:
 
     def get(this):
         return {
-            'name' : this.name,
-            'team' : this.team,
-            }
-
+            'name': this.name,
+            'team': this.team,
+        }
