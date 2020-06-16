@@ -25,21 +25,10 @@ def custom_board(placement: str):
     placement = placement.replace(' ', '').replace('\n', '').replace('\t', '')
     valid_pieces = tuple('KkQqBbNnRrPp.')
 
-    i = 0
-    board, line = [], []
-    while i < len(placement):
-        if placement[i] in valid_pieces:
-            line.append(pieces_dict[placement[i]])
-
-        if len(line) == 8:
-            board.append(line)
-            line = []
-
-        i += 1
-
-    board.append(line)
-
-    return board
+    return [
+        [pieces_dict[placement[8 * i + j]] for j in range(8) if placement[8 * i + j] in valid_pieces]
+        for i in range(8)
+        ]
 
 
 class TestPawnMoves(unittest.TestCase):
