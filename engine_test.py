@@ -67,9 +67,32 @@ class TestPawnMoves(unittest.TestCase):
 
         this.assertEqual(expected_moves, actual_moves)
 
-    @unittest.skip("Unimplemented")
-    def test_pawn_attacking_moves(this):
-        pass
+    def test_pawn_single_attack_move(this):
+        B = engine.Board()
+        B.pieces = custom_board(
+            """
+            ........
+            ........
+            ........
+            ........
+            ...P....
+            ..p.....
+            ........
+            ........
+            """)
+
+        # White
+        expected_moves = [(3, 5), (2, 5)]
+        actual_moves = B.get_pawn_moves(3, 4)
+
+        this.assertEqual(expected_moves, actual_moves)
+
+        # Black
+        expected_moves = [(2, 4), (3, 4)]
+        actual_moves = B.get_pawn_moves(2, 5)
+
+        this.assertEqual(expected_moves, actual_moves)
+
 
     @unittest.skip("Unimplemented")
     def test_pinned_pawn(this):
