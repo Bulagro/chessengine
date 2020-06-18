@@ -94,7 +94,7 @@ class Board:
     def get_rook_moves(this, x: int, y: int):
         if p := this.get_piece(x, y):
             output = []
-            for tempname in [[1, 0], [0, 1], [-1, 0], [0, -1]]:
+            for tempname in [[1, 0], [-1, 0], [0, 1], [0, -1]]:
                 i = 1
                 while (target := this.get_piece(
                     (tx := x + tempname[0] * i),
