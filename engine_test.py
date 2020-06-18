@@ -95,9 +95,29 @@ class TestPawnMoves(unittest.TestCase):
 
         this.assertEqual(expected_moves, actual_moves)
 
-    @unittest.skip("Unimplemented")
     def test_rook_free_movement(this):
-        pass
+        B = engine.Board()
+        B.pieces = custom_board(
+            """
+            r.......
+            ........
+            ........
+            ........
+            ........
+            ........
+            ........
+            ........
+            """)
+
+        expected_moves = (
+            [(i, 0) for i in range(1, 8)] +
+            [(0, i) for i in range(1, 8)]
+            )
+
+        actual_moves = B.get_rook_moves(0, 0)
+
+        this.assertEqual(expected_moves, actual_moves)
+
 
 
 if __name__ == "__main__":
