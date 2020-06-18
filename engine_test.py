@@ -26,9 +26,10 @@ def custom_board(board: str):
     valid_pieces = tuple('KkQqBbNnRrPp.')
 
     return [
-        [pieces_dict[board[8 * i + j]] for j in range(8) if board[8 * i + j] in valid_pieces]
+        [pieces_dict[board[8 * i + j]]
+         for j in range(8) if board[8 * i + j] in valid_pieces]
         for i in range(8)
-        ]
+    ]
 
 
 class TestPawnMoves(unittest.TestCase):
@@ -82,7 +83,6 @@ class TestPawnMoves(unittest.TestCase):
 
         this.assertEqual(expected_moves, actual_moves)
 
-
     @unittest.skip("Unimplemented")
     def test_pinned_pawn(this):
         pass
@@ -118,7 +118,46 @@ class TestPawnMoves(unittest.TestCase):
 
         this.assertEqual(expected_moves, actual_moves)
 
+    def test_rook_free_movement_in_middle_of_the_board(this):
+        B = engine.Board()
+        B.pieces = custom_board(
+            """
+            ........
+            ........
+            ........
+            ........
+            ...R....
+            ........
+            ........
+            ........
+            """)
 
+        expected_moves = (
+            [(i, 4) for a in [(4, 8, 1), (2, -1, -1)] for i in range(a[0], a[1], a[2])] +
+            [(3, i) for a in [(5, 8, 1), (3, -1, -1)] for i in range(a[0], a[1], a[2])]
+            )
+        actual_moves = B.get_rook_moves(3, 4)
+
+        this.assertEqual(expected_moves, actual_moves)
+
+    def test_rook_against_pawns(this):
+        B = engine.Board()
+        B.pieces = custom_board(
+            """
+            Rp......
+            p.......
+            ........
+            ........
+            ........
+            ........
+            ........
+            ........
+            """)
+
+        expected_moves = [(1, 0), (0, 1)]
+        actual_moves = B.get_rook_moves(0, 0)
+
+        this.assertEqual(expected_moves, actual_moves)
 
 if __name__ == "__main__":
     unittest.main()
