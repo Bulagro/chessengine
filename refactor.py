@@ -16,32 +16,32 @@ class Chess:
         # Each function must be named by the letter representation of the
         # desired piece and have a comment specifying which piece it is
 
-        @_get_piece_moves
+        @get_piece_moves
         # Pawn
         def p(self, coords=None):
             pass
 
-        @_get_piece_moves
+        @get_piece_moves
         # Rook
         def r(self, coords=None):
             pass
 
-        @_get_piece_moves
+        @get_piece_moves
         # Knight
         def n(self, coords=None):
             pass
 
-        @_get_piece_moves
+        @get_piece_moves
         # Bishop
         def b(self, coords=None):
             pass
 
-        @_get_piece_moves
+        @get_piece_moves
         # Queen
         def q(self, coords=None):
             pass
 
-        @_get_piece_moves
+        @get_piece_moves
         # King
         def k(self, coords=None):
             pass
