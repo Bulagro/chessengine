@@ -1,3 +1,18 @@
+from enum import Enum, auto
+
+class PieceTeam(Enum):
+    WHITE = auto()
+    BLACK = auto()
+
+class PieceName(Enum):
+    KING   = auto()
+    QUEEN  = auto()
+    BISHOP = auto()
+    KNIGHT = auto()
+    ROOK   = auto()
+    PAWN   = auto()
+
+
 class Chess:
     """
     Wrapper for the main logic of the chess engine.
@@ -80,10 +95,26 @@ class Chess:
         Returns the piece the cursor's pointing at.
         """
 
+        piece_info = {
+            'p' : (PieceName.PAWN,   PieceTeam.BLACK),
+            'P' : (PieceName.PAWN,   PieceTeam.WHITE),
+            'r' : (PieceName.ROOK,   PieceTeam.BLACK),
+            'R' : (PieceName.ROOK,   PieceTeam.WHITE),
+            'n' : (PieceName.KNIGHT, PieceTeam.BLACK),
+            'N' : (PieceName.KNIGHT, PieceTeam.WHITE),
+            'b' : (PieceName.BISHOP, PieceTeam.BLACK),
+            'B' : (PieceName.BISHOP, PieceTeam.WHITE),
+            'q' : (PieceName.QUEEN,  PieceTeam.BLACK),
+            'Q' : (PieceName.QUEEN,  PieceTeam.WHITE),
+            'k' : (PieceName.KING,   PieceTeam.BLACK),
+            'K' : (PieceName.KING,   PieceTeam.WHITE),
+            '.' : None,
+        }
+
         if 0 <= x <= 7 and 0 <= y <= 7:
-            return self.board[y][x]
+            return piece_info[self.board[y][x]]
         else:
-            return None
+            return False
 
     def get_moves(self):
         """
