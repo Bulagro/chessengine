@@ -7,7 +7,7 @@ class Chess:
         self.set()
         self.moves = {}
 
-        def move(f):
+        def get_piece_moves(f):
             self.moves.setdefault(f.__name__, f)
 
         # This is where we define the getters for the legal moves of each
@@ -16,32 +16,32 @@ class Chess:
         # Each function must be named by the letter representation of the
         # desired piece and have a comment specifying which piece it is
 
-        @move
+        @_get_piece_moves
         # Pawn
         def p(self, coords=None):
             pass
 
-        @move
+        @_get_piece_moves
         # Rook
         def r(self, coords=None):
             pass
 
-        @move
+        @_get_piece_moves
         # Knight
         def n(self, coords=None):
             pass
 
-        @move
+        @_get_piece_moves
         # Bishop
         def b(self, coords=None):
             pass
 
-        @move
+        @_get_piece_moves
         # Queen
         def q(self, coords=None):
             pass
 
-        @move
+        @_get_piece_moves
         # King
         def k(self, coords=None):
             pass
