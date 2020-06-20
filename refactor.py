@@ -23,7 +23,7 @@ class Chess:
         self.moves = {}
 
         def get_piece_moves(f):
-            self.get_piece_moves.setdefault(f.__name__, f)
+            self.moves.setdefault(f.__name__, f)
 
         # This is where we define the getters for the legal moves of each
         # piece type
