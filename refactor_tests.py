@@ -23,6 +23,13 @@ class TestChessClassFunctions(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
+    def test_get_piece_out_of_board(self):
+        self.assertFalse(Chess().get_piece(10, 10))
+
+
+class TestPieceMovement(unittest.TestCase):
+    def test_pawn_moves(self):
+        pass
 
 if __name__ == '__main__':
     unittest.main()
