@@ -75,6 +75,16 @@ class Chess:
         if 0 <= (aux := self.cursor[1] + y) <= 7:
             self.cursor[1] = aux
 
+    def get_piece(self, x: int, y: int):
+        """
+        Returns the piece the cursor's pointing at.
+        """
+
+        if 0 <= x <= 7 and 0 <= y <= 7:
+            return self.board[y][x]
+        else:
+            return None
+
     def get_moves(self):
         """
         Gets all legal moves for whatever piece is in the cursor's position.
