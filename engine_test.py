@@ -3,6 +3,7 @@ import unittest
 
 
 class TestChessClassFunctions(unittest.TestCase):
+
     def test_get_piece_normal_board_layout(self):
         C = Chess()
 
@@ -29,6 +30,7 @@ class TestChessClassFunctions(unittest.TestCase):
 
 
 class TestPawnMovement(unittest.TestCase):
+
     def test_pawn_moves_starting_position(self):
         C = Chess()
 
@@ -65,6 +67,7 @@ class TestPawnMovement(unittest.TestCase):
 
 
 class TestRookMovement(unittest.TestCase):
+
     def test_rook_movement_init_pos(self):
         C = Chess()
 
@@ -86,10 +89,8 @@ class TestRookMovement(unittest.TestCase):
             '........',
         )
 
-        expected = (
-            [(i, 0) for i in range(1, 8)] +
-            [(0, i) for i in range(1, 8)]
-        )
+        expected = ([(i, 0) for i in range(1, 8)] +
+                    [(0, i) for i in range(1, 8)])
         actual = C.r(0, 0)
 
         self.assertEqual(expected, actual)
@@ -107,16 +108,19 @@ class TestRookMovement(unittest.TestCase):
             '........',
         )
 
-        expected = (
-            [(i, 4) for a in [(4, 8, 1), (2, -1, -1)] for i in range(a[0], a[1], a[2])] +
-            [(3, i) for a in [(5, 8, 1), (3, -1, -1)] for i in range(a[0], a[1], a[2])]
-        )
+        expected = ([(i, 4)
+                     for a in [(4, 8, 1), (2, -1, -1)]
+                     for i in range(a[0], a[1], a[2])] +
+                    [(3, i)
+                     for a in [(5, 8, 1), (3, -1, -1)]
+                     for i in range(a[0], a[1], a[2])])
         actual = C.r(3, 4)
 
         self.assertEqual(expected, actual)
 
 
 class TestKnightMovement(unittest.TestCase):
+
     def test_knight_init_pos(self):
         C = Chess()
 
@@ -143,8 +147,9 @@ class TestKnightMovement(unittest.TestCase):
             '........',
         )
 
-        expected = [(4 + x, 4 + y) for x, y in [[1, 2], [-1, 2],
-                                                [1, -2], [-1, -2], [2, 1], [2, -1], [-2, 1], [-2, -1]]]
+        expected = [(4 + x, 4 + y)
+                    for x, y in [(1, 2), (-1, 2), (1, -2), (-1, -2), (2, 1),
+                                 (2, -1), (-2, 1), (-2, -1)]]
         actual = C.n(4, 4)
 
         self.assertEqual(expected, actual)
