@@ -130,6 +130,25 @@ class TestKnightMovement(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
+    def test_knight_movement_free_board(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '........',
+            '........',
+            '....k...',
+            '........',
+            '........',
+            '........',
+        )
+
+        expected = [(4 + x, 4 + y) for x, y in [[1, 2], [-1, 2],
+                                                [1, -2], [-1, -2], [2, 1], [2, -1], [-2, 1], [-2, -1]]]
+        actual = C.n(4, 4)
+
+        self.assertEqual(expected, actual)
+
 
 if __name__ == '__main__':
     unittest.main()
