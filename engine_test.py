@@ -64,5 +64,57 @@ class TestPawnMovement(unittest.TestCase):
         self.assertEqual(expected, actual)
 
 
+class TestRookMovement(unittest.TestCase):
+    def test_rook_movement_init_pos(self):
+        C = Chess()
+
+        self.assertEqual([], C.r(0, 0))
+        self.assertEqual([], C.r(7, 0))
+        self.assertEqual([], C.r(7, 0))
+        self.assertEqual([], C.r(7, 7))
+
+    def test_rook_in_corner_with_no_other_pieces(self):
+        C = Chess()
+        C.board = (
+            'r.......',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+        )
+
+        expected = (
+            [(i, 0) for i in range(1, 8)] +
+            [(0, i) for i in range(1, 8)]
+        )
+        actual = C.r(0, 0)
+
+        self.assertEqual(expected, actual)
+
+    def test_rook_movement_in_middle_of_board_with_no_other_pieces(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '........',
+            '........',
+            '...R....',
+            '........',
+            '........',
+            '........',
+        )
+
+        expected = (
+            [(i, 4) for a in [(4, 8, 1), (2, -1, -1)] for i in range(a[0], a[1], a[2])] +
+            [(3, i) for a in [(5, 8, 1), (3, -1, -1)] for i in range(a[0], a[1], a[2])]
+        )
+        actual = C.r(3, 4)
+
+        self.assertEqual(expected, actual)
+
+
 if __name__ == '__main__':
     unittest.main()
