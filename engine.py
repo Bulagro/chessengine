@@ -36,7 +36,6 @@ class Chess:
     # @get_piece_moves
     # Pawn
     def p(self, x: int, y: int):
-
         if p := self.get_piece(x, y):
             piece, team = p
 
@@ -74,8 +73,23 @@ class Chess:
 
     # @get_piece_moves
     # Rook
-    def r(self, coords=None):
-        pass
+    def r(self, x: int, y: int):
+        if p := self.get_piece(x, y):
+            output = []
+            for tempname in [[1, 0], [-1, 0], [0, 1], [0, -1]]:
+                i = 1
+                while (target := self.get_piece(
+                    (tx := x + tempname[0] * i),
+                    (ty := y + tempname[1] * i))
+                ) is None:
+                    i += 1
+                    output.append((tx, ty))
+                else:
+                    if target and target[1] != p[1]:
+                        output.append((tx, ty))
+
+            return output
+        return None
 
     # @get_piece_moves
     # Knight
