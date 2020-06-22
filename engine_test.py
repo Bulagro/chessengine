@@ -125,6 +125,11 @@ class TestKnightMovement(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
+        expected = [(7, 5), (5, 5)]
+        actual = C.n(6, 7)
+
+        self.assertEqual(expected, actual)
+
 
 if __name__ == '__main__':
     unittest.main()
