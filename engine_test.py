@@ -28,7 +28,7 @@ class TestChessClassFunctions(unittest.TestCase):
         self.assertFalse(Chess().get_piece(10, 10))
 
 
-class TestPieceMovement(unittest.TestCase):
+class TestPawnMovement(unittest.TestCase):
     def test_pawn_moves_starting_position(self):
         C = Chess()
 
