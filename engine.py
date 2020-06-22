@@ -1,133 +1,175 @@
 from enum import Enum, auto
 
 
-class Team(Enum):
+class PieceTeam(Enum):
     WHITE = auto()
     BLACK = auto()
 
 
-class PieceEnum(Enum):
-    PAWN = auto()
-    ROOK = auto()
-    KNIGHT = auto()
-    BISHOP = auto()
-    QUEEN = auto()
+class PieceName(Enum):
     KING = auto()
+    QUEEN = auto()
+    BISHOP = auto()
+    KNIGHT = auto()
+    ROOK = auto()
+    PAWN = auto()
 
 
-class Board:
-    def __init__(this):
-        this.set()
+class Chess:
+    """
+    Wrapper for the main logic of the chess engine.
+    """
 
-    def set(this):
-        # This is NOT a placeholder :)
-        this.pieces = [
-            [
-                Piece(PieceEnum.ROOK, Team.WHITE),
-                Piece(PieceEnum.KNIGHT, Team.WHITE),
-                Piece(PieceEnum.BISHOP, Team.WHITE),
-                Piece(PieceEnum.QUEEN, Team.WHITE),
-                Piece(PieceEnum.KING, Team.WHITE),
-                Piece(PieceEnum.BISHOP, Team.WHITE),
-                Piece(PieceEnum.KNIGHT, Team.WHITE),
-                Piece(PieceEnum.ROOK, Team.WHITE),
-            ],
-            [Piece(PieceEnum.PAWN, Team.WHITE)] * 8,
-            [None] * 8,
-            [None] * 8,
-            [None] * 8,
-            [None] * 8,
-            [Piece(PieceEnum.PAWN, Team.BLACK)] * 8,
-            [
-                Piece(PieceEnum.ROOK, Team.WHITE),
-                Piece(PieceEnum.KNIGHT, Team.WHITE),
-                Piece(PieceEnum.BISHOP, Team.WHITE),
-                Piece(PieceEnum.QUEEN, Team.WHITE),
-                Piece(PieceEnum.KING, Team.WHITE),
-                Piece(PieceEnum.BISHOP, Team.WHITE),
-                Piece(PieceEnum.KNIGHT, Team.WHITE),
-                Piece(PieceEnum.ROOK, Team.WHITE),
-            ],
-        ]
+    def __init__(self):
+        self.set()
+        self.moves = {}
 
-    def get_piece(this, x: int, y: int):
-        if not (0 <= x <= 7 and 0 <= y <= 7):
-            return False
+    def get_piece_moves(self, f):
+        self.moves.setdefault(f.__name__, f)
 
-        piece = this.pieces[y][x]
-        return None if not piece else piece.get()
+        # This is where we define the getters for the legal moves of each
+        # piece type
 
-    def get_pawn_moves(this, x: int, y: int):
-        if p := this.get_piece(x, y):
-            forward = -1 if p['team'] == Team.BLACK else 1
-            has_moved = (y != (6 if p['team'] == Team.BLACK else 1))
+        # Each function must be named by the letter representation of the
+        # desired piece and have a comment specifying which piece it is
+
+    # @get_piece_moves
+    # Pawn
+    def p(self, x: int, y: int):
+        if p := self.get_piece(x, y):
+            # p[0] -> piece (in this case PieceTeam.PAWN)
+            # p[1], target[1] -> team of the pawn and target, respectively.
+
+            forward = 1 if p[1] == PieceTeam.BLACK else -1
+            has_moved = (y != (1 if p[1] == PieceTeam.BLACK else 6))
             output = []
 
             # Forward one square
             aux = (x, y + forward)
-            if this.get_piece(aux[0], aux[1]) is None:
+            if self.get_piece(aux[0], aux[1]) is None:
                 output.append(aux)
 
                 # Forward two sqwares
                 aux = (x, y + 2 * forward)
-                if (not has_moved) and this.get_piece(
+                if (not has_moved) and self.get_piece(
                         aux[0], aux[1]) is None:
                     output.append(aux)
 
-            # Attack diagonal right
+            # Attack right diagonal
             aux = (x + 1, y + forward)
-            target = this.get_piece(aux[0], aux[1])
-            if target and target['team'] != p['team']:
+            target = self.get_piece(aux[0], aux[1])
+            if target and target[1] != p[1]:
                 output.append(aux)
 
-            # Attack diagonal left
+            # Attack left diagonal
             aux = (x - 1, y + forward)
-            target = this.get_piece(aux[0], aux[1])
-            if target and target['team'] != p['team']:
+            target = self.get_piece(aux[0], aux[1])
+            if target and target[1] != p[1]:
                 output.append(aux)
 
             return output
 
         # Invalid pos (OOB)
-        return None
+        return False
 
-    def get_rook_moves(this, x: int, y: int):
-        if p := this.get_piece(x, y):
+    # @get_piece_moves
+    # Rook
+    def r(self, x: int, y: int):
+        if p := self.get_piece(x, y):
             output = []
             for tempname in [[1, 0], [-1, 0], [0, 1], [0, -1]]:
                 i = 1
-                while (target := this.get_piece(
+                while (target := self.get_piece(
                     (tx := x + tempname[0] * i),
                     (ty := y + tempname[1] * i))
                 ) is None:
                     i += 1
                     output.append((tx, ty))
                 else:
-                    if target and target['team'] != p['team']:
+                    if target and target[1] != p[1]:
                         output.append((tx, ty))
 
             return output
         return None
 
-    def move_piece(this, x, y):
-        move_map = {
-            PieceEnum.PAWN: this.get_pawn_moves,
-            PieceEnum.ROOK: this.get_rook_moves,
-            None: [],
+    # @get_piece_moves
+    # Knight
+    def n(self, coords=None):
+        pass
+
+    # @get_piece_moves
+    # Bishop
+    def b(self, coords=None):
+        pass
+
+    # @get_piece_moves
+    # Queen
+    def q(self, coords=None):
+        pass
+
+    # @get_piece_moves
+    # King
+    def k(self, coords=None):
+        pass
+
+    def set(self):
+        """
+        Resets the board to it's default layout and the cursor to its default
+        position.
+        """
+
+        self.cursor = [0, 0]
+        self.board = (
+            'rnbqkbnr',
+            'pppppppp',
+            '........',
+            '........',
+            '........',
+            '........',
+            'PPPPPPPP',
+            'RNBQKBNR',
+        )
+
+    def move_cursor(self, x, y):
+        """
+        Moves the cursor by the specified amount if possible.
+        """
+
+        if 0 <= (aux := self.cursor[0] + x) <= 7:
+            self.cursor[0] = aux
+
+        if 0 <= (aux := self.cursor[1] + y) <= 7:
+            self.cursor[1] = aux
+
+    def get_piece(self, x: int, y: int):
+        """
+        Returns the piece the cursor's pointing at.
+        """
+
+        piece_info = {
+            'p': (PieceName.PAWN, PieceTeam.BLACK),
+            'P': (PieceName.PAWN, PieceTeam.WHITE),
+            'r': (PieceName.ROOK, PieceTeam.BLACK),
+            'R': (PieceName.ROOK, PieceTeam.WHITE),
+            'n': (PieceName.KNIGHT, PieceTeam.BLACK),
+            'N': (PieceName.KNIGHT, PieceTeam.WHITE),
+            'b': (PieceName.BISHOP, PieceTeam.BLACK),
+            'B': (PieceName.BISHOP, PieceTeam.WHITE),
+            'q': (PieceName.QUEEN, PieceTeam.BLACK),
+            'Q': (PieceName.QUEEN, PieceTeam.WHITE),
+            'k': (PieceName.KING, PieceTeam.BLACK),
+            'K': (PieceName.KING, PieceTeam.WHITE),
+            '.': None,
         }
 
-        piece = this.get_piece(x, y)
+        if 0 <= x <= 7 and 0 <= y <= 7:
+            return piece_info[self.board[y][x]]
+        else:
+            return False
 
-        return move_map[piece[0]](x, y, piece[1]) if piece else []
+    def get_moves(self):
+        """
+        Gets all legal moves for whatever piece is in the cursor's position.
+        """
 
-
-class Piece:
-    def __init__(this, name: PieceEnum, team: Team):
-        this.name = name
-        this.team = team
-
-    def get(this):
-        return {
-            'name': this.name,
-            'team': this.team,
-        }
+        pass

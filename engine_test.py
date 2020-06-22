@@ -1,163 +1,120 @@
-import engine
+from engine import Chess, PieceTeam, PieceName
 import unittest
 
 
-def custom_board(board: str):
-    pieces_dict = {
-        # Upper case for white team
-        'K': engine.Piece(engine.PieceEnum.KING, engine.Team.WHITE),
-        'Q': engine.Piece(engine.PieceEnum.QUEEN, engine.Team.WHITE),
-        'B': engine.Piece(engine.PieceEnum.BISHOP, engine.Team.WHITE),
-        'N': engine.Piece(engine.PieceEnum.KNIGHT, engine.Team.WHITE),
-        'R': engine.Piece(engine.PieceEnum.ROOK, engine.Team.WHITE),
-        'P': engine.Piece(engine.PieceEnum.PAWN, engine.Team.WHITE),
+class TestChessClassFunctions(unittest.TestCase):
+    def test_get_piece_normal_board_layout(self):
+        C = Chess()
 
-        # Lower case for black team
-        'k': engine.Piece(engine.PieceEnum.KING, engine.Team.BLACK),
-        'q': engine.Piece(engine.PieceEnum.QUEEN, engine.Team.BLACK),
-        'b': engine.Piece(engine.PieceEnum.BISHOP, engine.Team.BLACK),
-        'n': engine.Piece(engine.PieceEnum.KNIGHT, engine.Team.BLACK),
-        'r': engine.Piece(engine.PieceEnum.ROOK, engine.Team.BLACK),
-        'p': engine.Piece(engine.PieceEnum.PAWN, engine.Team.BLACK),
+        # Rook
+        expected = (PieceName.ROOK, PieceTeam.BLACK)
+        actual = C.get_piece(0, 0)
 
-        '.': None,
-    }
-    board = board.replace(' ', '').replace('\n', '').replace('\t', '')
-    valid_pieces = tuple('KkQqBbNnRrPp.')
+        self.assertEqual(expected, actual)
 
-    return [
-        [pieces_dict[board[8 * i + j]]
-         for j in range(8) if board[8 * i + j] in valid_pieces]
-        for i in range(8)
-    ]
+        # Knight
+        expected = (PieceName.KNIGHT, PieceTeam.WHITE)
+        actual = C.get_piece(1, 7)
+
+        self.assertEqual(expected, actual)
+
+        # None
+        expected = None
+        actual = C.get_piece(3, 3)
+
+        self.assertEqual(expected, actual)
+
+    def test_get_piece_out_of_board(self):
+        self.assertFalse(Chess().get_piece(10, 10))
 
 
-class TestPawnMoves(unittest.TestCase):
-    def test_pawn_first_move(this):
-        B = engine.Board()
+class TestPawnMovement(unittest.TestCase):
+    def test_pawn_moves_starting_position(self):
+        C = Chess()
 
         for i in range(8):
-            # White
-            expected_moves = [(i, 2), (i, 3)]
-            actual_moves = B.get_pawn_moves(i, 1)
-
-            this.assertEqual(expected_moves, actual_moves)
-
             # Black
-            expected_moves = [(i, 5), (i, 4)]
-            actual_moves = B.get_pawn_moves(i, 6)
+            expected = [(i, 2), (i, 3)]
+            actual = C.p(i, 1)
 
-            this.assertEqual(expected_moves, actual_moves)
+            self.assertEqual(expected, actual)
 
-    def test_invalid_pawn_pos(this):
-        B = engine.Board()
+            # White
+            expected = [(i, 5), (i, 4)]
+            actual = C.p(i, 6)
 
-        expected_moves = None
-        actual_moves = B.get_pawn_moves(-1, -1)
+            self.assertEqual(expected, actual)
 
-        this.assertEqual(expected_moves, actual_moves)
+    def test_pawn_attack_moves(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '........',
+            '..pPp...',
+            '...P....',
+            '........',
+            '........',
+            '........',
+        )
 
-    def test_pawn_single_attack_move(this):
-        B = engine.Board()
-        B.pieces = custom_board(
-            """
-            ........
-            ........
-            ........
-            ........
-            ...P....
-            ..p.....
-            ........
-            ........
-            """)
+        expected = [(4, 3), (2, 3)]
+        actual = C.p(3, 4)
 
-        # White
-        expected_moves = [(3, 5), (2, 5)]
-        actual_moves = B.get_pawn_moves(3, 4)
+        self.assertEqual(expected, actual)
 
-        this.assertEqual(expected_moves, actual_moves)
 
-        # Black
-        expected_moves = [(2, 4), (3, 4)]
-        actual_moves = B.get_pawn_moves(2, 5)
+class TestRookMovement(unittest.TestCase):
+    def test_rook_movement_init_pos(self):
+        C = Chess()
 
-        this.assertEqual(expected_moves, actual_moves)
+        self.assertEqual([], C.r(0, 0))
+        self.assertEqual([], C.r(7, 0))
+        self.assertEqual([], C.r(7, 0))
+        self.assertEqual([], C.r(7, 7))
 
-    @unittest.skip("Unimplemented")
-    def test_pinned_pawn(this):
-        pass
+    def test_rook_in_corner_with_no_other_pieces(self):
+        C = Chess()
+        C.board = (
+            'r.......',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+        )
 
-    def test_wrook_move(this):
-        B = engine.Board()
-
-        expected_moves = []
-        actual_moves = B.get_rook_moves(0, 0)
-
-        this.assertEqual(expected_moves, actual_moves)
-
-    def test_rook_free_movement(this):
-        B = engine.Board()
-        B.pieces = custom_board(
-            """
-            r.......
-            ........
-            ........
-            ........
-            ........
-            ........
-            ........
-            ........
-            """)
-
-        expected_moves = (
+        expected = (
             [(i, 0) for i in range(1, 8)] +
             [(0, i) for i in range(1, 8)]
-            )
+        )
+        actual = C.r(0, 0)
 
-        actual_moves = B.get_rook_moves(0, 0)
+        self.assertEqual(expected, actual)
 
-        this.assertEqual(expected_moves, actual_moves)
+    def test_rook_movement_in_middle_of_board_with_no_other_pieces(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '........',
+            '........',
+            '...R....',
+            '........',
+            '........',
+            '........',
+        )
 
-    def test_rook_free_movement_in_middle_of_the_board(this):
-        B = engine.Board()
-        B.pieces = custom_board(
-            """
-            ........
-            ........
-            ........
-            ........
-            ...R....
-            ........
-            ........
-            ........
-            """)
-
-        expected_moves = (
+        expected = (
             [(i, 4) for a in [(4, 8, 1), (2, -1, -1)] for i in range(a[0], a[1], a[2])] +
             [(3, i) for a in [(5, 8, 1), (3, -1, -1)] for i in range(a[0], a[1], a[2])]
-            )
-        actual_moves = B.get_rook_moves(3, 4)
+        )
+        actual = C.r(3, 4)
 
-        this.assertEqual(expected_moves, actual_moves)
+        self.assertEqual(expected, actual)
 
-    def test_rook_against_pawns(this):
-        B = engine.Board()
-        B.pieces = custom_board(
-            """
-            Rp......
-            p.......
-            ........
-            ........
-            ........
-            ........
-            ........
-            ........
-            """)
 
-        expected_moves = [(1, 0), (0, 1)]
-        actual_moves = B.get_rook_moves(0, 0)
-
-        this.assertEqual(expected_moves, actual_moves)
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()
