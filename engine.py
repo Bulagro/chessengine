@@ -37,10 +37,11 @@ class Chess:
     # Pawn
     def p(self, x: int, y: int):
         if p := self.get_piece(x, y):
-            piece, team = p
+            # p[0] -> piece (in this case PieceTeam.PAWN)
+            # p[1], target[1] -> team of the pawn and target, respectively.
 
-            forward = 1 if team == PieceTeam.BLACK else -1
-            has_moved = (y != (1 if team == PieceTeam.BLACK else 6))
+            forward = 1 if p[1] == PieceTeam.BLACK else -1
+            has_moved = (y != (1 if p[1] == PieceTeam.BLACK else 6))
             output = []
 
             # Forward one square
@@ -57,13 +58,13 @@ class Chess:
             # Attack right diagonal
             aux = (x + 1, y + forward)
             target = self.get_piece(aux[0], aux[1])
-            if target and target[1] != team:
+            if target and target[1] != p[1]:
                 output.append(aux)
 
             # Attack left diagonal
             aux = (x - 1, y + forward)
             target = self.get_piece(aux[0], aux[1])
-            if target and target[1] != team:
+            if target and target[1] != p[1]:
                 output.append(aux)
 
             return output
