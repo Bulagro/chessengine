@@ -94,8 +94,21 @@ class Chess:
 
     # @get_piece_moves
     # Knight
-    def n(self, coords=None):
-        pass
+    def n(self, x: int, y: int):
+        if p := self.get_piece(x, y):
+            output = []
+            for tempname in [[1, 2], [-1, 2], [1, -2],
+                             [-1, -2], [2, 1], [2, -1], [-2, 1], [-2, -1]]:
+                if (target := self.get_piece(
+                        (tx := x + tempname[0]),
+                        (ty := y + tempname[1]),
+                )) is None:
+                    output.append((tx, ty))
+                elif target and target[1] != p[1]:
+                    output.append((tx, ty))
+
+            return output
+        return None
 
     # @get_piece_moves
     # Bishop

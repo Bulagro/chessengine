@@ -116,5 +116,15 @@ class TestRookMovement(unittest.TestCase):
         self.assertEqual(expected, actual)
 
 
+class TestKnightMovement(unittest.TestCase):
+    def test_knight_init_pos(self):
+        C = Chess()
+
+        expected = [(2, 2), (0, 2)]
+        actual = C.n(1, 0)
+
+        self.assertEqual(expected, actual)
+
+
 if __name__ == '__main__':
     unittest.main()
