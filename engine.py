@@ -81,8 +81,8 @@ class Chess:
                 i = 1
                 while (target := self.get_piece(
                     (tx := x + tempname[0] * i),
-                    (ty := y + tempname[1] * i))
-                ) is None:
+                    (ty := y + tempname[1] * i)
+                )) is None:
                     i += 1
                     output.append((tx, ty))
                 else:
@@ -111,8 +111,23 @@ class Chess:
 
     # @get_piece_moves
     # Bishop
-    def b(self, coords=None):
-        pass
+    def b(self, x: int, y: int):
+        if p := self.get_piece(x, y):
+            output = []
+            for tempname in [(1, 1), (1, -1), (-1, 1), (-1, -1)]:
+                i = 1
+                while (target := self.get_piece(
+                    (tx := x + tempname[0] * i),
+                    (ty := y + tempname[1] * i))
+                ) is None:
+                    i += 1
+                    output.append((tx, ty))
+                else:
+                    if target and target[1] != p[1]:
+                        output.append((tx, ty))
+
+            return output
+        return None
 
     # @get_piece_moves
     # Queen

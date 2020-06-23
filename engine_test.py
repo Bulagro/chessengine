@@ -173,5 +173,38 @@ class TestKnightMovement(unittest.TestCase):
         self.assertEqual(expected, actual)
 
 
+class TestBishopMovement(unittest.TestCase):
+    def test_bishop_init_pos(self):
+        C = Chess()
+
+        self.assertEqual([], C.b(2, 0))
+        self.assertEqual([], C.b(5, 0))
+        self.assertEqual([], C.b(2, 7))
+        self.assertEqual([], C.b(5, 7))
+
+    def test_bishop_free_board(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '........',
+            '........',
+            '....b...',
+            '........',
+            '........',
+            '........',
+        )
+
+        expected = (
+            [(4 + i, 4 + i) for i in range(1, 4)] +
+            [(4 + i, 4 - i) for i in range(1, 4)] +
+            [(4 - i, 4 + i) for i in range(1, 4)] +
+            [(4 - i, 4 - i) for i in range(1, 5)]
+        )
+        actual = C.b(4, 4)
+
+        self.assertEqual(expected, actual)
+
+
 if __name__ == '__main__':
     unittest.main()
