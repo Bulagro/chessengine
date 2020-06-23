@@ -205,6 +205,24 @@ class TestBishopMovement(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
+    def test_bishop_attacking_moves(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '......P.',
+            '...P....',
+            '....b...',
+            '...P.P..',
+            '........',
+            '........',
+        )
+
+        expected = [(5, 5), (5, 3), (6, 2), (3, 5), (3, 3)]
+        actual = C.b(4, 4)
+
+        self.assertEqual(expected, actual)
+
 
 if __name__ == '__main__':
     unittest.main()
