@@ -33,7 +33,6 @@ class Chess:
         # Each function must be named by the letter representation of the
         # desired piece and have a comment specifying which piece it is
 
-    # @get_piece_moves
     # Pawn
     def p(self, x: int, y: int):
         if p := self.get_piece(x, y):
@@ -72,7 +71,6 @@ class Chess:
         # Invalid pos (OOB)
         return False
 
-    # @get_piece_moves
     # Rook
     def r(self, x: int, y: int):
         if p := self.get_piece(x, y):
@@ -92,7 +90,6 @@ class Chess:
             return output
         return None
 
-    # @get_piece_moves
     # Knight
     def n(self, x: int, y: int):
         if p := self.get_piece(x, y):
@@ -109,7 +106,6 @@ class Chess:
             return output
         return None
 
-    # @get_piece_moves
     # Bishop
     def b(self, x: int, y: int):
         if p := self.get_piece(x, y):
@@ -129,7 +125,6 @@ class Chess:
             return output
         return None
 
-    # @get_piece_moves
     # Queen
     def q(self, x: int, y: int):
         diagonal = self.b(x, y)
@@ -140,7 +135,6 @@ class Chess:
         else:
             return straight + diagonal
 
-    # @get_piece_moves
     # King
     def k(self, coords=None):
         pass
