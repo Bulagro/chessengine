@@ -94,8 +94,7 @@ class Chess:
     def n(self, x: int, y: int):
         if p := self.get_piece(x, y):
             output = []
-            for tempname in [(1, 2), (-1, 2), (1, -2),
-                             (-1, -2), (2, 1), (2, -1), (-2, 1), (-2, -1)]:
+            for tempname in [(1, 2), (-1, 2), (1, -2), (-1, -2), (2, 1), (2, -1), (-2, 1), (-2, -1)]:
                 if (target := self.get_piece(
                         (tx := x + tempname[0]),
                         (ty := y + tempname[1]),)) is None:
