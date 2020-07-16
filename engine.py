@@ -131,8 +131,14 @@ class Chess:
 
     # @get_piece_moves
     # Queen
-    def q(self, coords=None):
-        pass
+    def q(self, x: int, y: int):
+        diagonal = self.b(x, y)
+        straight = self.r(x, y)
+
+        if diagonal == None or straight == None:
+            return None
+        else:
+            return straight + diagonal
 
     # @get_piece_moves
     # King

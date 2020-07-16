@@ -3,7 +3,6 @@ import unittest
 
 
 class TestChessClassFunctions(unittest.TestCase):
-
     def test_get_piece_normal_board_layout(self):
         C = Chess()
 
@@ -30,7 +29,6 @@ class TestChessClassFunctions(unittest.TestCase):
 
 
 class TestPawnMovement(unittest.TestCase):
-
     def test_pawn_moves_starting_position(self):
         C = Chess()
 
@@ -67,7 +65,6 @@ class TestPawnMovement(unittest.TestCase):
 
 
 class TestRookMovement(unittest.TestCase):
-
     def test_rook_movement_init_pos(self):
         C = Chess()
 
@@ -120,7 +117,6 @@ class TestRookMovement(unittest.TestCase):
 
 
 class TestKnightMovement(unittest.TestCase):
-
     def test_knight_init_pos(self):
         C = Chess()
 
@@ -222,6 +218,46 @@ class TestBishopMovement(unittest.TestCase):
         actual = C.b(4, 4)
 
         self.assertEqual(expected, actual)
+
+
+class TestQueenMovement(unittest.TestCase):
+    def test_queen_init_pos(self):
+        C = Chess()
+
+        self.assertEqual([], C.q(3, 0))
+        self.assertEqual([], C.q(3, 7))
+
+    def test_queen_empty_board(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '........',
+            '........',
+            '....q...',
+            '........',
+            '........',
+            '........',
+        )
+
+        expected_straight = ( # Straight
+            [(4 + i, 4) for i in range(1, 4)] +
+            [(4 - i, 4) for i in range(1, 5)] +
+            [(4, 4 + i) for i in range(1, 4)] +
+            [(4, 4 - i) for i in range(1, 5)]
+        )
+
+        expected_diagonal = ( # Diagonal
+            [(4 + i, 4 + i) for i in range(1, 4)] +
+            [(4 + i, 4 - i) for i in range(1, 4)] +
+            [(4 - i, 4 + i) for i in range(1, 4)] +
+            [(4 - i, 4 - i) for i in range(1, 5)]
+        )
+
+        self.assertEqual(
+            expected_straight + expected_diagonal,
+            C.q(4, 4)
+        )
 
 
 if __name__ == '__main__':
