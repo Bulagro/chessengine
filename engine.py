@@ -136,8 +136,22 @@ class Chess:
             return straight + diagonal
 
     # King
-    def k(self, coords=None):
-        pass
+    def k(self, x: int, y: int):
+        if p := self.get_piece(x, y):
+            output = []
+            for tempname in [(1, 0), (1, 1), (0, 1), (-1, 1), (-1, 0), (-1, -1), (0, -1)]:
+                tx = x + tempname[0]
+                ty = y + tempname[1]
+                target = self.get_piece(tx, ty)
+
+                if target is None:
+                    output.append((tx, ty))
+                elif target and target[1] != p[1]:
+                    output.append((tx, ty))
+            return output
+
+        return None
+
 
     def set(self):
         """
