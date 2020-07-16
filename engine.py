@@ -22,16 +22,21 @@ class Chess:
 
     def __init__(self):
         self.set()
-        self.moves = {}
 
-    def get_piece_moves(self, f):
-        self.moves.setdefault(f.__name__, f)
+    def get_piece_moves(self, x: int, y: int):
+        PIECE_MOVES = {
+            PieceName.KING   : self.k,
+            PieceName.QUEEN  : self.q,
+            PieceName.BISHOP : self.b,
+            PieceName.KNIGHT : self.n,
+            PieceName.ROOK   : self.r,
+            PieceName.PAWN   : self.p,
+        }
 
-        # This is where we define the getters for the legal moves of each
-        # piece type
+        if p := self.get_piece(x, y):
+            return PIECE_MOVES[p[0]](x, y)
 
-        # Each function must be named by the letter representation of the
-        # desired piece and have a comment specifying which piece it is
+        return None
 
     # Pawn
     def p(self, x: int, y: int):
