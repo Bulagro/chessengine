@@ -260,5 +260,31 @@ class TestQueenMovement(unittest.TestCase):
         )
 
 
+class TestKingMovement(unittest.TestCase):
+    def test_king_movement_init_pos(self):
+        C = Chess()
+
+        self.assertEqual([], C.k(4, 0))
+
+    def test_king_movement_empty_board(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '........',
+            '........',
+            '....k...',
+            '........',
+            '........',
+            '........',
+        )
+
+        expected = (
+            [(4 + i, 4 + j) for i, j in [(1, 0), (1, 1), (0, 1), (-1, 1), (-1, 0), (-1, -1), (0, -1)]]
+        )
+        actual = C.k(4, 4)
+
+        self.assertEqual(expected, actual)
+
 if __name__ == '__main__':
     unittest.main()
