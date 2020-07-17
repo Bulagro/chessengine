@@ -62,13 +62,13 @@ class Chess:
             # Attack right diagonal
             aux = (x + 1, y + forward)
             target = self.get_piece(aux[0], aux[1])
-            if target and target[1] != p[1]:
+            if target and target[1] != p[1] and target[0] != PieceName.KING:
                 output.append(aux)
 
             # Attack left diagonal
             aux = (x - 1, y + forward)
             target = self.get_piece(aux[0], aux[1])
-            if target and target[1] != p[1]:
+            if target and target[1] != p[1] and target[0] != PieceName.KING:
                 output.append(aux)
 
             return output
@@ -89,7 +89,7 @@ class Chess:
                     i += 1
                     output.append((tx, ty))
                 else:
-                    if target and target[1] != p[1]:
+                    if target and target[1] != p[1] and target[0] != PieceName.KING:
                         output.append((tx, ty))
 
             return output
@@ -104,7 +104,7 @@ class Chess:
                         (tx := x + tempname[0]),
                         (ty := y + tempname[1]),)) is None:
                     output.append((tx, ty))
-                elif target and target[1] != p[1]:
+                elif target and target[1] != p[1] and target[0] != PieceName.KING:
                     output.append((tx, ty))
 
             return output
@@ -123,7 +123,7 @@ class Chess:
                     i += 1
                     output.append((tx, ty))
                 else:
-                    if target and target[1] != p[1]:
+                    if target and target[1] != p[1] and target[0] != PieceName.KING:
                         output.append((tx, ty))
 
             return output
@@ -150,7 +150,7 @@ class Chess:
 
                 if target is None:
                     output.append((tx, ty))
-                elif target and target[1] != p[1]:
+                elif target and target[1] != p[1] and target[0] != PieceName.KING:
                     output.append((tx, ty))
             return output
 
