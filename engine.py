@@ -33,10 +33,8 @@ class Chess:
             PieceName.PAWN   : self.p,
         }
 
-        if p := self.get_piece(x, y):
-            return PIECE_MOVES[p[0]](x, y)
-
-        return None
+        p = self.get_piece(x, y)
+        return PIECE_MOVES[p[0]](x, y)
 
     # Pawn
     def p(self, x: int, y: int):
