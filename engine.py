@@ -61,22 +61,29 @@ class Chess:
                         aux[0], aux[1]) is None:
                     output.append(aux)
 
-            # Attack right diagonal
-            aux = (x + 1, y + forward)
-            target = self.get_piece(aux[0], aux[1])
-            if target and target[1] != p[1] and target[0] != PieceName.KING:
-                output.append(aux)
 
-            # Attack left diagonal
-            aux = (x - 1, y + forward)
-            target = self.get_piece(aux[0], aux[1])
-            if target and target[1] != p[1] and target[0] != PieceName.KING:
-                output.append(aux)
-
-            return output
+            return output + self.p_attack(x, y, p[1], forward)
 
         # Invalid pos (OOB)
         return False
+
+    def p_attack(self, x: int, y: int, team: PieceTeam, forward: int):
+        output = []
+
+        # Attack right diagonal
+        aux = (x + 1, y + forward)
+        target = self.get_piece(aux[0], aux[1])
+        if target and target[1] != team and target[0] != PieceName.KING:
+            output.append(aux)
+
+        # Attack left diagonal
+        aux = (x - 1, y + forward)
+        target = self.get_piece(aux[0], aux[1])
+        if target and target[1] != team and target[0] != PieceName.KING:
+            output.append(aux)
+
+        return output
+
 
     # Rook moves
     def r(self, x: int, y: int):
