@@ -24,6 +24,10 @@ class Chess:
         self.set()
 
     def get_piece_moves(self, x: int, y: int):
+        """
+        Returns every possible move for a specific piece, given a position.
+        """
+
         PIECE_MOVES = {
             PieceName.KING   : self.k,
             PieceName.QUEEN  : self.q,
