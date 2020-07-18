@@ -94,8 +94,7 @@ class Chess:
                 i = 1
                 while (target := self.get_piece(
                     (tx := x + tempname[0] * i),
-                    (ty := y + tempname[1] * i)
-                )) is None:
+                    (ty := y + tempname[1] * i))) is None:
                     i += 1
                     output.append((tx, ty))
                 else:
@@ -112,7 +111,7 @@ class Chess:
             for tempname in [(1, 2), (-1, 2), (1, -2), (-1, -2), (2, 1), (2, -1), (-2, 1), (-2, -1)]:
                 if (target := self.get_piece(
                         (tx := x + tempname[0]),
-                        (ty := y + tempname[1]),)) is None:
+                        (ty := y + tempname[1]))) is None:
                     output.append((tx, ty))
                 elif target and target[1] != p[1] and target[0] != PieceName.KING:
                     output.append((tx, ty))
@@ -128,8 +127,7 @@ class Chess:
                 i = 1
                 while (target := self.get_piece(
                     (tx := x + tempname[0] * i),
-                    (ty := y + tempname[1] * i))
-                ) is None:
+                    (ty := y + tempname[1] * i))) is None:
                     i += 1
                     output.append((tx, ty))
                 else:
