@@ -75,6 +75,24 @@ class TestPawnMovement(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
+    def test_pawn_cant_eat_king(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '........',
+            '..k.k...',
+            '...P....',
+            '........',
+            '........',
+            '........',
+        )
+
+        expected = [(3, 3)]
+        actual = C.p(3, 4)
+
+        self.assertEqual(expected, actual)
+
 
 class TestRookMovement(unittest.TestCase):
     def test_rook_movement_init_pos(self):
@@ -127,6 +145,24 @@ class TestRookMovement(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
+    def test_rook_cant_eat_king(self):
+        C = Chess()
+        C.board = (
+            'R..k....',
+            '........',
+            'K.......',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+        )
+
+        expected = [(1, 0), (2, 0), (0, 1)]
+        actual = C.r(0, 0)
+
+        self.assertEqual(expected, actual)
+
 
 class TestKnightMovement(unittest.TestCase):
     def test_knight_init_pos(self):
@@ -169,6 +205,24 @@ class TestKnightMovement(unittest.TestCase):
             '........',
             '...p.P..',
             '..p...p.',
+            '....n...',
+            '..p...p.',
+            '...p.p..',
+            '........',
+        )
+
+        expected = [(5, 2)]
+        actual = C.n(4, 4)
+
+        self.assertEqual(expected, actual)
+
+    def test_knight_cant_eat_king(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '...p.P..',
+            '..K...p.',
             '....n...',
             '..p...p.',
             '...p.p..',
@@ -231,6 +285,24 @@ class TestBishopMovement(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
+    def test_bishop_cant_eat_king(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '......P.',
+            '...K....',
+            '....b...',
+            '...P.P..',
+            '........',
+            '........',
+        )
+
+        expected = [(5, 5), (5, 3), (6, 2), (3, 5)]
+        actual = C.b(4, 4)
+
+        self.assertEqual(expected, actual)
+
 
 class TestQueenMovement(unittest.TestCase):
     def test_queen_init_pos(self):
@@ -270,6 +342,24 @@ class TestQueenMovement(unittest.TestCase):
             expected_straight + expected_diagonal,
             C.q(4, 4)
         )
+
+    def queen_cant_eat_king(self):
+        C = Chess()
+        C.board = (
+            'q..K....',
+            'p.......',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+        )
+
+        expected = [(1, 0), (2, 0)]
+        actual = C.q(0, 0)
+
+        self.assertEqual(expected, actual)
 
 
 class TestKingMovement(unittest.TestCase):
