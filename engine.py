@@ -22,6 +22,7 @@ class Chess:
 
     def __init__(self):
         self.set()
+        self.in_check = None
 
     def get_piece_moves(self, x: int, y: int):
         """
@@ -164,6 +165,99 @@ class Chess:
             return output
 
         return None
+
+    def get_king_status(self, team: PieceTeam):
+        """
+        Sets the 'in_check' flag and returns a list with the positions of the pinned pieces.
+        """
+
+        def get_king_pos():
+            king_to_look_for = 'k' if team == PieceTeam.BLACK else 'K'
+
+            for i, p in enumerate(self.board):
+                if king_to_look_for in p:
+                    return (p.index(king_to_look_for), i)
+
+            raise ValueError('How tf is there no king on the board?')
+
+        kx, ky = get_king_pos()
+        pinned_pieces = []
+        forward = 1 if team == PieceTeam.BLACK else -1
+
+        # Straight lines
+        for tempname in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
+            i = 1
+            remembered_piece = None
+
+            while (target := self.get_piece(
+                (tx := kx + tempname[0] * i),
+                (ty := ky + tempname[1] * i))) != False:
+                if target == None:
+                    i += 1
+                    continue
+
+                if target[1] == team:
+                    if remembered_piece: break
+                    else: remembered_piece = (tx, ty)
+
+                elif target[1] != team:
+                    if target[0] == PieceName.QUEEN or target[0] == PieceName.ROOK:
+                        if remembered_piece:
+                            pinned_pieces.append(remembered_piece)
+                        else:
+                            self.in_check = team
+                            return []
+                    else:
+                        break
+                i += 1
+
+        # Diagonal lines
+        for tempname in [(1, 1), (1, -1), (-1, 1), (-1, -1)]:
+            i = 1
+            remembered_piece = None
+
+            while (target := self.get_piece(
+                (tx := kx + tempname[0] * i),
+                (ty := ky + tempname[1] * i))) != False:
+                if target == None:
+                    i += 1
+                    continue
+
+                if target[1] == team:
+                    if remembered_piece: break
+                    else: remembered_piece = (tx, ty)
+
+                elif target[1] != team:
+                    if target[0] == PieceName.QUEEN or target[0] == PieceName.BISHOP:
+                        if remembered_piece:
+                            pinned_pieces.append(remembered_piece)
+                        else:
+                            self.in_check = team
+                            return []
+                    else:
+                        break
+
+                i += 1
+
+        # Knight check
+        for tempname in [(1, 2), (-1, 2), (1, -2), (-1, -2), (2, 1), (2, -1), (-2, 1), (-2, -1)]:
+            if (target := self.get_piece(
+                (tx := kx + tempname[0]),
+                (ty := ky + tempname[1]))):
+                if target[0] == PieceName.KNIGHT and target[1] != team:
+                    self.in_check = team
+                    return []
+
+        # Pawn check
+        for i in (1, -1):
+            target = self.get_piece(kx + i, ky + forward)
+            if not target: continue
+
+            if target[0] == PieceName.PAWN and target[1] != team:
+                self.in_check = team
+                return []
+
+        return pinned_pieces
 
 
     def set(self):
