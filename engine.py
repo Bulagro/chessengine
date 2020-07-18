@@ -36,7 +36,7 @@ class Chess:
         p = self.get_piece(x, y)
         return PIECE_MOVES[p[0]](x, y)
 
-    # Pawn
+    # Pawn moves
     def p(self, x: int, y: int):
         if p := self.get_piece(x, y):
             # p[0] -> piece (in this case PieceTeam.PAWN)
@@ -74,7 +74,7 @@ class Chess:
         # Invalid pos (OOB)
         return False
 
-    # Rook
+    # Rook moves
     def r(self, x: int, y: int):
         if p := self.get_piece(x, y):
             output = []
@@ -93,7 +93,7 @@ class Chess:
             return output
         return None
 
-    # Knight
+    # Knight moves
     def n(self, x: int, y: int):
         if p := self.get_piece(x, y):
             output = []
@@ -108,7 +108,7 @@ class Chess:
             return output
         return None
 
-    # Bishop
+    # Bishop moves
     def b(self, x: int, y: int):
         if p := self.get_piece(x, y):
             output = []
@@ -127,7 +127,7 @@ class Chess:
             return output
         return None
 
-    # Queen
+    # Queen moves
     def q(self, x: int, y: int):
         diagonal = self.b(x, y)
         straight = self.r(x, y)
@@ -137,7 +137,7 @@ class Chess:
         else:
             return straight + diagonal
 
-    # King
+    # King moves
     def k(self, x: int, y: int):
         if p := self.get_piece(x, y):
             output = []
