@@ -175,7 +175,7 @@ class Chess:
         king_to_look_for = 'k' if team == PieceTeam.BLACK else 'K'
 
         for i, p in enumerate(self.board):
-            for j in range(len(p)):
+            for j in range(8):
                 if p[j] == king_to_look_for:
                     return (j, i)
 
