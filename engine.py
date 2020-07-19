@@ -24,6 +24,7 @@ class Chess:
         self.set()
         self.in_check = None
 
+
     def get_piece_moves(self, x: int, y: int):
         """
         Returns every possible move for a specific piece, given a position.
@@ -40,6 +41,7 @@ class Chess:
 
         p = self.get_piece(x, y)
         return PIECE_MOVES[p[0]](x, y)
+
 
     # Pawn moves
     def p(self, x: int, y: int):
@@ -66,6 +68,7 @@ class Chess:
 
         # Invalid pos (OOB)
         return False
+
 
     def p_attack(self, x: int, y: int, team: PieceTeam, forward: int):
         output = []
@@ -103,6 +106,7 @@ class Chess:
             return output
         return None
 
+
     # Knight moves
     def n(self, x: int, y: int):
         if p := self.get_piece(x, y):
@@ -117,6 +121,7 @@ class Chess:
 
             return output
         return None
+
 
     # Bishop moves
     def b(self, x: int, y: int):
@@ -136,6 +141,7 @@ class Chess:
             return output
         return None
 
+
     # Queen moves
     def q(self, x: int, y: int):
         diagonal = self.b(x, y)
@@ -145,6 +151,7 @@ class Chess:
             return None
         else:
             return straight + diagonal
+
 
     # King moves
     def k(self, x: int, y: int):
@@ -162,6 +169,7 @@ class Chess:
             return output
 
         return None
+
 
     def get_king_status(self, team: PieceTeam):
         """
@@ -275,6 +283,7 @@ class Chess:
             'RNBQKBNR',
         )
 
+
     def move_cursor(self, x, y):
         """
         Moves the cursor by the specified amount if possible.
@@ -285,6 +294,7 @@ class Chess:
 
         if 0 <= (aux := self.cursor[1] + y) <= 7:
             self.cursor[1] = aux
+
 
     def get_piece(self, x: int, y: int):
         """
@@ -311,6 +321,7 @@ class Chess:
             return piece_info[self.board[y][x]]
         else:
             return False
+
 
     def get_moves(self):
         """
