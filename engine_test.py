@@ -40,6 +40,14 @@ class TestChessClassFunctions(unittest.TestCase):
             C.n(1, 0)
         )
 
+    def test_find_king_pos(self):
+        C = Chess()
+
+        self.assertEqual(
+            (4, 0),
+            C.find_king_pos(PieceTeam.BLACK)
+        )
+
 class TestPawnMovement(unittest.TestCase):
     def test_pawn_moves_starting_position(self):
         C = Chess()

@@ -171,6 +171,17 @@ class Chess:
         return None
 
 
+    def find_king_pos(self, team: PieceTeam):
+        king_to_look_for = 'k' if team == PieceTeam.BLACK else 'K'
+
+        for i, p in enumerate(self.board):
+            for j in range(len(p)):
+                if p[j] == king_to_look_for:
+                    return (j, i)
+
+        raise ValueError('How tf is there no king on the board?')
+
+
     def get_king_status(self, team: PieceTeam):
         """
         Sets the 'in_check' flag and returns a tuple containing in_check and
@@ -178,16 +189,7 @@ class Chess:
         - the path to the piece that's causing the check.
         """
 
-        def get_king_pos():
-            king_to_look_for = 'k' if team == PieceTeam.BLACK else 'K'
-
-            for i, p in enumerate(self.board):
-                if king_to_look_for in p:
-                    return (p.index(king_to_look_for), i)
-
-            raise ValueError('How tf is there no king on the board?')
-
-        kx, ky = get_king_pos()
+        kx, ky = self.find_king_pos(team)
         pinned_pieces = []
         forward = 1 if team == PieceTeam.BLACK else -1
 
