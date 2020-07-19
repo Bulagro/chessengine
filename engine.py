@@ -62,7 +62,6 @@ class Chess:
                         aux[0], aux[1]) is None:
                     output.append(aux)
 
-
             return output + self.p_attack(x, y, p[1], forward)
 
         # Invalid pos (OOB)
