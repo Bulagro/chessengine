@@ -64,14 +64,15 @@ class Chess:
                         aux[0], aux[1]) is None:
                     output.append(aux)
 
-            return output + self.p_attack(x, y, p[1], forward, show_protected)
+            return output + self.p_attack(x, y, p[1], show_protected)
 
         # Invalid pos (OOB)
         return False
 
 
-    def p_attack(self, x: int, y: int, team: PieceTeam, forward: int, show_protected=False):
+    def p_attack(self, x: int, y: int, team: PieceTeam, show_protected=False):
         output = []
+        forward = 1 if team == PieceTeam.BLACK else -1
 
         # Attack right diagonal
         aux = (x + 1, y + forward)
