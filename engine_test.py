@@ -133,7 +133,22 @@ class TestChessClassFunctions(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_get_piece_moves_with_protected_pieces_ignores_king(self):
-        pass
+        C = Chess()
+        C.board = (
+            'n.......',
+            '..k.....',
+            '.p......',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+        )
+
+        expected = [(1, 2)]
+        actual = C.get_piece_moves(0, 0, True)
+
+        self.assertEqual(expected, actual)
 
     def test_find_king_pos(self):
         C = Chess()
