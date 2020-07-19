@@ -402,14 +402,16 @@ class TestKingMovement(unittest.TestCase):
         )
 
         expected_w = []
-        actual_w = C.get_king_status(PieceTeam.WHITE)
+        C.in_check, actual_w = C.get_king_status(PieceTeam.WHITE)
 
         self.assertEqual(expected_w, actual_w)
+        self.assertEqual(None, C.in_check)
 
         expected_b = []
-        actual_b = C.get_king_status(PieceTeam.BLACK)
+        C.in_check, actual_b = C.get_king_status(PieceTeam.BLACK)
 
         self.assertEqual(expected_b, actual_b)
+        self.assertEqual(None, C.in_check)
 
     def test_get_king_status_no_pinned_pieces_straight_line(self):
         C = Chess()
@@ -425,9 +427,10 @@ class TestKingMovement(unittest.TestCase):
         )
 
         expected = []
-        actual = C.get_king_status(PieceTeam.WHITE)
+        C.in_check, actual = C.get_king_status(PieceTeam.WHITE)
 
         self.assertEqual(expected, actual)
+        self.assertEqual(None, C.in_check)
 
     def test_get_king_status_one_pinned_piece_straight_line(self):
         C = Chess()
@@ -443,9 +446,10 @@ class TestKingMovement(unittest.TestCase):
         )
 
         expected = [(5, 7)]
-        actual = C.get_king_status(PieceTeam.WHITE)
+        C.in_check, actual = C.get_king_status(PieceTeam.WHITE)
 
         self.assertEqual(expected, actual)
+        self.assertEqual(None, C.in_check)
 
     def test_king_status_one_non_pinned_piece_since_the_attacker_cant_attack_in_that_direction(self):
         C = Chess()
@@ -461,9 +465,10 @@ class TestKingMovement(unittest.TestCase):
         )
 
         expected = []
-        actual = C.get_king_status(PieceTeam.WHITE)
+        C.in_check, actual = C.get_king_status(PieceTeam.WHITE)
 
         self.assertEqual(expected, actual)
+        self.assertEqual(None, C.in_check)
 
     def test_get_king_status_multiple_pinned_pieces_straight_line(self):
         C = Chess()
@@ -479,9 +484,10 @@ class TestKingMovement(unittest.TestCase):
         )
 
         expected = [(5, 7), (1, 5)]
-        actual = C.get_king_status(PieceTeam.WHITE)
+        C.in_check, actual = C.get_king_status(PieceTeam.WHITE)
 
         self.assertEqual(expected, actual)
+        self.assertEqual(None, C.in_check)
 
     def test_king_status_one_pinned_piece_diagonal_line(self):
         C = Chess()
@@ -497,9 +503,10 @@ class TestKingMovement(unittest.TestCase):
         )
 
         expected = [(2, 6)]
-        actual = C.get_king_status(PieceTeam.WHITE)
+        C.in_check, actual = C.get_king_status(PieceTeam.WHITE)
 
         self.assertEqual(expected, actual)
+        self.assertEqual(None, C.in_check)
 
     def test_king_status_multiple_pinned_pieces_diagonal_line(self):
         C = Chess()
@@ -515,9 +522,10 @@ class TestKingMovement(unittest.TestCase):
         )
 
         expected = [(4, 6), (5, 3)]
-        actual = C.get_king_status(PieceTeam.BLACK)
+        C.in_check, actual = C.get_king_status(PieceTeam.BLACK)
 
         self.assertEqual(expected, actual)
+        self.assertEqual(None, C.in_check)
 
     def test_king_status_check_straight_line(self):
         C = Chess()
@@ -533,7 +541,7 @@ class TestKingMovement(unittest.TestCase):
         )
 
         expected = [(2, 7), (3, 7), (4, 7), (5, 7), (6, 7), (7, 7)]
-        actual = C.get_king_status(PieceTeam.BLACK)
+        C.in_check, actual = C.get_king_status(PieceTeam.BLACK)
 
         self.assertEqual(expected, actual)
         self.assertEqual(C.in_check, PieceTeam.BLACK)
@@ -552,7 +560,7 @@ class TestKingMovement(unittest.TestCase):
         )
 
         expected = [(2, 6), (3, 5)]
-        actual = C.get_king_status(PieceTeam.BLACK)
+        C.in_check, actual = C.get_king_status(PieceTeam.BLACK)
 
         self.assertEqual(expected, actual)
         self.assertEqual(C.in_check, PieceTeam.BLACK)
@@ -571,7 +579,7 @@ class TestKingMovement(unittest.TestCase):
         )
 
         expected = [(2, 7), (3, 7), (4, 7), (5, 7), (6, 7), (7, 7)]
-        actual = C.get_king_status(PieceTeam.WHITE)
+        C.in_check, actual = C.get_king_status(PieceTeam.WHITE)
 
         self.assertEqual(expected, actual)
         self.assertEqual(C.in_check, PieceTeam.WHITE)
@@ -590,9 +598,10 @@ class TestKingMovement(unittest.TestCase):
         )
 
         expected = []
-        actual = C.get_king_status(PieceTeam.BLACK)
+        C.in_check, actual = C.get_king_status(PieceTeam.BLACK)
 
         self.assertEqual(expected, actual)
+        self.assertEqual(None, C.in_check)
 
     def test_king_status_check_by_pawn(self):
         C = Chess()
@@ -608,7 +617,7 @@ class TestKingMovement(unittest.TestCase):
         )
 
         expected = [(3, 5)]
-        actual = C.get_king_status(PieceTeam.BLACK)
+        C.in_check, actual = C.get_king_status(PieceTeam.BLACK)
 
         self.assertEqual(expected, actual)
         self.assertEqual(C.in_check, PieceTeam.BLACK)
@@ -625,7 +634,7 @@ class TestKingMovement(unittest.TestCase):
         )
 
         expected = [(5, 3)]
-        actual = C.get_king_status(PieceTeam.WHITE)
+        C.in_check, actual = C.get_king_status(PieceTeam.WHITE)
 
         self.assertEqual(expected, actual)
         self.assertEqual(C.in_check, PieceTeam.WHITE)
@@ -644,7 +653,7 @@ class TestKingMovement(unittest.TestCase):
         )
 
         expected = [(3, 6)]
-        actual = C.get_king_status(PieceTeam.BLACK)
+        C.in_check, actual = C.get_king_status(PieceTeam.BLACK)
 
         self.assertEqual(expected, actual)
         self.assertEqual(C.in_check, PieceTeam.BLACK)
