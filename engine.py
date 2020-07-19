@@ -173,7 +173,8 @@ class Chess:
 
     def get_king_status(self, team: PieceTeam):
         """
-        Sets the 'in_check' flag and returns a list with the positions of the pinned pieces.
+        Sets the 'in_check' flag and returns a list with all pinned pieces
+        or the path to the piece that's causing the check.
         """
 
         def get_king_pos():
@@ -193,12 +194,14 @@ class Chess:
         for tempname in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
             i = 1
             remembered_piece = None
+            path = []
 
             while (target := self.get_piece(
                 (tx := kx + tempname[0] * i),
                 (ty := ky + tempname[1] * i))) != False:
                 if target == None:
                     i += 1
+                    path.append((tx, ty))
                     continue
 
                 if target[1] == team:
@@ -211,7 +214,8 @@ class Chess:
                             pinned_pieces.append(remembered_piece)
                         else:
                             self.in_check = team
-                            return []
+                            path.append((tx, ty))
+                            return path
                     else:
                         break
                 i += 1
@@ -220,12 +224,14 @@ class Chess:
         for tempname in [(1, 1), (1, -1), (-1, 1), (-1, -1)]:
             i = 1
             remembered_piece = None
+            path = []
 
             while (target := self.get_piece(
                 (tx := kx + tempname[0] * i),
                 (ty := ky + tempname[1] * i))) != False:
                 if target == None:
                     i += 1
+                    path.append((tx, ty))
                     continue
 
                 if target[1] == team:
@@ -238,7 +244,8 @@ class Chess:
                             pinned_pieces.append(remembered_piece)
                         else:
                             self.in_check = team
-                            return []
+                            path.append((tx, ty))
+                            return path
                     else:
                         break
 
@@ -251,7 +258,7 @@ class Chess:
                 (ty := ky + tempname[1]))):
                 if target[0] == PieceName.KNIGHT and target[1] != team:
                     self.in_check = team
-                    return []
+                    return [(tx, ty)]
 
         # Pawn check
         for i in (1, -1):
@@ -260,7 +267,7 @@ class Chess:
 
             if target[0] == PieceName.PAWN and target[1] != team:
                 self.in_check = team
-                return []
+                return [(kx + i, ky + forward)]
 
         return pinned_pieces
 

@@ -532,7 +532,7 @@ class TestKingMovement(unittest.TestCase):
             '.k.....Q',
         )
 
-        expected = []
+        expected = [(2, 7), (3, 7), (4, 7), (5, 7), (6, 7), (7, 7)]
         actual = C.get_king_status(PieceTeam.BLACK)
 
         self.assertEqual(expected, actual)
@@ -551,7 +551,7 @@ class TestKingMovement(unittest.TestCase):
             '.k......',
         )
 
-        expected = []
+        expected = [(2, 6), (3, 5)]
         actual = C.get_king_status(PieceTeam.BLACK)
 
         self.assertEqual(expected, actual)
@@ -570,7 +570,7 @@ class TestKingMovement(unittest.TestCase):
             '.K.....q',
         )
 
-        expected = []
+        expected = [(2, 7), (3, 7), (4, 7), (5, 7), (6, 7), (7, 7)]
         actual = C.get_king_status(PieceTeam.WHITE)
 
         self.assertEqual(expected, actual)
@@ -601,13 +601,13 @@ class TestKingMovement(unittest.TestCase):
             '........',
             '........',
             '........',
-            '....k....',
+            '....k...',
             '...P....',
             '........',
             '........',
         )
 
-        expected = []
+        expected = [(3, 5)]
         actual = C.get_king_status(PieceTeam.BLACK)
 
         self.assertEqual(expected, actual)
@@ -624,7 +624,7 @@ class TestKingMovement(unittest.TestCase):
             '........',
         )
 
-        expected = []
+        expected = [(5, 3)]
         actual = C.get_king_status(PieceTeam.WHITE)
 
         self.assertEqual(expected, actual)
@@ -643,7 +643,7 @@ class TestKingMovement(unittest.TestCase):
             '........',
         )
 
-        expected = []
+        expected = [(3, 6)]
         actual = C.get_king_status(PieceTeam.BLACK)
 
         self.assertEqual(expected, actual)
