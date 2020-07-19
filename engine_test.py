@@ -40,6 +40,101 @@ class TestChessClassFunctions(unittest.TestCase):
             C.n(1, 0)
         )
 
+    def test_get_piece_moves_pawn_with_protected_pieces(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '........',
+            '..p.....',
+            '.n.r....',
+            '........',
+            '........',
+            '........',
+        )
+
+        expected = [(2, 4), (3, 4), (1, 4)]
+        actual = C.get_piece_moves(2, 3, True)
+
+        self.assertEqual(expected, actual)
+
+    def test_get_piece_moves_rook_with_protected_pieces(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '..p.....',
+            '.prp....',
+            '..p.....',
+            '........',
+            '........',
+            '........',
+        )
+
+        expected = [(3, 3), (1, 3), (2, 4), (2, 2)]
+        actual = C.get_piece_moves(2, 3, True)
+
+        self.assertEqual(expected, actual)
+
+    def test_get_piece_moves_bishop_with_protected_pieces(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '.r.r....',
+            '..b.....',
+            '.r.r....',
+            '........',
+            '........',
+            '........',
+        )
+
+        expected = [(3, 4), (3, 2), (1, 4), (1, 2)]
+        actual = C.get_piece_moves(2, 3, True)
+
+        self.assertEqual(expected, actual)
+
+    def test_get_piece_moves_knight_with_protected_pieces(self):
+        C = Chess()
+        C.board = (
+            'n.......',
+            '..p.....',
+            '.p......',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+        )
+
+        expected = [(1, 2), (2, 1)]
+        actual = C.get_piece_moves(0, 0, True)
+
+        self.assertEqual(expected, actual)
+
+    def test_get_piece_moves_king_with_protected_pieces(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '........',
+            '...ppp..',
+            '...pkp..',
+            '...ppp..',
+            '........',
+            '........',
+        )
+
+        expected = (
+            [(4 + i, 4 + j) for i, j in [(1, 0), (1, 1), (0, 1), (-1, 1), (-1, 0), (-1, -1), (0, -1)]]
+        )
+        actual = C.get_piece_moves(4, 4, True)
+
+        self.assertEqual(expected, actual)
+
+    def test_get_piece_moves_with_protected_pieces_ignores_king(self):
+        pass
+
     def test_find_king_pos(self):
         C = Chess()
 

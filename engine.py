@@ -25,7 +25,7 @@ class Chess:
         self.in_check = None
 
 
-    def get_piece_moves(self, x: int, y: int):
+    def get_piece_moves(self, x: int, y: int, show_protected=False):
         """
         Returns every possible move for a specific piece, given a position.
         """
@@ -40,11 +40,11 @@ class Chess:
         }
 
         p = self.get_piece(x, y)
-        return PIECE_MOVES[p[0]](x, y)
+        return PIECE_MOVES[p[0]](x, y, show_protected)
 
 
     # Pawn moves
-    def p(self, x: int, y: int):
+    def p(self, x: int, y: int, show_protected=False):
         if p := self.get_piece(x, y):
             # p[0] -> piece (in this case PieceTeam.PAWN)
             # p[1], target[1] -> team of the pawn and target, respectively.
@@ -64,13 +64,13 @@ class Chess:
                         aux[0], aux[1]) is None:
                     output.append(aux)
 
-            return output + self.p_attack(x, y, p[1], forward)
+            return output + self.p_attack(x, y, p[1], forward, show_protected)
 
         # Invalid pos (OOB)
         return False
 
 
-    def p_attack(self, x: int, y: int, team: PieceTeam, forward: int):
+    def p_attack(self, x: int, y: int, team: PieceTeam, forward: int, show_protected=False):
         output = []
 
         # Attack right diagonal
@@ -79,17 +79,25 @@ class Chess:
         if target and target[1] != team and target[0] != PieceName.KING:
             output.append(aux)
 
+        # Add protected pieces to the list
+        if show_protected and target[1] == team and target[0] != PieceName.KING:
+            output.append(aux)
+
         # Attack left diagonal
         aux = (x - 1, y + forward)
         target = self.get_piece(aux[0], aux[1])
         if target and target[1] != team and target[0] != PieceName.KING:
             output.append(aux)
 
+        # Add protected pieces to the list
+        if show_protected and target[1] == team and target[0] != PieceName.KING:
+            output.append(aux)
+
         return output
 
 
     # Rook moves
-    def r(self, x: int, y: int):
+    def r(self, x: int, y: int, show_protected=False):
         if p := self.get_piece(x, y):
             output = []
             for tempname in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
@@ -103,12 +111,16 @@ class Chess:
                     if target and target[1] != p[1] and target[0] != PieceName.KING:
                         output.append((tx, ty))
 
+                    # Protected pieces
+                    if show_protected and target and target[1] == p[1] and target[0] != PieceName.KING:
+                        output.append((tx, ty))
+
             return output
         return None
 
 
     # Knight moves
-    def n(self, x: int, y: int):
+    def n(self, x: int, y: int, show_protected=False):
         if p := self.get_piece(x, y):
             output = []
             for tempname in [(1, 2), (-1, 2), (1, -2), (-1, -2), (2, 1), (2, -1), (-2, 1), (-2, -1)]:
@@ -116,15 +128,20 @@ class Chess:
                         (tx := x + tempname[0]),
                         (ty := y + tempname[1]))) is None:
                     output.append((tx, ty))
-                elif target and target[1] != p[1] and target[0] != PieceName.KING:
-                    output.append((tx, ty))
+                else:
+                    if target and target[1] != p[1] and target[0] != PieceName.KING:
+                        output.append((tx, ty))
+
+                    # Protected pieces
+                    if show_protected and target and target[1] == p[1] and target[0] != PieceName.KING:
+                        output.append((tx, ty))
 
             return output
         return None
 
 
     # Bishop moves
-    def b(self, x: int, y: int):
+    def b(self, x: int, y: int, show_protected=False):
         if p := self.get_piece(x, y):
             output = []
             for tempname in [(1, 1), (1, -1), (-1, 1), (-1, -1)]:
@@ -138,14 +155,18 @@ class Chess:
                     if target and target[1] != p[1] and target[0] != PieceName.KING:
                         output.append((tx, ty))
 
+                    # Protected Pieces
+                    if show_protected and target and target[1] == p[1] and target[0] != PieceName.KING:
+                        output.append((tx, ty))
+
             return output
         return None
 
 
     # Queen moves
-    def q(self, x: int, y: int):
-        diagonal = self.b(x, y)
-        straight = self.r(x, y)
+    def q(self, x: int, y: int, show_protected=False):
+        diagonal = self.b(x, y, show_protected)
+        straight = self.r(x, y, show_protected)
 
         if diagonal == None or straight == None:
             return None
@@ -154,7 +175,7 @@ class Chess:
 
 
     # King moves
-    def k(self, x: int, y: int):
+    def k(self, x: int, y: int, show_protected=False):
         if p := self.get_piece(x, y):
             output = []
             for tempname in [(1, 0), (1, 1), (0, 1), (-1, 1), (-1, 0), (-1, -1), (0, -1)]:
@@ -164,10 +185,14 @@ class Chess:
 
                 if target is None:
                     output.append((tx, ty))
-                elif target and target[1] != p[1] and target[0] != PieceName.KING:
+                elif target and target[1] != p[1]:
                     output.append((tx, ty))
-            return output
 
+                # Protected pieces
+                elif show_protected and target and target[1] == p[1]:
+                        output.append((tx, ty))
+
+            return output
         return None
 
 
