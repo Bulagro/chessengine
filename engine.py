@@ -25,9 +25,11 @@ class Chess:
         self.in_check = None
 
 
-    def get_piece_moves(self, x: int, y: int, show_protected=False):
+    def get_piece_moves(self, x: int, y: int, show_protected=False, only_attack=False):
         """
-        Returns every possible move for a specific piece, given a position.
+        Returns every legal move for a specific piece, given a position.
+        - show_protected: add those squares protected by the selected piece.
+        - only_attack: return only those squares attacked (applies only to pawn).
         """
 
         PIECE_MOVES = {
@@ -40,6 +42,13 @@ class Chess:
         }
 
         p = self.get_piece(x, y)
+        if only_attack and p[0] == PieceName.PAWN:
+            return self.p_attack(
+                x, y,
+                p[1],
+                show_protected
+            )
+
         return PIECE_MOVES[p[0]](x, y, show_protected)
 
 
