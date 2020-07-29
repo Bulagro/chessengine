@@ -82,7 +82,7 @@ class Chess:
             output.append(aux)
 
         # Add protected pieces to the list
-        if show_protected and target[1] == team and target[0] != PieceName.KING:
+        if show_protected and target and target[1] == team and target[0] != PieceName.KING:
             output.append(aux)
 
         # Attack left diagonal
@@ -92,7 +92,7 @@ class Chess:
             output.append(aux)
 
         # Add protected pieces to the list
-        if show_protected and target[1] == team and target[0] != PieceName.KING:
+        if show_protected and target and target[1] == team and target[0] != PieceName.KING:
             output.append(aux)
 
         return output
