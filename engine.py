@@ -177,6 +177,7 @@ class Chess:
 
 
     # King moves
+    # Get every square the king can't be in and compare them.
     def k(self, x: int, y: int, show_protected=False):
         if p := self.get_piece(x, y):
             output = []
@@ -258,6 +259,7 @@ class Chess:
             while (target := self.get_piece(
                 (tx := kx + tempname[0] * i),
                 (ty := ky + tempname[1] * i))) != False:
+
                 if target == None:
                     i += 1
                     path.append((tx, ty))
