@@ -158,6 +158,34 @@ class TestChessClassFunctions(unittest.TestCase):
             C.find_king_pos(PieceTeam.BLACK)
         )
 
+    def test_every_square_the_king_cant_be_in_default_board(self):
+        C = Chess()
+
+        expected = [
+            # Ffffffffff
+        ]
+        actual = C.get_every_square_the_king_cant_be_in(PieceTeam.BLACK)
+
+        self.assertEqual(expected, actual)
+
+    def test_every_square_the_king_cant_be_in_empty_board(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '........',
+            '........',
+            '....k...',
+            '........',
+            '........',
+            '........',
+        )
+
+        expected = []
+        actual = C.get_every_square_the_king_cant_be_in(PieceTeam.BLACK)
+
+        self.assertEqual(expected, actual)
+
 class TestPawnMovement(unittest.TestCase):
     def test_pawn_moves_starting_position(self):
         C = Chess()

@@ -300,6 +300,33 @@ class Chess:
         return (None, pinned_pieces)
 
 
+    def get_every_square_the_king_cant_be_in(self, team: PieceTeam):
+        kx, ky = self.find_king_pos(team)
+        squares = []
+        oposing_team = PieceTeam.BLACK if team == PieceTeam.WHITE else PieceTeam.WHITE
+
+        PIECE_MOVES = {
+            PieceName.KING   : self.k,
+            PieceName.QUEEN  : self.q,
+            PieceName.BISHOP : self.b,
+            PieceName.KNIGHT : self.n,
+            PieceName.ROOK   : self.r,
+        }
+
+        for i in range(8):
+            for j in range(8):
+                piece = self.get_piece(j, i)
+
+                if not piece or piece[1] == team: continue
+
+                if piece[0] == PieceName.PAWN:
+                    squares += self.p_attack(j, i, oposing_team, show_protected=True)
+                else:
+                    squares += PIECE_MOVES[piece[0]](j, i, show_protected=True)
+
+        return squares
+
+
     def set(self):
         """
         Resets the board to it's default layout and the cursor to its default
