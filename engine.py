@@ -7,12 +7,12 @@ class PieceTeam(Enum):
 
 
 class PieceName(Enum):
-    KING = auto()
-    QUEEN = auto()
+    KING   = auto()
+    QUEEN  = auto()
     BISHOP = auto()
     KNIGHT = auto()
-    ROOK = auto()
-    PAWN = auto()
+    ROOK   = auto()
+    PAWN   = auto()
 
 
 class Chess:
@@ -200,6 +200,9 @@ class Chess:
 
 
     def find_king_pos(self, team: PieceTeam):
+        """
+        Where's the king?
+        """
         king_to_look_for = 'k' if team == PieceTeam.BLACK else 'K'
 
         for i, p in enumerate(self.board):
