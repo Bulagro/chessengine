@@ -1,5 +1,5 @@
 # A Terrible Chess Engine
 
-Some chess engine being done by people who know none of what they're doing.
+Some chess engine made by people who don't know what they're doing.
 
-You'll never lose (even if you try).
+The idea is that you'll never lose (even if you try).
