@@ -369,19 +369,19 @@ class Chess:
         """
 
         piece_info = {
-            'p': (PieceName.PAWN,   PieceTeam.BLACK),
-            'P': (PieceName.PAWN,   PieceTeam.WHITE),
-            'r': (PieceName.ROOK,   PieceTeam.BLACK),
-            'R': (PieceName.ROOK,   PieceTeam.WHITE),
-            'n': (PieceName.KNIGHT, PieceTeam.BLACK),
-            'N': (PieceName.KNIGHT, PieceTeam.WHITE),
-            'b': (PieceName.BISHOP, PieceTeam.BLACK),
-            'B': (PieceName.BISHOP, PieceTeam.WHITE),
-            'q': (PieceName.QUEEN,  PieceTeam.BLACK),
-            'Q': (PieceName.QUEEN,  PieceTeam.WHITE),
-            'k': (PieceName.KING,   PieceTeam.BLACK),
-            'K': (PieceName.KING,   PieceTeam.WHITE),
-            '.': None,
+            'p' : (PieceName.PAWN,   PieceTeam.BLACK),
+            'P' : (PieceName.PAWN,   PieceTeam.WHITE),
+            'r' : (PieceName.ROOK,   PieceTeam.BLACK),
+            'R' : (PieceName.ROOK,   PieceTeam.WHITE),
+            'n' : (PieceName.KNIGHT, PieceTeam.BLACK),
+            'N' : (PieceName.KNIGHT, PieceTeam.WHITE),
+            'b' : (PieceName.BISHOP, PieceTeam.BLACK),
+            'B' : (PieceName.BISHOP, PieceTeam.WHITE),
+            'q' : (PieceName.QUEEN,  PieceTeam.BLACK),
+            'Q' : (PieceName.QUEEN,  PieceTeam.WHITE),
+            'k' : (PieceName.KING,   PieceTeam.BLACK),
+            'K' : (PieceName.KING,   PieceTeam.WHITE),
+            '.' : None,
         }
 
         if 0 <= x <= 7 and 0 <= y <= 7:
