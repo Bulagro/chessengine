@@ -76,33 +76,18 @@ class Chess:
         output = []
         forward = 1 if team == PieceTeam.BLACK else -1
 
-        # Attack right diagonal
-        aux = (x + 1, y + forward)
-        target = self.get_piece(aux[0], aux[1])
-        if target:
-            target_name, target_team = target
+        for aux in [(x + 1, y + forward), (x - 1, y + forward)]:
+            target = self.get_piece(aux[0], aux[1])
+            if target:
+                target_name, target_team = target
 
-            if ((target != EMPTY_SQUARE and target_team != team and target_name != PieceName.KING) or
-            (target == EMPTY_SQUARE and show_protected)):
-                output.append(aux)
+                if ((target != EMPTY_SQUARE and target_team != team and target_name != PieceName.KING) or
+                (target == EMPTY_SQUARE and show_protected)):
+                    output.append(aux)
 
-            # Add protected pieces to the list
-            if show_protected and target_team == team and target_name != PieceName.KING:
-                output.append(aux)
-
-        # Attack left diagonal
-        aux = (x - 1, y + forward)
-        target = self.get_piece(aux[0], aux[1])
-        if target:
-            target_name, target_team = target
-
-            if ((target != EMPTY_SQUARE and target_team != team and target_name != PieceName.KING) or
-            (target == EMPTY_SQUARE and show_protected)):
-                output.append(aux)
-
-            # Add protected pieces to the list
-            if show_protected and target_team == team and target_name != PieceName.KING:
-                output.append(aux)
+                # Add protected pieces to the list
+                if show_protected and target_team == team and target_name != PieceName.KING:
+                    output.append(aux)
 
         return output
 
