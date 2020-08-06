@@ -810,6 +810,114 @@ class TestKingMovement(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
+    def test_restricted_king_movement_straight_line(self):
+        C = Chess()
+        C.board = (
+            '.....R..',
+            '........',
+            '........',
+            '....k...', # 4, 3
+            '........',
+            '........',
+            '........',
+            '........',
+        )
+
+        expected = [(4, 4), (3, 4), (3, 3), (3, 2), (4, 2)]
+        actual = C.get_piece_moves(4, 3, False)
+
+        self.assertEqual(expected, actual)
+
+    def test_restricted_king_movement_straight_line_more_restrictions(self):
+        C = Chess()
+        C.board = (
+            '.....R..',
+            '........',
+            '........',
+            '....k...', # 4, 3
+            'R.......',
+            '........',
+            '........',
+            '........',
+        )
+
+        expected = [(3, 3), (3, 2), (4, 2)]
+        actual = C.get_piece_moves(4, 3, False)
+
+        self.assertEqual(expected, actual)
+
+    def test_restricted_king_movement_diagonal_line(self):
+        C = Chess()
+        C.board = (
+            '..B.....',
+            '........',
+            '........',
+            '....k...', # 4, 3
+            '........',
+            '........',
+            '........',
+            '........',
+        )
+
+        expected = [(5, 4), (4, 4), (5, 2), (3, 4), (3, 3), (3, 2)]
+        actual = C.get_piece_moves(4, 3, False)
+
+        self.assertEqual(expected, actual)
+
+    def test_restricted_king_movement_diagonal_line_more_restrictions(self):
+        C = Chess()
+        C.board = (
+            '..B.....',
+            '........',
+            '........',
+            '....k...', # 4, 3
+            '........',
+            '........',
+            '..B.....',
+            '........',
+        )
+
+        expected = [(5, 4), (5, 2), (3, 4), (3, 3), (3, 2)]
+        actual = C.get_piece_moves(4, 3, False)
+
+        self.assertEqual(expected, actual)
+
+    def test_restricted_king_movement_by_knight(self):
+        C = Chess()
+        C.board = (
+            '....n...',
+            '........',
+            '........',
+            '....K...', # 4, 3
+            '........',
+            '....n...',
+            '........',
+            '........',
+        )
+
+        expected = [(5, 4), (4, 4), (3, 4), (4, 2)]
+        actual = C.get_piece_moves(4, 3, False)
+
+        self.assertEqual(expected, actual)
+
+    def test_restricted_king_movement_by_pawn(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '........',
+            '....k...', # 4, 3
+            '....P...',
+            '........',
+            '........',
+            '........',
+        )
+
+        expected = [(5, 4), (4, 4), (5, 2), (3, 4), (3, 2), (4, 2)]
+        actual = C.get_piece_moves(4, 3, False)
+
+        self.assertEqual(expected, actual)
+
 
 if __name__ == '__main__':
     unittest.main()
