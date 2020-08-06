@@ -18,8 +18,7 @@ class TestChessClassFunctions(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
-        # None
-        expected = None
+        expected = (None, None)
         actual = C.get_piece(3, 3)
 
         self.assertEqual(expected, actual)
@@ -781,12 +780,12 @@ class TestKingMovement(unittest.TestCase):
         C = Chess()
 
         expected = set(
-            [(i, 5) for i in range(8)] + # Pawn attacks
-            [(0, 6), (1, 7), (7, 6), (6, 7)] + # Pieces defended by rooks
+            [(i, 5) for i in range(8)] +                       # Pawn attacks
+            [(0, 6), (1, 7), (7, 6), (6, 7)] +                 # Pieces defended by rooks
             [(3, 6), (0, 5), (2, 5), (4, 6), (5, 5), (7, 5)] + # Squares defended by knights
-            [(1, 6), (3, 6), (4, 6), (6, 6)] + # Pieces defended by bishops
-            [(2, 7), (2, 6), (3, 6), (4, 6)] + # Pieces defended by queen
-            [(3, 7), (3, 6), (4, 6), (5, 6), (5, 7)] # Pieces defended by the king.
+            [(1, 6), (3, 6), (4, 6), (6, 6)] +                 # Pieces defended by bishops
+            [(2, 7), (2, 6), (3, 6), (4, 6)] +                 # Pieces defended by queen
+            [(3, 7), (3, 6), (4, 6), (5, 6), (5, 7)]           # Pieces defended by the king.
         )
         actual = set(C.get_every_square_the_king_cant_be_in(PieceTeam.BLACK))
 
