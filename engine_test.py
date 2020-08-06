@@ -126,7 +126,7 @@ class TestChessClassFunctions(unittest.TestCase):
         )
 
         expected = (
-            [(4 + i, 4 + j) for i, j in [(1, 0), (1, 1), (0, 1), (1, -1), (-1, 1), (-1, 0), (-1, -1), (0, -1)]]
+            [(4 + i, 4 + j) for i, j in [(1, 0), (1, 1), (0, 1), (-1, 1), (-1, 0), (-1, -1), (0, -1), (1, -1)]]
         )
         actual = C.get_piece_moves(4, 4, True)
 
@@ -501,7 +501,7 @@ class TestKingMovement(unittest.TestCase):
         )
 
         expected = (
-            [(4 + i, 4 + j) for i, j in [(1, 0), (1, 1), (0, 1), (1, -1), (-1, 1), (-1, 0), (-1, -1), (0, -1)]]
+            [(4 + i, 4 + j) for i, j in [(1, 0), (1, 1), (0, 1), (-1, 1), (-1, 0), (-1, -1), (0, -1), (1, -1)]]
         )
         actual = C.k(4, 4)
 
@@ -859,7 +859,7 @@ class TestKingMovement(unittest.TestCase):
             '........',
         )
 
-        expected = [(5, 4), (4, 4), (5, 2), (3, 4), (3, 3), (3, 2)]
+        expected = [(5, 4), (4, 4), (3, 4), (3, 3), (3, 2), (5, 2)]
         actual = C.get_piece_moves(4, 3, False)
 
         self.assertEqual(expected, actual)
@@ -877,7 +877,7 @@ class TestKingMovement(unittest.TestCase):
             '........',
         )
 
-        expected = [(5, 4), (5, 2), (3, 4), (3, 3), (3, 2)]
+        expected = [(5, 4), (3, 4), (3, 3), (3, 2), (5, 2)]
         actual = C.get_piece_moves(4, 3, False)
 
         self.assertEqual(expected, actual)
@@ -913,7 +913,7 @@ class TestKingMovement(unittest.TestCase):
             '........',
         )
 
-        expected = [(5, 4), (4, 4), (5, 2), (3, 4), (3, 2), (4, 2)]
+        expected = [(5, 4), (4, 4), (3, 4), (3, 2), (4, 2), (5, 2)]
         actual = C.get_piece_moves(4, 3, False)
 
         self.assertEqual(expected, actual)
