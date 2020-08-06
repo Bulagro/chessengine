@@ -1,7 +1,9 @@
-☐ Finnish tests for get_every_square_the_king_cant_be_in().
-☐ Update King movement function to consider all the squares he can't be in.
+✔ Finnish tests for get_every_square_the_king_cant_be_in(). @done(20-08-06 02:02)
+✔ Update King movement function to consider all the squares he can't be in. @done(20-08-06 02:02)
 
 ☐ Make a CLI.
+
+☐ Rename get_king_status() to something else.
 
 Retarded Sloth:
     ☐ Make retarded sloth.
