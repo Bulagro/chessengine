@@ -78,7 +78,7 @@ class Chess:
         # Attack right diagonal
         aux = (x + 1, y + forward)
         target = self.get_piece(aux[0], aux[1])
-        if target and target[1] != team and target[0] != PieceName.KING:
+        if (target and target[1] != team and target[0] != PieceName.KING) or (target == None and show_protected):
             output.append(aux)
 
         # Add protected pieces to the list
@@ -88,7 +88,7 @@ class Chess:
         # Attack left diagonal
         aux = (x - 1, y + forward)
         target = self.get_piece(aux[0], aux[1])
-        if target and target[1] != team and target[0] != PieceName.KING:
+        if (target and target[1] != team and target[0] != PieceName.KING) or (target == None and show_protected):
             output.append(aux)
 
         # Add protected pieces to the list
