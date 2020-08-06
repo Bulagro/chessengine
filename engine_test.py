@@ -126,7 +126,7 @@ class TestChessClassFunctions(unittest.TestCase):
         )
 
         expected = (
-            [(4 + i, 4 + j) for i, j in [(1, 0), (1, 1), (0, 1), (-1, 1), (-1, 0), (-1, -1), (0, -1)]]
+            [(4 + i, 4 + j) for i, j in [(1, 0), (1, 1), (0, 1), (1, -1), (-1, 1), (-1, 0), (-1, -1), (0, -1)]]
         )
         actual = C.get_piece_moves(4, 4, True)
 
@@ -528,7 +528,7 @@ class TestKingMovement(unittest.TestCase):
         )
 
         expected = (
-            [(4 + i, 4 + j) for i, j in [(1, 0), (1, 1), (0, 1), (-1, 1), (-1, 0), (-1, -1), (0, -1)]]
+            [(4 + i, 4 + j) for i, j in [(1, 0), (1, 1), (0, 1), (1, -1), (-1, 1), (-1, 0), (-1, -1), (0, -1)]]
         )
         actual = C.k(4, 4)
 

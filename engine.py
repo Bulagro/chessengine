@@ -181,8 +181,7 @@ class Chess:
         if p := self.get_piece(x, y):
             king_moves = []
 
-            output = []
-            for tempname in [(1, 0), (1, 1), (0, 1), (-1, 1), (-1, 0), (-1, -1), (0, -1)]:
+            for tempname in [(1, 0), (1, 1), (0, 1), (1, -1), (-1, 1), (-1, 0), (-1, -1), (0, -1)]:
                 tx = x + tempname[0]
                 ty = y + tempname[1]
                 target = self.get_piece(tx, ty)
