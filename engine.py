@@ -6,7 +6,6 @@ class PieceTeam(Enum):
     BLACK = auto()
 
 
-
 class PieceName(Enum):
     KING   = auto()
     QUEEN  = auto()
