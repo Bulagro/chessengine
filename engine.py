@@ -177,9 +177,10 @@ class Chess:
 
 
     # King moves
-    # Get every square the king can't be in and compare them.
     def k(self, x: int, y: int, show_protected=False):
         if p := self.get_piece(x, y):
+            king_moves = []
+
             output = []
             for tempname in [(1, 0), (1, 1), (0, 1), (-1, 1), (-1, 0), (-1, -1), (0, -1)]:
                 tx = x + tempname[0]
@@ -187,15 +188,20 @@ class Chess:
                 target = self.get_piece(tx, ty)
 
                 if target is None:
-                    output.append((tx, ty))
+                    king_moves.append((tx, ty))
                 elif target and target[1] != p[1]:
-                    output.append((tx, ty))
+                    king_moves.append((tx, ty))
 
                 # Protected pieces
                 elif show_protected and target and target[1] == p[1]:
-                        output.append((tx, ty))
+                    king_moves.append((tx, ty))
 
-            return output
+            if show_protected:
+                return king_moves
+            else:
+                bad_squares = self.get_every_square_the_king_cant_be_in(p[1])
+                return [move for move in king_moves if move not in bad_squares]
+
         return None
 
 
