@@ -51,7 +51,7 @@ class Chess:
             # p[1], target[1] -> team of the pawn and target, respectively.
 
             forward = 1 if p[1] == PieceTeam.BLACK else -1
-            has_moved = (y != (1 if p[1] == PieceTeam.BLACK else 6))
+            has_moved = y != (1 if p[1] == PieceTeam.BLACK else 6)
             output = []
 
             # Forward one square
