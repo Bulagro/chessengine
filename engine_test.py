@@ -158,38 +158,6 @@ class TestChessClassFunctions(unittest.TestCase):
             C.find_king_pos(PieceTeam.BLACK)
         )
 
-    def test_every_square_the_king_cant_be_in_default_board(self):
-        C = Chess()
-
-        expected = set(
-            [(i, 5) for i in range(8)] + # Pawn attacks
-            [(0, 6), (1, 7), (7, 6), (6, 7)] + # Pieces defended by rooks
-            [(3, 6), (0, 5), (2, 5), (4, 6), (5, 5), (7, 5)] + # Squares defended by knights
-            [(1, 6), (3, 6), (4, 6), (6, 6)] + # Pieces defended by bishops
-            [(2, 7), (2, 6), (3, 6), (4, 6)] + # Pieces defended by queen
-            [(3, 7), (3, 6), (4, 6), (5, 6), (5, 7)] # Pieces defended by the king.
-        )
-        actual = set(C.get_every_square_the_king_cant_be_in(PieceTeam.BLACK))
-
-        self.assertEqual(expected, actual)
-
-    def test_every_square_the_king_cant_be_in_empty_board(self):
-        C = Chess()
-        C.board = (
-            '........',
-            '........',
-            '........',
-            '........',
-            '....k...',
-            '........',
-            '........',
-            '........',
-        )
-
-        expected = []
-        actual = C.get_every_square_the_king_cant_be_in(PieceTeam.BLACK)
-
-        self.assertEqual(expected, actual)
 
 class TestPawnMovement(unittest.TestCase):
     def test_pawn_moves_starting_position(self):
@@ -808,6 +776,39 @@ class TestKingMovement(unittest.TestCase):
 
         self.assertEqual(expected, actual)
         self.assertEqual(C.in_check, PieceTeam.BLACK)
+
+    def test_every_square_the_king_cant_be_in_default_board(self):
+        C = Chess()
+
+        expected = set(
+            [(i, 5) for i in range(8)] + # Pawn attacks
+            [(0, 6), (1, 7), (7, 6), (6, 7)] + # Pieces defended by rooks
+            [(3, 6), (0, 5), (2, 5), (4, 6), (5, 5), (7, 5)] + # Squares defended by knights
+            [(1, 6), (3, 6), (4, 6), (6, 6)] + # Pieces defended by bishops
+            [(2, 7), (2, 6), (3, 6), (4, 6)] + # Pieces defended by queen
+            [(3, 7), (3, 6), (4, 6), (5, 6), (5, 7)] # Pieces defended by the king.
+        )
+        actual = set(C.get_every_square_the_king_cant_be_in(PieceTeam.BLACK))
+
+        self.assertEqual(expected, actual)
+
+    def test_every_square_the_king_cant_be_in_empty_board(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '........',
+            '........',
+            '....k...',
+            '........',
+            '........',
+            '........',
+        )
+
+        expected = []
+        actual = C.get_every_square_the_king_cant_be_in(PieceTeam.BLACK)
+
+        self.assertEqual(expected, actual)
 
 
 if __name__ == '__main__':
