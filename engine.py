@@ -306,7 +306,6 @@ class Chess:
 
 
     def get_every_square_the_king_cant_be_in(self, team: PieceTeam):
-        kx, ky = self.find_king_pos(team)
         squares = []
         oposing_team = PieceTeam.BLACK if team == PieceTeam.WHITE else PieceTeam.WHITE
 
