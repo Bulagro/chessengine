@@ -3,8 +3,15 @@
 ✔ Refactor use of Chess().get_piece() to use verbose variables (instead of piece[0] or piece[1]) @done(20-08-06 12:27)
 
 ☐ Limit piece movement when in check.
+    // Get all moves to defend the check.
+    // See if there's at least one posible move to prevent it.
+    // If not, checkmate.
+    // If there is, for each piece, only show the avaliable moves if they're in...
+    // ... the possible moves list.
 
 ☐ Rename get_king_status() to something else.
+☐ Refactor get_king_status() to set pinned_pieces for both teams, path to checking piece and in_check.
+
 ☐ Make a CLI.
 
 
