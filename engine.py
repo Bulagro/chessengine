@@ -234,7 +234,7 @@ class Chess:
 
     def get_king_status(self, team: PieceTeam):
         """
-        Sets the 'in_check' flag and returns a tuple containing in_check and
+        Returns a tuple containing in_check and:
         - a list with all pinned pieces or
         - the path to the piece that's causing the check.
         """
@@ -317,7 +317,6 @@ class Chess:
                 target_name, target_team = target
 
                 if target_name == PieceName.KNIGHT and target_team != team:
-                    self.in_check = team
                     return (team, [(tx, ty)])
 
         # Pawn check
@@ -328,7 +327,6 @@ class Chess:
             target_name, target_team = target
 
             if target_name == PieceName.PAWN and target_team != team:
-                self.in_check = team
                 return (team, [(kx + i, ky + forward)])
 
         return (None, pinned_pieces)
