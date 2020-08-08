@@ -665,7 +665,27 @@ class TestKingMovement(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
-    def test_king_status_check_straight_line(self):
+    def test_get_king_status_on_empty_board_with_only_two_non_interfiering_kings(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '.....K..',
+            '........',
+            '........',
+            '...k....',
+            '........',
+            '........',
+        )
+
+        for team in (PieceTeam.WHITE, PieceTeam.BLACK):
+            C.get_king_status(team)
+
+            self.assertIsNone(C.in_check)
+            self.assertEqual(C.moves_to_defend_check, [])
+            self.assertEqual(C.pinned_pieces, {})
+
+    def test_get_king_status_no_pinned_pieces_straight_line(self):
         C = Chess()
         C.board = (
             '........',
@@ -675,16 +695,233 @@ class TestKingMovement(unittest.TestCase):
             '........',
             '........',
             '........',
-            '.k.....Q',
+            '.K.P.P.r',
         )
 
-        expected = [(2, 7), (3, 7), (4, 7), (5, 7), (6, 7), (7, 7)]
-        C.in_check, actual = C.get_king_status(PieceTeam.BLACK)
+        C.get_king_status(PieceTeam.WHITE)
 
-        self.assertEqual(expected, actual)
-        self.assertEqual(C.in_check, PieceTeam.BLACK)
+        self.assertIsNone(C.in_check)
+        self.assertEqual(C.pinned_pieces, {})
+        self.assertEqual(C.moves_to_defend_check, [])
 
-    def test_king_status_check_diagonal_line(self):
+    def test_get_king_status_one_pinned_pawn_straight_line(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+            '.K...P.r',
+        )
+
+        C.get_king_status(PieceTeam.WHITE)
+        expected = {
+            (5, 7) : []
+        }
+
+        self.assertIsNone(C.in_check)
+        self.assertEqual(expected, C.pinned_pieces)
+        self.assertEqual(C.moves_to_defend_check, [])
+
+    def test_get_king_status_one_pinned_rook_straight_line(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+            '.K...R.r',
+        )
+
+        C.get_king_status(PieceTeam.WHITE)
+        expected = {
+            (5, 7) : [(6, 7), (7, 7), (4, 7), (3, 7), (2, 7)]
+        }
+
+        self.assertIsNone(C.in_check)
+        self.assertEqual(expected, C.pinned_pieces)
+        self.assertEqual(C.moves_to_defend_check, [])
+
+    def test_get_king_status_one_pinned_piece_and_check_straight_line(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '........',
+            '........',
+            '.q......',
+            '........',
+            '........',
+            '.K...R.r',
+        )
+
+        C.get_king_status(PieceTeam.WHITE)
+        expected_check = PieceTeam.WHITE
+        expected_pins = {
+            (5, 7) : [(6, 7), (7, 7), (4, 7), (3, 7), (2, 7)]
+        }
+        expected_moves_to_defend_check = [
+            (1, 6), (1, 5), (1, 4)
+        ]
+
+        self.assertEqual(expected_check, C.in_check)
+        self.assertEqual(expected_pins, C.pinned_pieces)
+        self.assertEqual(expected_moves_to_defend_check, C.moves_to_defend_check)
+
+    def test_get_king_status_multiple_pinned_pieces_straight_line(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '........',
+            '........',
+            '.q......',
+            '.P......',
+            '........',
+            '.K...R.r',
+        )
+
+        C.get_king_status(PieceTeam.WHITE)
+        expected_pins = {
+            (5, 7) : [(6, 7), (7, 7), (4, 7), (3, 7), (2, 7)],
+            (1, 5) : [],
+        }
+
+        self.assertIsNone(C.in_check)
+        self.assertEqual(expected_pins, C.pinned_pieces)
+        self.assertEqual(C.moves_to_defend_check, [])
+
+    def test_get_king_status_one_non_pinned_piece_since_the_attacker_cant_attack_in_that_direction(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '........',
+            '........',
+            '.b......',
+            '.N......',
+            '........',
+            '.K......',
+        )
+
+        C.get_king_status(PieceTeam.WHITE)
+
+        self.assertIsNone(C.in_check)
+        self.assertEqual(C.pinned_pieces, {})
+        self.assertEqual(C.moves_to_defend_check, [])
+
+    def test_get_king_status_not_pinning_same_team_piece_straight_line(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '........',
+            '........',
+            '.r......',
+            '.b......',
+            '........',
+            '.K......',
+        )
+
+        C.get_king_status(PieceTeam.WHITE)
+
+        self.assertIsNone(C.in_check)
+        self.assertEqual(C.pinned_pieces, {})
+        self.assertEqual(C.moves_to_defend_check, [])
+
+    def test_get_king_status_one_pinned_pawn_diagonal_line(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '........',
+            '........',
+            '....b...',
+            '........',
+            '..P.....',
+            '.K......',
+        )
+
+        C.get_king_status(PieceTeam.WHITE)
+        expected_pin = {
+            (2, 6) : []
+            }
+
+        self.assertIsNone(C.in_check)
+        self.assertEqual(expected_pin, C.pinned_pieces)
+        self.assertEqual(C.moves_to_defend_check, [])
+
+    def test_get_king_status_one_pinned_queen_diagonal_line(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '........',
+            '........',
+            '....b...',
+            '........',
+            '..Q.....',
+            '.K......',
+        )
+
+        C.get_king_status(PieceTeam.WHITE)
+        expected_pin = {
+            (2, 6) : [(3, 5), (4, 4)]
+            }
+
+        self.assertIsNone(C.in_check)
+        self.assertEqual(expected_pin, C.pinned_pieces)
+        self.assertEqual(C.moves_to_defend_check, [])
+
+    def test_get_king_status_multiple_pinned_pieces_diagonal_line(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '......B.',
+            '.....r..',
+            '........',
+            '...k....',
+            '....p...',
+            '.....B..',
+        )
+
+        C.get_king_status(PieceTeam.BLACK)
+        expected_pins = {
+            (4, 6) : [(5, 7)],
+            (5, 3) : [],
+        }
+
+        self.assertIsNone(C.in_check)
+        self.assertEqual(expected_pins, C.pinned_pieces)
+        self.assertEqual(C.moves_to_defend_check, [])
+
+    def test_get_king_status_not_pinning_same_team_piece_diagonal_line(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '........',
+            '........',
+            '....B...',
+            '........',
+            '..P.....',
+            '.k......',
+        )
+
+        C.get_king_status(PieceTeam.BLACK)
+
+        self.assertIsNone(C.in_check)
+        self.assertEqual(C.pinned_pieces, {})
+        self.assertEqual(C.moves_to_defend_check, [])
+
+    def test_get_king_status_check_diagonal_line(self):
         C = Chess()
         C.board = (
             '........',
@@ -697,49 +934,35 @@ class TestKingMovement(unittest.TestCase):
             '.k......',
         )
 
-        expected = [(2, 6), (3, 5)]
-        C.in_check, actual = C.get_king_status(PieceTeam.BLACK)
+        C.get_king_status(PieceTeam.BLACK)
+        expected_moves_to_defend_check = [(2, 6), (3, 5)]
 
-        self.assertEqual(expected, actual)
-        self.assertEqual(C.in_check, PieceTeam.BLACK)
+        self.assertEqual(PieceTeam.BLACK, C.in_check)
+        self.assertEqual(C.pinned_pieces, {})
+        self.assertEqual(expected_moves_to_defend_check, C.moves_to_defend_check)
 
-    def test_king_status_ignore_pinned_pieces_on_check(self):
+    def test_get_king_status_pinned_pieces_and_check_diagonal_line(self):
         C = Chess()
         C.board = (
             '........',
+            'b.......',
             '........',
+            '..P.....',
+            '...K....',
             '........',
+            '.q......',
             '........',
-            '.r..b...',
-            '.P......',
-            '..N.....',
-            '.K.....q',
         )
 
-        expected = [(2, 7), (3, 7), (4, 7), (5, 7), (6, 7), (7, 7)]
-        C.in_check, actual = C.get_king_status(PieceTeam.WHITE)
+        C.get_king_status(PieceTeam.WHITE)
+        expected_pin = {
+            (2, 3) : []
+        }
+        expected_moves_to_defend_check = [(2, 5), (1, 6)]
 
-        self.assertEqual(expected, actual)
-        self.assertEqual(C.in_check, PieceTeam.WHITE)
-
-    def test_king_status_not_pinning_other_teams_piece(self):
-        C = Chess()
-        C.board = (
-            '........',
-            '........',
-            '........',
-            '........',
-            '........',
-            '........',
-            '........',
-            '.k.N...Q',
-        )
-
-        expected = []
-        C.in_check, actual = C.get_king_status(PieceTeam.BLACK)
-
-        self.assertEqual(expected, actual)
-        self.assertEqual(None, C.in_check)
+        self.assertEqual(PieceTeam.WHITE, C.in_check)
+        self.assertEqual(expected_pin, C.pinned_pieces)
+        self.assertEqual(expected_moves_to_defend_check, C.moves_to_defend_check)
 
     def test_king_status_check_by_pawn(self):
         C = Chess()
@@ -754,28 +977,30 @@ class TestKingMovement(unittest.TestCase):
             '........',
         )
 
-        expected = [(3, 5)]
-        C.in_check, actual = C.get_king_status(PieceTeam.BLACK)
+        C.get_king_status(PieceTeam.BLACK)
+        expected_moves_to_defend_check = [(3, 5)]
 
-        self.assertEqual(expected, actual)
-        self.assertEqual(C.in_check, PieceTeam.BLACK)
+        self.assertEqual(PieceTeam.BLACK, C.in_check)
+        self.assertEqual(C.pinned_pieces, {})
+        self.assertEqual(expected_moves_to_defend_check, C.moves_to_defend_check)
 
         C.board = (
             '........',
             '........',
             '........',
-            '.....p..',
-            '....K...',
             '........',
+            '....k...',
+            '.....P..',
             '........',
             '........',
         )
 
-        expected = [(5, 3)]
-        C.in_check, actual = C.get_king_status(PieceTeam.WHITE)
+        C.get_king_status(PieceTeam.BLACK)
+        expected_moves_to_defend_check = [(5, 5)]
 
-        self.assertEqual(expected, actual)
-        self.assertEqual(C.in_check, PieceTeam.WHITE)
+        self.assertEqual(PieceTeam.BLACK, C.in_check)
+        self.assertEqual(C.pinned_pieces, {})
+        self.assertEqual(expected_moves_to_defend_check, C.moves_to_defend_check)
 
     def test_king_status_check_by_knight(self):
         C = Chess()
@@ -790,150 +1015,13 @@ class TestKingMovement(unittest.TestCase):
             '........',
         )
 
-        expected = [(3, 6)]
-        C.in_check, actual = C.get_king_status(PieceTeam.BLACK)
+        C.get_king_status(PieceTeam.BLACK)
+        expected_moves_to_defend_check = [(3, 6)]
 
-        self.assertEqual(expected, actual)
         self.assertEqual(C.in_check, PieceTeam.BLACK)
+        self.assertEqual(C.pinned_pieces, {})
+        self.assertEqual(expected_moves_to_defend_check, C.moves_to_defend_check)
 
-    def test_every_square_the_king_cant_be_in_default_board(self):
-        C = Chess()
-
-        expected = set(
-            [(i, 5) for i in range(8)] +                       # Pawn attacks
-            [(0, 6), (1, 7), (7, 6), (6, 7)] +                 # Pieces defended by rooks
-            [(3, 6), (0, 5), (2, 5), (4, 6), (5, 5), (7, 5)] + # Squares defended by knights
-            [(1, 6), (3, 6), (4, 6), (6, 6)] +                 # Pieces defended by bishops
-            [(2, 7), (2, 6), (3, 6), (4, 6)] +                 # Pieces defended by queen
-            [(3, 7), (3, 6), (4, 6), (5, 6), (5, 7)]           # Pieces defended by the king.
-        )
-        actual = set(C.get_every_square_the_king_cant_be_in(PieceTeam.BLACK))
-
-        self.assertEqual(expected, actual)
-
-    def test_every_square_the_king_cant_be_in_empty_board(self):
-        C = Chess()
-        C.board = (
-            '........',
-            '........',
-            '........',
-            '........',
-            '....k...',
-            '........',
-            '........',
-            '........',
-        )
-
-        expected = []
-        actual = C.get_every_square_the_king_cant_be_in(PieceTeam.BLACK)
-
-        self.assertEqual(expected, actual)
-
-    def test_restricted_king_movement_straight_line(self):
-        C = Chess()
-        C.board = (
-            '.....R..',
-            '........',
-            '........',
-            '....k...', # 4, 3
-            '........',
-            '........',
-            '........',
-            '........',
-        )
-
-        expected = [(4, 4), (3, 4), (3, 3), (3, 2), (4, 2)]
-        actual = C.get_piece_moves(4, 3, False)
-
-        self.assertEqual(expected, actual)
-
-    def test_restricted_king_movement_straight_line_more_restrictions(self):
-        C = Chess()
-        C.board = (
-            '.....R..',
-            '........',
-            '........',
-            '....k...', # 4, 3
-            'R.......',
-            '........',
-            '........',
-            '........',
-        )
-
-        expected = [(3, 3), (3, 2), (4, 2)]
-        actual = C.get_piece_moves(4, 3, False)
-
-        self.assertEqual(expected, actual)
-
-    def test_restricted_king_movement_diagonal_line(self):
-        C = Chess()
-        C.board = (
-            '..B.....',
-            '........',
-            '........',
-            '....k...', # 4, 3
-            '........',
-            '........',
-            '........',
-            '........',
-        )
-
-        expected = [(5, 4), (4, 4), (3, 4), (3, 3), (3, 2), (5, 2)]
-        actual = C.get_piece_moves(4, 3, False)
-
-        self.assertEqual(expected, actual)
-
-    def test_restricted_king_movement_diagonal_line_more_restrictions(self):
-        C = Chess()
-        C.board = (
-            '..B.....',
-            '........',
-            '........',
-            '....k...', # 4, 3
-            '........',
-            '........',
-            '..B.....',
-            '........',
-        )
-
-        expected = [(5, 4), (3, 4), (3, 3), (3, 2), (5, 2)]
-        actual = C.get_piece_moves(4, 3, False)
-
-        self.assertEqual(expected, actual)
-
-    def test_restricted_king_movement_by_knight(self):
-        C = Chess()
-        C.board = (
-            '....n...',
-            '........',
-            '........',
-            '....K...', # 4, 3
-            '........',
-            '....n...',
-            '........',
-            '........',
-        )
-
-        expected = [(5, 4), (4, 4), (3, 4), (4, 2)]
-        actual = C.get_piece_moves(4, 3, False)
-
-        self.assertEqual(expected, actual)
-
-    def test_restricted_king_movement_by_pawn(self):
-        C = Chess()
-        C.board = (
-            '........',
-            '........',
-            '........',
-            '....k...', # 4, 3
-            '....P...',
-            '........',
-            '........',
-            '........',
-        )
-
-        expected = [(5, 4), (4, 4), (3, 4), (3, 2), (4, 2), (5, 2)]
-        actual = C.get_piece_moves(4, 3, False)
 
         self.assertEqual(expected, actual)
 

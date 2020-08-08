@@ -234,81 +234,101 @@ class Chess:
 
     def get_king_status(self, team: PieceTeam):
         """
-        Returns a tuple containing in_check and:
-        - a list with all pinned pieces or
-        - the path to the piece that's causing the check.
+        Sets the in_check flag, pinned_pieces and a list of moves
+        to defend the check.
         """
 
+        # Clear values of previous position.
+        self.in_check = None
+        self.moves_to_defend_check = []
+        self.pinned_pieces = {}
+
         kx, ky = self.find_king_pos(team)
-        pinned_pieces = []
         forward = 1 if team == PieceTeam.BLACK else -1
 
-        # Straight lines
+        # Straight line.
         for tempname in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
-            i = 1
-            remembered_piece = None
             path = []
+            remembered_piece = None
+            i = 1
 
             while (target := self.get_piece(
                 (tx := kx + tempname[0] * i),
-                (ty := ky + tempname[1] * i))) != False:
+                (ty := ky + tempname[1] * i))):
 
                 target_name, target_team = target
 
                 if target == EMPTY_SQUARE:
-                    i += 1
                     path.append((tx, ty))
-                    continue
 
-                if target_team == team:
+                elif target_team == team:
                     if remembered_piece: break
                     else: remembered_piece = (tx, ty)
 
-                else:
-                    if target_name == PieceName.QUEEN or target_name == PieceName.ROOK:
+                else: # target_team != team
+                    if target_name in (PieceName.ROOK, PieceName.QUEEN):
+                        path.append((tx, ty))
+
+                        # Pin
                         if remembered_piece:
-                            pinned_pieces.append(remembered_piece)
+                            rx, ry = remembered_piece
+                            self.pinned_pieces[remembered_piece] = [
+                                move for move in self.get_piece_moves(rx, ry)
+                                if move in path
+                            ]
+                            break
+
+                        # Check
                         else:
-                            path.append((tx, ty))
-                            return (team, path)
+                            self.moves_to_defend_check += path
+                            self.in_check = team
+                            break
                     else:
                         break
                 i += 1
 
-        # Diagonal lines
+        # Diagonal line.
         for tempname in [(1, 1), (1, -1), (-1, 1), (-1, -1)]:
-            i = 1
-            remembered_piece = None
             path = []
+            remembered_piece = None
+            i = 1
 
             while (target := self.get_piece(
                 (tx := kx + tempname[0] * i),
-                (ty := ky + tempname[1] * i))) != False:
+                (ty := ky + tempname[1] * i))):
 
                 target_name, target_team = target
 
                 if target == EMPTY_SQUARE:
-                    i += 1
                     path.append((tx, ty))
-                    continue
 
-                if target_team == team:
+                elif target_team == team:
                     if remembered_piece: break
                     else: remembered_piece = (tx, ty)
 
-                else:
-                    if target_name == PieceName.QUEEN or target_name == PieceName.BISHOP:
+                else: # target_team != team
+                    if target_name in (PieceName.BISHOP, PieceName.QUEEN):
+                        path.append((tx, ty))
+
+                        # Pin
                         if remembered_piece:
-                            pinned_pieces.append(remembered_piece)
+                            rx, ry = remembered_piece
+                            self.pinned_pieces[remembered_piece] = [
+                                move for move in self.get_piece_moves(rx, ry)
+                                if move in path
+                            ]
+                            break
+
+                        # Check
                         else:
-                            path.append((tx, ty))
-                            return (team, path)
+                            self.moves_to_defend_check += path
+                            self.in_check = team
+                            break
                     else:
                         break
-
                 i += 1
 
-        # Knight check
+        # Knights
         for tempname in [(1, 2), (-1, 2), (1, -2), (-1, -2), (2, 1), (2, -1), (-2, 1), (-2, -1)]:
             if (target := self.get_piece(
                 (tx := kx + tempname[0]),
@@ -317,9 +337,10 @@ class Chess:
                 target_name, target_team = target
 
                 if target_name == PieceName.KNIGHT and target_team != team:
-                    return (team, [(tx, ty)])
+                    self.in_check = team
+                    self.moves_to_defend_check = [(tx, ty)]
 
-        # Pawn check
+        # Pawns
         for i in (1, -1):
             target = self.get_piece(kx + i, ky + forward)
             if not target or target == EMPTY_SQUARE: continue
@@ -327,9 +348,8 @@ class Chess:
             target_name, target_team = target
 
             if target_name == PieceName.PAWN and target_team != team:
-                return (team, [(kx + i, ky + forward)])
-
-        return (None, pinned_pieces)
+                self.in_check = team
+                self.moves_to_defend_check = [(kx + i, ky + forward)]
 
 
     def get_every_square_the_king_cant_be_in(self, team: PieceTeam):
