@@ -348,7 +348,11 @@ class Chess:
             for j in range(8):
                 piece = self.get_piece(j, i)
 
-                if not piece or piece == EMPTY_SQUARE or piece[1] == team: continue
+                if (
+                    not piece             or
+                    piece == EMPTY_SQUARE or
+                    piece[1] == team
+                    ): continue
 
                 if piece[0] == PieceName.PAWN:
                     squares += self.p_attack(j, i, oposing_team, show_protected=True)
