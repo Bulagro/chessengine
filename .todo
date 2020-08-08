@@ -1,18 +1,18 @@
 ✔ Finish tests for get_every_square_the_king_cant_be_in(). @done(20-08-06 02:02)
 ✔ Update King movement function to consider all the squares he can't be in. @done(20-08-06 02:02)
 ✔ Refactor use of Chess().get_piece() to use verbose variables (instead of piece[0] or piece[1]) @done(20-08-06 12:27)
+✔ Refactor get_king_status() to set pinned_pieces for both teams, path to checking piece and in_check. @done(20-08-08 02:33)
 
 ☐ Limit piece movement when in check.
-    // Get all moves to defend the check.
-    // See if there's at least one posible move to prevent it.
-    // If not, checkmate.
-    // If there is, for each piece, only show the avaliable moves if they're in...
-    // ... the possible moves list.
-
+☐ Make can_move(team: PieceTeam) -> bool
 ☐ Rename get_king_status() to something else.
-☐ Refactor get_king_status() to set pinned_pieces for both teams, path to checking piece and in_check.
 
-☐ Make a CLI.
+Fix get_every_square_the_king_cant_be_in():
+    ☐ Redefine functions to determine rook and bishop attacking squares.
+    ☐ Fix tests.
+
+CLI:
+    ☐ Make it.
 
 
 Retarded Sloth:
