@@ -1,19 +1,20 @@
-✔ Finish tests for get_every_square_the_king_cant_be_in(). @done(20-08-06 02:02)
-✔ Update King movement function to consider all the squares he can't be in. @done(20-08-06 02:02)
-✔ Refactor use of Chess().get_piece() to use verbose variables (instead of piece[0] or piece[1]) @done(20-08-06 12:27)
-✔ Refactor get_king_status() to set pinned_pieces for both teams, path to checking piece and in_check. @done(20-08-08 02:33)
-
-☐ Limit piece movement when in check.
 ☐ Make can_move(team: PieceTeam) -> bool
 ☐ Rename get_king_status() to something else.
 
-Fix get_every_square_the_king_cant_be_in():
+☐ Limit piece movement when in check. @critical
+
+Fix get_every_square_the_king_cant_be_in(): @high
     ☐ Redefine functions to determine rook and bishop attacking squares.
     ☐ Fix tests.
 
 CLI:
     ☐ Make it.
 
-
 Retarded Sloth:
     ☐ Make retarded sloth.
+
+Archive:
+  ✔ Finish tests for get_every_square_the_king_cant_be_in(). @done(20-08-06 02:02)
+  ✔ Update King movement function to consider all the squares he can't be in. @done(20-08-06 02:02)
+  ✔ Refactor use of Chess().get_piece() to use verbose variables (instead of piece[0] or piece[1]) @done(20-08-06 12:27)
+  ✔ Refactor get_king_status() to set pinned_pieces for both teams, path to checking piece and in_check. @done(20-08-08 02:33)
