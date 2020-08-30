@@ -628,7 +628,7 @@ class TestKingMovement(unittest.TestCase):
             '........',
         )
 
-        expected = [(2, 1), (2, 2), (1, 2), (0, 2), (0, 1), (1, 0)]
+        expected = [(2, 1), (2, 2), (1, 2), (0, 2), (0, 1), (1, 0), (2, 0)]
         actual = C.get_piece_moves(1, 1)
 
         self.assertEqual(expected, actual)
