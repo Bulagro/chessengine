@@ -263,6 +263,30 @@ class TestRookMovement(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
+    def test_rook_attacking_moves(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '...p....',
+            '........',
+            'p..R.p..',
+            '........',
+            '........',
+            '...p....',
+        )
+
+        expected = [
+            (4, 4), (5, 4),         # Right
+            (2, 4), (1, 4), (0, 4), # Left
+            (3, 5), (3, 6), (3, 7), # Down
+            (3, 3), (3, 2)          # Up
+        ]
+
+        actual = C.r(3, 4)
+
+        self.assertEqual(expected, actual)
+
     def test_rook_cant_eat_king(self):
         C = Chess()
         C.board = (
