@@ -5,6 +5,8 @@
 
 Fix get_every_square_the_king_cant_be_in(): @high
     ☐ Redefine functions to determine rook and bishop attacking squares.
+        // Not redefine them, instead modify the existing ones to behave under the show_protected flag
+        // Rook is done.
     ☐ Fix tests.
 
 CLI:
