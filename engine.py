@@ -160,18 +160,22 @@ class Chess:
                 i = 1
                 while (target := self.get_piece(
                     (tx := x + tempname[0] * i),
-                    (ty := y + tempname[1] * i))) is EMPTY_SQUARE:
+                    (ty := y + tempname[1] * i))) and target[1] != piece_team:
                     i += 1
-                    output.append((tx, ty))
+
+                    if target == EMPTY_SQUARE:
+                        output.append((tx, ty))
+                    else:
+                        if target[0] != PieceName.KING:
+                            output.append((tx, ty))
+                        if not show_protected:
+                            break
                 else:
                     if target:
-                        target_name, target_team = target
-
-                        if target_team != piece_team and target_name != PieceName.KING:
-                            output.append((tx, ty))
+                        target_name, _ = target
 
                         # Protected pieces
-                        if show_protected and target_team == piece_team and target_name != PieceName.KING:
+                        if show_protected and target_name != PieceName.KING:
                             output.append((tx, ty))
 
             return output
