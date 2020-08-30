@@ -1039,8 +1039,6 @@ class TestKingMovement(unittest.TestCase):
         self.assertEqual(expected_moves_to_defend_check, C.moves_to_defend_check)
 
 
-        self.assertEqual(expected, actual)
-
 
 if __name__ == '__main__':
     unittest.main()
