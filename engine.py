@@ -105,19 +105,18 @@ class Chess:
                     (ty := y + tempname[1] * i))) and target[1] != piece_team:
                     i += 1
 
-                    if target[0] != PieceName.KING:
+                    if target == EMPTY_SQUARE:
                         output.append((tx, ty))
-                    elif not show_protected:
+                    else:
+                        if target[0] != PieceName.KING:
+                            output.append((tx, ty))
                         break
                 else:
                     if target:
-                        target_name, target_team = target
-
-                        if target_team != piece_team and target_name != PieceName.KING:
-                            output.append((tx, ty))
+                        target_name, _ = target
 
                         # Protected pieces
-                        if show_protected and target_team == piece_team and target_name != PieceName.KING:
+                        if show_protected and target_name != PieceName.KING:
                             output.append((tx, ty))
 
             return output
