@@ -110,7 +110,8 @@ class Chess:
                     else:
                         if target[0] != PieceName.KING:
                             output.append((tx, ty))
-                        break
+                        if not show_protected:
+                            break
                 else:
                     if target:
                         target_name, _ = target
