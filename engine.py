@@ -66,7 +66,8 @@ class Chess:
                 if (not has_moved) and self.get_piece(aux[0], aux[1]) == EMPTY_SQUARE:
                     output.append(aux)
 
-            return output + self.p_attack(x, y, piece_team, show_protected)
+            output += self.p_attack(x, y, piece_team, show_protected)
+            return output
 
         # Invalid pos (OOB)
         return False
