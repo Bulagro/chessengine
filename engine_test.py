@@ -593,6 +593,22 @@ class TestKingMovement(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
+        C.board = (
+            '........',
+            '.K......',
+            '..b.....',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+        )
+
+        expected = [(2, 1), (2, 2), (1, 2), (0, 2), (0, 1), (1, 0)]
+        actual = C.get_piece_moves(1, 1)
+
+        self.assertEqual(expected, actual)
+
     def test_restricted_king_movement_diagonal_line(self):
         C = Chess()
         C.board = (
