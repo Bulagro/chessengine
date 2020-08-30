@@ -26,12 +26,15 @@ class Chess:
     def __init__(self):
         self.set()
         self.in_check = None
+        self.moves_to_defend_check = []
+        self.pinned_pieces = {}
 
 
-    def get_piece_moves(self, x: int, y: int, show_protected=False):
+    def get_piece_moves(self, x: int, y: int, show_protected=False, consider_pins=False):
         """
         Returns every legal move for a specific piece, given a position.
         - show_protected: add those squares protected by the selected piece.
+        - consider_pins:  takes pinned pieces into consideration.
         """
 
         PIECE_MOVES = {
@@ -43,8 +46,21 @@ class Chess:
             PieceName.PAWN   : self.p,
         }
 
-        p = self.get_piece(x, y)
-        return PIECE_MOVES[p[0]](x, y, show_protected)
+        piece_name, piece_team = self.get_piece(x, y)
+        piece_moves = PIECE_MOVES[piece_name](x, y, show_protected)
+
+        if consider_pins:
+            if (x, y) in self.pinned_pieces:
+                possible_moves = self.pinned_pieces[(x, y)]
+                return [move for move in piece_moves if move in possible_moves]
+
+            elif self.in_check == piece_team:
+                return [move for move in piece_moves if move in self.moves_to_defend_check]
+
+            else:
+                return piece_moves
+
+        return piece_moves
 
 
     # Pawn moves
