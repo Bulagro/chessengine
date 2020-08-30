@@ -578,7 +578,7 @@ class TestKingMovement(unittest.TestCase):
     def test_king_cant_go_in_the_same_line_as_his_threatener(self):
         C = Chess()
         C.board = (
-            'K....r..',
+            '.K...r..',
             '........',
             '........',
             '........',
@@ -588,8 +588,8 @@ class TestKingMovement(unittest.TestCase):
             '........',
         )
 
-        expected = [(1, 1), (0, 1)]
-        actual = C.get_piece_moves(0, 0)
+        expected = [(2, 1), (1, 1), (0, 1)]
+        actual = C.get_piece_moves(1, 0)
 
         self.assertEqual(expected, actual)
 
