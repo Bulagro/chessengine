@@ -149,13 +149,73 @@ class TestChessClassFunctions(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
+    def test_get_piece_moves_pawn_considering_pins(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '........',
+            '...p....',
+            '..R.....',
+            '........',
+            '........',
+            '........',
+        )
+        C.pinned_pieces = {
+            (3, 3) : [(2, 4)]
+        }
+
+        expected = [(2, 4)]
+        actual = C.get_piece_moves(3, 3, consider_pins=True)
+
+        self.assertEqual(expected, actual)
+
+    def test_get_piece_moves_knight_considering_pins(self):
+        C = Chess()
+        C.board = (
+            'n.......',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+        )
+        C.pinned_pieces = {
+            (0, 0) : [(2, 1)]
+        }
+
+        expected = [(2, 1)]
+        actual = C.get_piece_moves(0, 0, consider_pins=True)
+
+        self.assertEqual(expected, actual)
+
+    def test_get_piece_moves_rook_considering_pins(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '........',
+            '...r....',
+            '........',
+            '........',
+            '........',
+            '........',
+        )
+        C.pinned_pieces = {
+            (3, 3) : [(4, 3), (5, 3), (6, 3), (7, 3), (2, 3), (1, 3), (0, 3)]
+        }
+
+        expected = [(4, 3), (5, 3), (6, 3), (7, 3), (2, 3), (1, 3), (0, 3)]
+        actual = C.get_piece_moves(3, 3, consider_pins=True)
+
+        self.assertEqual(expected, actual)
+
     def test_find_king_pos(self):
         C = Chess()
 
-        self.assertEqual(
-            (4, 0),
-            C.find_king_pos(PieceTeam.BLACK)
-        )
+        self.assertEqual((4, 0), C.find_king_pos(PieceTeam.BLACK))
 
 
 class TestPawnMovement(unittest.TestCase):
