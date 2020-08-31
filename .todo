@@ -3,12 +3,6 @@
 
 ☐ Limit piece movement when in check. @critical
 
-Fix get_every_square_the_king_cant_be_in(): @high
-    ☐ Redefine functions to determine rook and bishop attacking squares.
-        // Not redefine them, instead modify the existing ones to behave under the show_protected flag
-        // Rook is done.
-    ☐ Fix tests.
-
 CLI:
     ☐ Make it.
 
@@ -16,6 +10,10 @@ Retarded Sloth:
     ☐ Make retarded sloth.
 
 Archive:
+  ✔ Redefine functions to determine rook and bishop attacking squares. @done(20-08-30 18:53) @project(Fix get_every_square_the_king_cant_be_in())
+    // Not redefine them, instead modify the existing ones to behave under the show_protected flag
+    // Rook, bishop is done.
+  ✔ Fix tests. @done(20-08-30 18:53) @project(Fix get_every_square_the_king_cant_be_in())
   ✔ Finish tests for get_every_square_the_king_cant_be_in(). @done(20-08-06 02:02)
   ✔ Update King movement function to consider all the squares he can't be in. @done(20-08-06 02:02)
   ✔ Refactor use of Chess().get_piece() to use verbose variables (instead of piece[0] or piece[1]) @done(20-08-06 12:27)
