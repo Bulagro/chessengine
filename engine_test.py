@@ -217,6 +217,59 @@ class TestChessClassFunctions(unittest.TestCase):
 
         self.assertEqual((4, 0), C.find_king_pos(PieceTeam.BLACK))
 
+    def test_can_move_default_board(self):
+        C = Chess()
+
+        self.assertTrue(C.can_move(PieceTeam.BLACK))
+        self.assertTrue(C.can_move(PieceTeam.WHITE))
+
+    def test_can_move_when_on_check_and_avaliable_moves(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '........',
+            '....R...',
+            '........',
+            '...n....',
+            '........',
+            '....k...',
+        )
+
+        C.get_king_status(PieceTeam.BLACK)
+        self.assertTrue(C.can_move(PieceTeam.BLACK))
+
+    def test_can_move_with_no_avaliable_moves(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '........',
+            'p.......',
+            'P.......',
+            '........',
+            '........',
+            '........',
+        )
+
+        self.assertFalse(C.can_move(PieceTeam.WHITE))
+        self.assertFalse(C.can_move(PieceTeam.BLACK))
+
+    def test_can_move_draw(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+            '.r......',
+            '.....k.K',
+        )
+
+        self.assertFalse(C.can_move(PieceTeam.WHITE))
+
 
 class TestPawnMovement(unittest.TestCase):
     def test_pawn_moves_starting_position(self):

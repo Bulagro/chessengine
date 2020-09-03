@@ -403,6 +403,18 @@ class Chess:
         return squares
 
 
+    def can_move(self, team: PieceTeam):
+        for y in range(8):
+            for x in range(8):
+                piece_name, piece_team = self.get_piece(x, y)
+
+                if piece_name and piece_team == team:
+                    if self.get_piece_moves(x, y, consider_pins=True):
+                        return True
+
+        return False
+
+
     def set(self):
         """
         Resets the board to it's default layout and the cursor to its default
