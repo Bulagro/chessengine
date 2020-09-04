@@ -408,6 +408,10 @@ class Chess:
 
 
     def can_move(self, team: PieceTeam):
+        """
+        Returns a boolean value: whether a team can move or not.
+        """
+
         for y in range(8):
             for x in range(8):
                 piece_name, piece_team = self.get_piece(x, y)
