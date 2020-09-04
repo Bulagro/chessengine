@@ -53,13 +53,10 @@ class Chess:
         if consider_pins:
             if (x, y) in self.pinned_pieces:
                 possible_moves = self.pinned_pieces[(x, y)]
-                return [move for move in piece_moves if move in possible_moves]
+                piece_moves = [move for move in piece_moves if move in possible_moves]
 
-            elif self.in_check == piece_team:
-                return [move for move in piece_moves if move in self.moves_to_defend_check]
-
-            else:
-                return piece_moves
+        if self.in_check == piece_team:
+            piece_moves = [move for move in piece_moves if move in self.moves_to_defend_check]
 
         return piece_moves
 

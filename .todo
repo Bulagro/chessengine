@@ -1,6 +1,5 @@
 ☐ Rename get_king_status() to something else.
-
-☐ Limit piece movement when in check. @critical
+☐ Implement Castle move.
 
 CLI:
     ☐ Make it.
@@ -9,6 +8,8 @@ Retarded Sloth:
     ☐ Make retarded sloth.
 
 Archive:
+  ✔ Tests for check mate. @done(20-09-04 06:05)
+  ✔ Limit piece movement when in check. @critical @done(20-09-04 06:05)
   ✔ Make can_move(team: PieceTeam) -> bool @done(20-09-03 13:29)
   ✔ Redefine functions to determine rook and bishop attacking squares. @done(20-08-30 18:53) @project(Fix get_every_square_the_king_cant_be_in())
     // Not redefine them, instead modify the existing ones to behave under the show_protected flag

@@ -1175,6 +1175,31 @@ class TestKingMovement(unittest.TestCase):
         self.assertEqual(C.pinned_pieces, {})
         self.assertEqual(expected_moves_to_defend_check, C.moves_to_defend_check)
 
+    def test_limited_piece_movement_when_in_check(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '...p....',
+            '....R...',
+            '........',
+            '....k...',
+            '.b......',
+            '........',
+            '........',
+        )
+
+        C.get_king_status(PieceTeam.BLACK)
+
+        self.assertEqual(PieceTeam.BLACK, C.in_check)
+        self.assertEqual( # Pawn
+            [(4, 2)],
+            C.get_piece_moves(3, 1)
+        )
+        self.assertEqual(
+            [(4, 2)],
+            C.get_piece_moves(1, 5)
+        )
+
 
 class TestCheckmate(unittest.TestCase):
     def test_checkmate_with_rooks(self):
