@@ -28,6 +28,7 @@ class Chess:
         self.in_check = None
         self.moves_to_defend_check = []
         self.pinned_pieces = {}
+        self.checkmate = None
 
 
     def get_piece_moves(self, x: int, y: int, show_protected=False, consider_pins=False):
@@ -375,6 +376,9 @@ class Chess:
             if target_name == PieceName.PAWN and target_team != team:
                 self.in_check = team
                 self.moves_to_defend_check = [(kx + i, ky + forward)]
+
+        if not self.can_move(team) and self.in_check == team:
+            self.checkmate = team
 
 
     def get_every_square_the_king_cant_be_in(self, team: PieceTeam):

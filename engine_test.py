@@ -1176,6 +1176,91 @@ class TestKingMovement(unittest.TestCase):
         self.assertEqual(expected_moves_to_defend_check, C.moves_to_defend_check)
 
 
+class TestCheckmate(unittest.TestCase):
+    def test_checkmate_with_rooks(self):
+        C = Chess()
+        C.board = (
+            '......RR',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+            '.......k',
+        )
+
+        C.get_king_status(PieceTeam.BLACK)
+
+        self.assertEqual(PieceTeam.BLACK, C.in_check)
+        self.assertEqual(PieceTeam.BLACK, C.checkmate)
+        self.assertEqual({}, C.pinned_pieces)
+        self.assertEqual(
+            [(7, i) for i in range(6, -1, -1)],
+            C.moves_to_defend_check
+            )
+
+    def test_checkmate_with_knight(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '........',
+            '......QR',
+            '........',
+            '........',
+            'R....N.P',
+            '.......k',
+        )
+
+        C.get_king_status(PieceTeam.BLACK)
+
+        self.assertEqual(PieceTeam.BLACK, C.in_check)
+        self.assertEqual(PieceTeam.BLACK, C.checkmate)
+        self.assertEqual({}, C.pinned_pieces)
+        self.assertEqual([(5, 6)], C.moves_to_defend_check)
+
+    def test_checkmate_with_pawn(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '........',
+            '........',
+            '.....b..',
+            '........',
+            '...p....',
+            '...PKR..',
+        )
+
+        C.get_king_status(PieceTeam.WHITE)
+
+        self.assertEqual(PieceTeam.WHITE, C.in_check)
+        self.assertEqual(PieceTeam.WHITE, C.checkmate)
+        self.assertEqual({}, C.pinned_pieces)
+        self.assertEqual([(3, 6)], C.moves_to_defend_check)
+
+    def test_not_checkmate_with_possible_move(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+            '...p....',
+            '...PKR..',
+        )
+
+        C.get_king_status(PieceTeam.WHITE)
+
+        self.assertTrue(C.can_move(PieceTeam.WHITE))
+        self.assertEqual(PieceTeam.WHITE, C.in_check)
+        self.assertEqual(None, C.checkmate)
+        self.assertEqual({}, C.pinned_pieces)
+        self.assertEqual([(3, 6)], C.moves_to_defend_check)
+
 
 if __name__ == '__main__':
     unittest.main()
