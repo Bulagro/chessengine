@@ -55,7 +55,7 @@ class Chess:
                 possible_moves = self.pinned_pieces[(x, y)]
                 piece_moves = [move for move in piece_moves if move in possible_moves]
 
-        if self.in_check == piece_team:
+        if self.in_check == piece_team and piece_name != PieceName.KING:
             piece_moves = [move for move in piece_moves if move in self.moves_to_defend_check]
 
         return piece_moves
