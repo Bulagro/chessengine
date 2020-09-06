@@ -1258,16 +1258,13 @@ class TestCheckmate(unittest.TestCase):
             '...PKR..',
         )
 
-
         C.get_king_status(PieceTeam.WHITE)
 
         self.assertEqual(PieceTeam.WHITE, C.in_check)
         self.assertEqual(PieceTeam.WHITE, C.checkmate)
         self.assertEqual({}, C.pinned_pieces)
         self.assertEqual([(3, 6)], C.moves_to_defend_check)
-
         self.assertEqual([], C.get_piece_moves(4, 7))
-
 
     def test_not_checkmate_with_possible_move(self):
         C = Chess()
