@@ -443,6 +443,35 @@ class Chess:
         return False
 
 
+    def move_piece(self, ox: int, oy: int, dx: int, dy: int, castle: bool):
+        """
+        Replaces characters on the board without performing any checks.
+        """
+
+        origin_line = list(self.board[oy])
+        destiny_line = list(self.board[dy])
+
+        if castle: # origin = king, destiny = rook
+            castle_dir = 1
+            if dx < ox: castle_dir = -1
+
+            king_x = ox + (2 * castle_dir)
+
+            destiny_line[ox] = '.'
+            destiny_line[dx] = '.'
+            destiny_line[king_x] = self.board[oy][ox]
+            destiny_line[king_x + (1 * castle_dir * -1)] = self.board[dy][dx]
+        else:
+            origin_line[ox] = '.'
+            destiny_line[dx] = self.board[oy][ox]
+
+        new_board = list(self.board)
+        new_board[oy] = ''.join(origin_line)
+        new_board[dy] = ''.join(destiny_line)
+
+        self.board = tuple(new_board)
+
+
     def set(self):
         """
         Resets the board to it's default layout and the cursor to its default

@@ -269,7 +269,61 @@ class TestChessClassFunctions(unittest.TestCase):
         )
 
         self.assertFalse(C.can_move(PieceTeam.WHITE))
+        self.assertEqual(None, C.in_check)
+        self.assertEqual(None, C.checkmate)
 
+    def test_move_piece_piece_forward(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '........',
+            '...p....',
+            '........',
+            '........',
+            '........',
+            '........',
+        )
+
+        C.move_piece(3, 3, 3, 4, False)
+
+        self.assertEqual('........', C.board[3])
+        self.assertEqual('...p....', C.board[4])
+
+    def test_move_piece_attack(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '........',
+            '...p....',
+            '..P.....',
+            '........',
+            '........',
+            '........',
+        )
+        C.move_piece(3, 3, 2, 4, False)
+
+        self.assertEqual('........', C.board[3])
+        self.assertEqual('..p.....', C.board[4])
+
+    def test_move_piece_castle(self):
+        C = Chess()
+        C.board = (
+            'r...k...',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+            '....K..R',
+        )
+        C.move_piece(4, 0, 0, 0, True)
+        C.move_piece(4, 7, 7, 7, True)
+
+        self.assertEqual('..kr....', C.board[0])
+        self.assertEqual('.....RK.', C.board[7])
 
 class TestPawnMovement(unittest.TestCase):
     def test_pawn_moves_starting_position(self):

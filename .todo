@@ -1,5 +1,4 @@
 ☐ Rename get_king_status() to something else.
-☐ Implement Castle move.
 
 CLI:
     ☐ Make it.
@@ -8,6 +7,8 @@ Retarded Sloth:
     ☐ Make retarded sloth.
 
 Archive:
+  ✔ Make move_piece() function. @done(20-09-06 11:05)
+  ✔ Implement Castle move. @critical @done(20-09-05 21:38)
   ✔ Tests for check mate. @done(20-09-04 06:05)
   ✔ Limit piece movement when in check. @critical @done(20-09-04 06:05)
   ✔ Make can_move(team: PieceTeam) -> bool @done(20-09-03 13:29)
