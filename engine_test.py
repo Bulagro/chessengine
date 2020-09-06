@@ -635,6 +635,8 @@ class TestKingMovement(unittest.TestCase):
             '........',
             '........',
         )
+        C.has_king_moved = [True, True]
+        C.has_rook_moved = [[True, True], [True, True]]
 
         expected = (
             [(4 + i, 4 + j) for i, j in [(1, 0), (1, 1), (0, 1), (-1, 1), (-1, 0), (-1, -1), (0, -1), (1, -1)]]
@@ -688,6 +690,8 @@ class TestKingMovement(unittest.TestCase):
             '........',
             '........',
         )
+        C.has_king_moved = [True, True]
+        C.has_rook_moved = [[True, True], [True, True]]
 
         expected = [(4, 4), (3, 4), (3, 3), (3, 2), (4, 2)]
         actual = C.get_piece_moves(4, 3)
@@ -706,6 +710,8 @@ class TestKingMovement(unittest.TestCase):
             '........',
             '........',
         )
+        C.has_king_moved = [True, True]
+        C.has_rook_moved = [[True, True], [True, True]]
 
         expected = [(3, 3), (3, 2), (4, 2)]
         actual = C.get_piece_moves(4, 3)
@@ -724,6 +730,8 @@ class TestKingMovement(unittest.TestCase):
             '........',
             '........',
         )
+        C.has_king_moved = [True, True]
+        C.has_rook_moved = [[True, True], [True, True]]
 
         expected = [(2, 1), (1, 1), (0, 1)]
         actual = C.get_piece_moves(1, 0)
@@ -758,6 +766,8 @@ class TestKingMovement(unittest.TestCase):
             '........',
             '........',
         )
+        C.has_king_moved = [True, True]
+        C.has_rook_moved = [[True, True], [True, True]]
 
         expected = [(5, 4), (4, 4), (3, 4), (3, 3), (3, 2), (5, 2)]
         actual = C.get_piece_moves(4, 3, False)
@@ -776,6 +786,8 @@ class TestKingMovement(unittest.TestCase):
             '..B.....',
             '........',
         )
+        C.has_king_moved = [True, True]
+        C.has_rook_moved = [[True, True], [True, True]]
 
         expected = [(5, 4), (3, 4), (3, 3), (3, 2), (5, 2)]
         actual = C.get_piece_moves(4, 3, False)
@@ -812,6 +824,8 @@ class TestKingMovement(unittest.TestCase):
             '........',
             '........',
         )
+        C.has_king_moved = [True, True]
+        C.has_rook_moved = [[True, True], [True, True]]
 
         expected = [(5, 4), (4, 4), (3, 4), (3, 2), (4, 2), (5, 2)]
         actual = C.get_piece_moves(4, 3, False)
@@ -1199,6 +1213,72 @@ class TestKingMovement(unittest.TestCase):
             [(4, 2)],
             C.get_piece_moves(1, 5)
         )
+
+    def test_king_can_castle_with_both_rooks_perfect_conditions(self):
+        C = Chess()
+        C.board = (
+            'r...k..r',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+            'R...K..R',
+        )
+
+        self.assertTrue((0, 0) and (7, 0) in C.get_piece_moves(4, 0))
+        self.assertTrue((0, 7) and (7, 7) in C.get_piece_moves(4, 7))
+
+    def test_king_cant_castle_with_pice_in_between(self):
+        C = Chess()
+        C.board = (
+            'r.n.k..r',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+            'R...K..R',
+        )
+
+        self.assertEqual(
+            [(5, 0), (5, 1), (4, 1), (3, 1), (3, 0), (7, 0)],
+            C.get_piece_moves(4, 0)
+        )
+        self.assertTrue((0, 7) and (7, 7) in C.get_piece_moves(4, 7))
+
+    def test_king_cant_castle_with_oposing_piece_threatening_square(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '........',
+            '........',
+            '..r.....',
+            '........',
+            '........',
+            'R...K..R',
+        )
+
+        self.assertTrue((0, 0) not in C.get_piece_moves(4, 7))
+
+    def test_king_cant_castle_already_moved_rook(self):
+        C = Chess()
+        C.board = (
+            'r...k..r',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+        )
+        C.has_rook_moved = [[False, False], [True, False]]
+
+        self.assertTrue((0, 0) not in C.get_piece_moves(4, 0))
 
 
 class TestCheckmate(unittest.TestCase):

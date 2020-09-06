@@ -24,12 +24,16 @@ class Chess:
     """
 
     def __init__(self):
-        self.set()
         self.in_check = None
+        self.checkmate = None
         self.moves_to_defend_check = []
         self.pinned_pieces = {}
-        self.checkmate = None
 
+                            #  White  Black
+        self.has_king_moved = [False, False]
+        self.has_rook_moved = [[False, False], [False, False]]
+                            #  WL      WR      BL      BR
+        self.set()
 
     def get_piece_moves(self, x: int, y: int, show_protected=False, consider_pins=False):
         """
@@ -232,11 +236,30 @@ class Chess:
                     elif show_protected and target_team == piece_team:
                         king_moves.append((tx, ty))
 
-            if show_protected:
-                return king_moves
-            else:
+            if not show_protected:
                 bad_squares = self.get_every_square_the_king_cant_be_in(piece_team)
-                return [move for move in king_moves if move not in bad_squares]
+                king_moves = [move for move in king_moves if move not in bad_squares]
+
+                p = piece_team.value - 1
+                king_y = 0 if piece_team == PieceTeam.BLACK else 7
+
+                # Castling!
+                if not self.has_king_moved[p] and self.in_check != piece_team:
+                    if not self.has_rook_moved[p][0]:
+                        for x in range(3, 0, -1):
+                            if (x, king_y) in bad_squares or self.get_piece(x, king_y) != EMPTY_SQUARE:
+                                break
+                        else:
+                            king_moves.append((0, king_y))
+
+                    if not self.has_rook_moved[p][1]:
+                        for x in range(5, 7):
+                            if (x, king_y) in bad_squares or self.get_piece(x, king_y) != EMPTY_SQUARE:
+                                break
+                        else:
+                            king_moves.append((7, king_y))
+
+            return king_moves
 
         return None
 
@@ -427,6 +450,14 @@ class Chess:
         """
 
         self.cursor = [0, 0]
+
+        self.in_check = None
+        self.checkmate = None
+        self.moves_to_defend_check = []
+        self.pinned_pieces = {}
+        self.has_king_moved = [False, False]
+        self.has_rook_moved = [[False, False], [False, False]]
+
         self.board = (
             'rnbqkbnr',
             'pppppppp',
