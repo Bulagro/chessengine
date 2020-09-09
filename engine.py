@@ -499,18 +499,6 @@ class Chess:
         )
 
 
-    def move_cursor(self, x, y):
-        """
-        Moves the cursor by the specified amount if possible.
-        """
-
-        if 0 <= (aux := self.cursor[0] + x) <= 7:
-            self.cursor[0] = aux
-
-        if 0 <= (aux := self.cursor[1] + y) <= 7:
-            self.cursor[1] = aux
-
-
     def get_piece(self, x: int, y: int):
         """
         Returns the piece the cursor's pointing at.
@@ -536,11 +524,3 @@ class Chess:
             return piece_info[self.board[y][x]]
         else:
             return False
-
-
-    def get_moves(self):
-        """
-        Gets all legal moves for whatever piece is in the cursor's position.
-        """
-
-        pass
