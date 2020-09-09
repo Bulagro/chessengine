@@ -67,7 +67,8 @@ class Chess:
 
     # Pawn moves
     def p(self, x: int, y: int, show_protected=False):
-        if p := self.get_piece(x, y):
+        p = self.get_piece(x, y)
+        if p:
             _, piece_team = p
 
             forward = 1 if piece_team == PieceTeam.BLACK else -1
@@ -113,15 +114,18 @@ class Chess:
 
     # Rook moves
     def r(self, x: int, y: int, show_protected=False):
-        if p := self.get_piece(x, y):
+        p = self.get_piece(x, y)
+        if p:
             _, piece_team = p
             output = []
 
             for tempname in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
                 i = 1
-                while (target := self.get_piece(
-                    (tx := x + tempname[0] * i),
-                    (ty := y + tempname[1] * i))) and target[1] != piece_team:
+                tx = x + tempname[0]
+                ty = y + tempname[1]
+                target = self.get_piece(tx, ty)
+
+                while target and target[1] != piece_team:
                     i += 1
 
                     if target == EMPTY_SQUARE:
@@ -131,6 +135,10 @@ class Chess:
                             output.append((tx, ty))
                         if not show_protected:
                             break
+
+                    tx = x + tempname[0] * i
+                    ty = y + tempname[1] * i
+                    target = self.get_piece(tx, ty)
                 else:
                     if target:
                         target_name, _ = target
@@ -145,14 +153,17 @@ class Chess:
 
     # Knight moves
     def n(self, x: int, y: int, show_protected=False):
-        if p := self.get_piece(x, y):
+        p = self.get_piece(x, y)
+        if p:
             _, piece_team = p
             output = []
 
             for tempname in [(1, 2), (-1, 2), (1, -2), (-1, -2), (2, 1), (2, -1), (-2, 1), (-2, -1)]:
-                if (target := self.get_piece(
-                        (tx := x + tempname[0]),
-                        (ty := y + tempname[1]))) is None:
+                tx = x + tempname[0]
+                ty = y + tempname[1]
+                target = self.get_piece(tx, ty)
+
+                if target is None:
                     output.append((tx, ty))
                 else:
                     if target:
@@ -171,15 +182,18 @@ class Chess:
 
     # Bishop moves
     def b(self, x: int, y: int, show_protected=False):
-        if p := self.get_piece(x, y):
+        p = self.get_piece(x, y)
+        if p:
             _, piece_team = p
             output = []
 
             for tempname in [(1, 1), (1, -1), (-1, 1), (-1, -1)]:
                 i = 1
-                while (target := self.get_piece(
-                    (tx := x + tempname[0] * i),
-                    (ty := y + tempname[1] * i))) and target[1] != piece_team:
+                tx = x + tempname[0]
+                ty = y + tempname[1]
+                target = self.get_piece(tx, ty)
+
+                while target and target[1] != piece_team:
                     i += 1
 
                     if target == EMPTY_SQUARE:
@@ -189,6 +203,10 @@ class Chess:
                             output.append((tx, ty))
                         if not show_protected:
                             break
+
+                    tx = x + tempname[0] * i
+                    ty = y + tempname[1] * i
+                    target = self.get_piece(tx, ty)
                 else:
                     if target:
                         target_name, _ = target
@@ -214,7 +232,8 @@ class Chess:
 
     # King moves
     def k(self, x: int, y: int, show_protected=False):
-        if p := self.get_piece(x, y):
+        p = self.get_piece(x, y)
+        if p:
             _, piece_team = p
             king_moves = []
 
@@ -296,12 +315,13 @@ class Chess:
         for tempname in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
             path = []
             remembered_piece = None
+
             i = 1
+            tx = kx + tempname[0]
+            ty = ky + tempname[1]
+            target = self.get_piece(tx, ty)
 
-            while (target := self.get_piece(
-                (tx := kx + tempname[0] * i),
-                (ty := ky + tempname[1] * i))):
-
+            while target:
                 target_name, target_team = target
 
                 if target == EMPTY_SQUARE:
@@ -332,16 +352,21 @@ class Chess:
                     else:
                         break
                 i += 1
+                tx = kx + tempname[0] * i
+                ty = ky + tempname[1] * i
+                target = self.get_piece(tx, ty)
 
         # Diagonal line.
         for tempname in [(1, 1), (1, -1), (-1, 1), (-1, -1)]:
             path = []
             remembered_piece = None
-            i = 1
 
-            while (target := self.get_piece(
-                (tx := kx + tempname[0] * i),
-                (ty := ky + tempname[1] * i))):
+            i = 1
+            tx = kx + tempname[0]
+            ty = ky + tempname[1]
+            target = self.get_piece(tx, ty)
+
+            while target:
 
                 target_name, target_team = target
 
@@ -373,13 +398,17 @@ class Chess:
                     else:
                         break
                 i += 1
+                tx = kx + tempname[0] * i
+                ty = ky + tempname[1] * i
+                target = self.get_piece(tx, ty)
 
         # Knights
         for tempname in [(1, 2), (-1, 2), (1, -2), (-1, -2), (2, 1), (2, -1), (-2, 1), (-2, -1)]:
-            if (target := self.get_piece(
-                (tx := kx + tempname[0]),
-                (ty := ky + tempname[1]))):
+            tx = kx + tempname[0]
+            ty = ky + tempname[1]
+            target = self.get_piece(tx, ty)
 
+            if target:
                 target_name, target_team = target
 
                 if target_name == PieceName.KNIGHT and target_team != team:
