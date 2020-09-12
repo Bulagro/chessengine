@@ -1,4 +1,4 @@
 *.vim
 *.swp
 *.py~
-__pycache__
+src/__pycache__
