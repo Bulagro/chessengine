@@ -53,7 +53,7 @@ class Chess:
 
         piece_name, piece_team = self.get_piece(x, y)
 
-        if not piece_name:
+        if piece_name == None:
             return []
 
         piece_moves = PIECE_MOVES[piece_name](x, y, show_protected)
