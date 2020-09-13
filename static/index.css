@@ -1,0 +1,18 @@
+body {
+    text-align: center;
+}
+
+#board {
+    border: 1px solid black;
+    display: inline-block;
+    margin: auto;
+}
+
+#board table {
+    border-collapse: collapse;
+}
+
+td {
+    width: 80px;
+    height: 80px;
+}
