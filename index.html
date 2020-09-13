@@ -8,5 +8,27 @@
     <body onload="brython()">
 
         <div id="board"></div>
+        <script type="text/python">
+# Create table
+t = TABLE()
+
+colors = [(0, 0, 0), (255, 255, 255)]
+color = True
+
+for row in range(8):
+    r = TR()
+    color = row % 2 == 0
+
+    for column in range(8):
+        _id=str(row*8 + column)
+        r <=TD(
+            style={'background-color' : f'rgb{colors[int(color)]}'},
+            id=_id,
+            onclick=f"click('{_id}');")
+        color = not color
+    t <= r
+
+document['board'] <= t
+        </script>
     </body>
 </html>
