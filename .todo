@@ -1,7 +1,18 @@
 ☐ Rename get_king_status() to something else.
+☐ Fix get_piece_moves on empty square on main branch
 
 UI:
-    ☐ Make it.
+    ☐ Make a usable board.
+      ☐ Making two boards: one above the other.
+        // The one at the top will handle the pieces.
+        // The one at the bottom will have the actual board.
+      ✔ Highlight possible moves. @done(20-09-13 18:37)
+      ☐ Display pieces.
+        ☐ Make animation for piece movement.
+
+    ☐ Make something that, when the user clicks on a square, it does things.
+      // Basically selecting between asking the engine for moves, moving a piece or just
+         canceling a selection.
 
 Retarded Sloth:
     ☐ Make retarded sloth.
