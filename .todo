@@ -1,5 +1,4 @@
 ☐ Rename get_king_status() to something else.
-☐ Fix get_piece_moves on empty square on main branch
 
 UI:
     ☐ Make a usable board.
@@ -18,6 +17,7 @@ Retarded Sloth:
     ☐ Make retarded sloth.
 
 Archive:
+  ✔ Fix get_piece_moves on empty square on main branch @done(20-09-14 21:10)
   ✔ Make move_piece() function. @done(20-09-06 11:05)
   ✔ Implement Castle move. @critical @done(20-09-05 21:38)
   ✔ Tests for check mate. @done(20-09-04 06:05)
