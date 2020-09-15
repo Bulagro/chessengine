@@ -2,14 +2,19 @@ body {
     text-align: center;
 }
 
-#board {
-    border: 1px solid black;
-    display: inline-block;
-    margin: auto;
+#board squares {
+    z-index: 0;
+}
+#board pieces {
+    z-index: 10;
 }
 
 #board table {
+    border: 1px solid black;
     border-collapse: collapse;
+    position: absolute;
+    left: calc(50vw - 320px);
+    top: calc(50vh - 320px);
 }
 
 td {

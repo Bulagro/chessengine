@@ -3,7 +3,7 @@
 
 UI:
     ☐ Make a usable board.
-      ☐ Making two boards: one above the other.
+      ✔ Making two boards: one above the other. @done(20-09-14 21:07)
         // The one at the top will handle the pieces.
         // The one at the bottom will have the actual board.
       ✔ Highlight possible moves. @done(20-09-13 18:37)

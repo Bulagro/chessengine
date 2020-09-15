@@ -7,7 +7,10 @@
     </head>
     <body onload="brython()">
 
-        <div id="board"></div>
+        <div id="board">
+            <div id="squares"></div>
+            <div id="pieces"></div>
+        </div>
         <script type="text/python">
 ####################################################################
 from enum import Enum, auto
@@ -620,25 +623,35 @@ window.click = click
 ####################################################################
 
 # Create table
-t = TABLE()
+s = TABLE(id='squares')
+p = TABLE(id='pieces')
 
 colors = [(0, 0, 0), (255, 255, 255)]
-color = True
 
 for row in range(8):
-    r = TR()
+    sr = TR()
+    pr = TR()
     color = row % 2 == 0
 
     for column in range(8):
-        _id=str(row*8 + column)
-        r <=TD(
-            style={'background-color' : f'rgb{colors[int(color)]}'},
-            id=_id,
-            onclick=f"click('{_id}');")
-        color = not color
-    t <= r
+        _id = str(row*8 + column)
 
-document['board'] <= t
+        sr <= TD(
+            id=_id,
+            style={'background-color' : f'rgb{colors[int(color)]}'}
+        )
+        pr <= TD(
+            id=_id,
+            onclick=f"click('{_id}');"
+        )
+        color = not color
+
+    s <= sr
+    p <= pr
+
+document['squares'] <= s
+document['pieces'] <= p
+
         </script>
     </body>
 </html>
