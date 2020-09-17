@@ -592,7 +592,7 @@ def click(square: str):
 
     if selected_square == -1:
         selected_square = square
-        x, y = selected_square % 8, int(selected_square / 8)
+        x, y = selected_square % 8, selected_square // 8
         moves = C.get_piece_moves(x, y)
 
         for x, y in moves:
@@ -609,7 +609,7 @@ def click(square: str):
             selected_square = -1
             for s in possible_moves:
                 s = int(s)
-                x, y = s % 8, int(s / 8)
+                x, y = s % 8, s // 8
                 document[str(s)].style.backgroundColor = 'white' if is_white(x, y) else 'black'
             possible_moves = []
 
