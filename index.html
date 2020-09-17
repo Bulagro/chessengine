@@ -8,8 +8,8 @@
     <body onload="brython()">
 
         <div id="board">
-            <div id="squares"></div>
-            <div id="pieces"></div>
+            <div id="squares-div"></div>
+            <div id="pieces-div"></div>
         </div>
         <script type="text/python">
 ####################################################################
@@ -649,8 +649,9 @@ for row in range(8):
     s <= sr
     p <= pr
 
-document['squares'] <= s
-document['pieces'] <= p
+document['squares-div'] <= s
+document['pieces-div'] <= p
+
 
         </script>
     </body>
