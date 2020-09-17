@@ -617,6 +617,15 @@ def click(square: str):
             print('hola')
 
 
+def put_piece_in_square(square_id, name, team):
+    table = list(document['squares'])
+    i_square_id = int(square_id)
+
+    x, y = i_square_id % 8, i_square_id // 8
+    square = list(table[y])[x]
+    square.innerHTML = f'<img src="static/pieces/{name}_{team}">'
+
+
 # This is done to have this function usable in js
 window.click = click
 
