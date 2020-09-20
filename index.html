@@ -582,6 +582,8 @@ C = Chess()
 selected_square = -1
 possible_moves = []
 
+PIECE_SIZE = '76px'
+
 
 def is_white(x: int, y: int):
     return (x % 2 == 0 and y % 2 == 0) or (x % 2 != 0 and y % 2 != 0)
@@ -623,7 +625,7 @@ def put_piece_in_square(square_id, name, team):
 
     x, y = i_square_id % 8, i_square_id // 8
     square = list(table[y])[x]
-    square.innerHTML = f'<img src="static/pieces/{name}_{team}">'
+    square.innerHTML = f'<img src="static/pieces/{name}_{team}.png" width="{PIECE_SIZE}" height="{PIECE_SIZE}">'
 
 
 # This is done to have this function usable in js
@@ -647,7 +649,9 @@ for row in range(8):
 
         sr <= TD(
             id=_id,
-            style={'background-color' : f'rgb{colors[int(color)]}'}
+            style={
+                'background-color' : f'rgb{colors[int(color)]}'
+            }
         )
         pr <= TD(
             id=_id,
@@ -660,7 +664,6 @@ for row in range(8):
 
 document['squares-div'] <= s
 document['pieces-div'] <= p
-
 
         </script>
     </body>
