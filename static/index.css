@@ -21,3 +21,8 @@ td {
     width: 80px;
     height: 80px;
 }
+
+img {
+    padding: 0px;
+    margin: 0px;
+}
