@@ -8,6 +8,7 @@ UI:
       ✔ Highlight possible moves. @done(20-09-13 18:37)
       ☐ Display pieces.
         ☐ Make animation for piece movement.
+        ☐ Make function for moving piece.
 
     ☐ Make something that, when the user clicks on a square, it does things.
       // Basically selecting between asking the engine for moves, moving a piece or just
