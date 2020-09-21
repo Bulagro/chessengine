@@ -625,7 +625,7 @@ def put_piece_in_square(square_id, name, team):
 
     x, y = i_square_id % 8, i_square_id // 8
     square = list(table[y])[x]
-    square.innerHTML = f'<img src="static/pieces/{name}_{team}.png" width="{PIECE_SIZE}" height="{PIECE_SIZE}">'
+    square.innerHTML = f'<img src="static/pieces/{team}_{name}.png" width="{PIECE_SIZE}" height="{PIECE_SIZE}">'
 
 
 # This is done to have this function usable in js
