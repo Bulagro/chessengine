@@ -1,5 +1,6 @@
 *.vim
 *.swp
 *.py~
+*.DS_Store
 src/__pycache__
 .vscode
