@@ -9,6 +9,7 @@ UI:
       ☐ Display pieces.
         ☐ Make animation for piece movement.
         ☐ Make function for moving piece.
+        ☐ Render_board() function: it's supposed to look trough every square and put the corresponding piece.
 
     ☐ Make something that, when the user clicks on a square, it does things.
       // Basically selecting between asking the engine for moves, moving a piece or just
