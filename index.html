@@ -636,6 +636,18 @@ def put_piece_in_square(square_id, name, team):
     square.innerHTML = f'<img src="static/pieces/{team}_{name}.png" width="{PIECE_SIZE}" height="{PIECE_SIZE}">'
 
 
+def render_board(chess):
+    for y in range(8):
+        for x in range(8):
+            name, team = chess.get_piece(x, y)
+            if name != None:
+                put_piece_in_square(
+                    str(y * 8 + x),
+                    str(name.name).lower(),
+                    str(team.name).lower(),
+                )
+
+
 # This is done to have this function usable in js
 window.click = click
 
@@ -671,37 +683,7 @@ for row in range(8):
 document['squares-div'] <= s
 document['pieces-div'] <= p
 
-# Default pos :: WHITE
-for i in range(8):
-    put_piece_in_square(str(8 + i), 'pawn', 'black')
-
-put_piece_in_square('0', 'rook', 'black')
-put_piece_in_square('7', 'rook', 'black')
-
-put_piece_in_square('1', 'knight', 'black')
-put_piece_in_square('6', 'knight', 'black')
-put_piece_in_square('2', 'bishop', 'black')
-
-put_piece_in_square('5', 'bishop', 'black')
-
-put_piece_in_square('3', 'queen', 'black')
-put_piece_in_square('4', 'king', 'black')
-
-# Default pos :: BLACK
-for i in range(8):
-    put_piece_in_square(str(48 + i), 'pawn', 'white')
-
-put_piece_in_square('56', 'rook', 'white')
-put_piece_in_square('63', 'rook', 'white')
-
-put_piece_in_square('57', 'knight', 'white')
-put_piece_in_square('62', 'knight', 'white')
-
-put_piece_in_square('58', 'bishop', 'white')
-put_piece_in_square('61', 'bishop', 'white')
-
-put_piece_in_square('59', 'queen', 'white')
-put_piece_in_square('60', 'king', 'white')
+render_board(C)
 
         </script>
     </body>
