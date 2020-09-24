@@ -627,13 +627,16 @@ def click(square: str):
             print('hola')
 
 
-def put_piece_in_square(square_id, name, team):
+def get_square(square_id):
     table = list(document['squares'])
     i_square_id = int(square_id)
 
     x, y = i_square_id % 8, i_square_id // 8
-    square = list(table[y])[x]
-    square.innerHTML = f'<img src="static/pieces/{team}_{name}.png" width="{PIECE_SIZE}" height="{PIECE_SIZE}">'
+    return list(table[y])[x]
+
+
+def put_piece_in_square(square_id, name, team):
+    get_square(square_id).innerHTML = f'<img src="static/pieces/{team}_{name}.png" width="{PIECE_SIZE}" height="{PIECE_SIZE}">'
 
 
 def render_board(chess):
