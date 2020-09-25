@@ -636,7 +636,6 @@ def click(square: str):
         elif str(square) in possible_moves:
             move_piece(selected_square, str(square), False)
             del document['moving-piece']
-            print(C.pinned_pieces, C.board)
 
             for s in possible_moves:
                 s = int(s)
