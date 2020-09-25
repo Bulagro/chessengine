@@ -634,7 +634,14 @@ def click(square: str):
                 del document['moving-piece']
 
         elif str(square) in possible_moves:
-            move_piece(selected_square, str(square), False)
+            k_n, k_t = C.get_piece(int(selected_square) % 8, int(selected_square) // 8)
+            r_n, r_t = C.get_piece(square % 8, square // 8)
+
+            castle = False
+            if k_n == PieceName.KING and r_n == PieceName.ROOK and k_t == r_t:
+                castle = True
+
+            move_piece(selected_square, str(square), castle, k_t.name)
             del document['moving-piece']
 
             for s in possible_moves:
@@ -688,23 +695,34 @@ def create_moving_piece(origin_id):
     document <= piece_div
 
 
-def move_piece(origin_id, destiny_id, is_castle):
+def move_piece(origin_id, destiny_id, is_castle, team=None):
     origin = get_square(origin_id)
     destiny = get_square(destiny_id)
+    ox = int(origin_id) % 8
+    oy = int(origin_id) // 8
+    dx = int(destiny_id) % 8
+    dy = int(destiny_id) // 8
+
+    if is_castle == True:
+        castle_dir = 1 if dx > ox else -1
+
+        document['moving-piece'].style.zIndex = '10'
+        destiny.innerHTML = ''
+        put_piece_in_square(str(int(origin_id + 2 * castle_dir)), 'king', team)
+        put_piece_in_square(str(int(origin_id) + castle_dir), 'rook', team)
+
+        t_value = 0 if team == 'WHITE' else 1
+
+        C.has_king_moved[t_value] = True
+        C.has_rook_moved[t_value][int(not dx == 0)] = True
+    else:
+        document['moving-piece'].style.zIndex = '10'
+        document['moving-piece'].style.y = destiny.style.y + '3'
+        document['moving-piece'].style.x = destiny.style.x + '1'
+        destiny.innerHTML = document['moving-piece'].innerHTML
 
     put_piece_in_square(origin_id, 'None', 0)
-    document['moving-piece'].style.zIndex = '10'
-    document['moving-piece'].style.y = destiny.style.y + '3'
-    document['moving-piece'].style.x = destiny.style.x + '1'
-
-    destiny.innerHTML = document['moving-piece'].innerHTML
-    C.move_piece(
-        int(origin_id) % 8,
-        int(origin_id) // 8,
-        int(destiny_id) % 8,
-        int(destiny_id) // 8,
-        is_castle
-    )
+    C.move_piece(ox, oy, dx, dy, is_castle)
 
 
 # This is done to have this function usable in js
