@@ -283,14 +283,16 @@ class Chess:
 
                 # Castling!
                 if not self.has_king_moved[p] and self.in_check != piece_team:
-                    if not self.has_rook_moved[p][0]:
+                    r = self.get_piece(0, king_y)
+                    if not self.has_rook_moved[p][0] and r[0] == PieceName.ROOK and r[1] == piece_team:
                         for x in range(3, 0, -1):
                             if (x, king_y) in bad_squares or self.get_piece(x, king_y) != EMPTY_SQUARE:
                                 break
                         else:
                             king_moves.append((0, king_y))
 
-                    if not self.has_rook_moved[p][1]:
+                    r = self.get_piece(0, king_y)
+                    if not self.has_rook_moved[p][1] and r[0] == PieceName.ROOK and r[1] == piece_team:
                         for x in range(5, 7):
                             if (x, king_y) in bad_squares or self.get_piece(x, king_y) != EMPTY_SQUARE:
                                 break
