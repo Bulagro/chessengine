@@ -1,6 +1,3 @@
-body {
-    text-align: center;
-}
 
 #board squares {
     z-index: 0;
@@ -17,6 +14,13 @@ body {
     top: calc(50vh - 320px);
 }
 
+#moving-piece {
+    display: inline-block;
+    position: absolute;
+    transition: 10s;
+}
+
+
 td {
     width: 80px;
     height: 80px;
@@ -25,4 +29,8 @@ td {
 img {
     padding: 0px;
     margin: 0px;
+}
+
+body {
+    text-align: center;
 }

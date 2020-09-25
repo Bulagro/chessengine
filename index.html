@@ -581,7 +581,7 @@ class Chess:
 ####################################################################
 
 from browser import document, window
-from browser.html import TABLE, TR, TH, TD
+from browser.html import TABLE, TR, TH, TD, DIV, IMG
 
 C = Chess()
 selected_square = -1
@@ -601,15 +601,18 @@ def click(square: str):
     if selected_square == -1:
         selected_square = square
         document[str(selected_square)].style.backgroundColor = '#49f540' if is_white(square % 8, square // 8) else '#257a21'
+
         x, y = selected_square % 8, selected_square // 8
-        moves = C.get_piece_moves(x, y)
 
-        for x, y in moves:
-            _id = str((y * 8) + x)
-            possible_moves.append(_id)
-            document[_id].style.backgroundColor = '#49f540' if is_white(x, y) else '#257a21'
+        if C.get_piece(x, y) != EMPTY_SQUARE:
+            moves = C.get_piece_moves(x, y)
+            create_moving_piece(selected_square)
 
-        if not possible_moves:
+            for x, y in moves:
+                _id = str((y * 8) + x)
+                possible_moves.append(_id)
+                document[_id].style.backgroundColor = '#49f540' if is_white(x, y) else '#257a21'
+        else:
             document[str(selected_square)].style.backgroundColor = 'white' if is_white(selected_square % 8, selected_square // 8) else 'black'
             selected_square = -1
             return None
@@ -617,7 +620,7 @@ def click(square: str):
     elif selected_square != -1:
         document[str(selected_square)].style.backgroundColor = '#49f540' if is_white(selected_square % 8, selected_square // 8) else '#257a21'
 
-        if selected_square == square or square not in possible_moves:
+        if selected_square == square or str(square) not in possible_moves:
             document[str(selected_square)].style.backgroundColor = 'white' if is_white(selected_square % 8, selected_square // 8) else 'black'
             selected_square = -1
 
@@ -627,9 +630,22 @@ def click(square: str):
                 document[str(s)].style.backgroundColor = 'white' if is_white(x, y) else 'black'
 
             possible_moves = []
+            if 'moving-piece' in document:
+                del document['moving-piece']
 
         elif str(square) in possible_moves:
-            print('hola')
+            move_piece(selected_square, str(square), False)
+            del document['moving-piece']
+            print(C.pinned_pieces, C.board)
+
+            for s in possible_moves:
+                s = int(s)
+                x, y = s % 8, s // 8
+                document[str(s)].style.backgroundColor = 'white' if is_white(x, y) else 'black'
+
+            possible_moves = []
+            document[str(selected_square)].style.backgroundColor = 'white' if is_white(selected_square % 8, selected_square // 8) else 'black'
+            selected_square = -1
 
 
 def get_square(square_id):
@@ -657,6 +673,39 @@ def render_board():
                     str(name.name).lower(),
                     str(team.name).lower(),
                 )
+
+
+def create_moving_piece(origin_id):
+    origin = get_square(origin_id)
+    piece_div = DIV(
+        Id='moving-piece',
+        style={
+            'left'    : f'{origin.x + 3}px',
+            'top'     : f'{origin.y + 1}px',
+            'z-index' : '-1',
+        }
+    )
+    piece_div.innerHTML = origin.innerHTML
+    document <= piece_div
+
+
+def move_piece(origin_id, destiny_id, is_castle):
+    origin = get_square(origin_id)
+    destiny = get_square(destiny_id)
+
+    put_piece_in_square(origin_id, 'None', 0)
+    document['moving-piece'].style.zIndex = '10'
+    document['moving-piece'].y = f'{destiny.y + 3}px'
+    document['moving-piece'].x = f'{destiny.x + 1}px'
+
+    destiny.innerHTML = document['moving-piece'].innerHTML
+    C.move_piece(
+        int(origin_id) % 8,
+        int(origin_id) // 8,
+        int(destiny_id) % 8,
+        int(destiny_id) // 8,
+        is_castle
+    )
 
 
 # This is done to have this function usable in js
@@ -694,7 +743,7 @@ for row in range(8):
 document['squares-div'] <= s
 document['pieces-div'] <= p
 
-render_board(C)
+render_board()
 
         </script>
     </body>
