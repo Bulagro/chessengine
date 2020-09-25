@@ -1422,5 +1422,23 @@ class TestCheckmate(unittest.TestCase):
         self.assertEqual([(3, 6)], C.moves_to_defend_check)
 
 
+class TestsForBugs(unittest.TestCase):
+    def test_pieces_duplicate_on_horizontal_movement(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '........',
+            '........',
+            '...k....',
+            '........',
+            '........',
+            '........',
+        )
+
+        C.move_piece(3, 4, 2, 4, False)
+
+        self.assertEqual(C.board[4], '..k.....')
+
 if __name__ == '__main__':
     unittest.main()

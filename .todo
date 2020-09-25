@@ -1,6 +1,7 @@
 ☐ Rename get_king_status() to something else.
-☐ Fix king's movement
+✔ Fix king's movement @done(20-09-25 12:27)
   // Check if there's a rook...
+  // Turned out, pieces were duplicating with horizontal movement
 
 UI:
     ☐ Make a usable board.
@@ -10,7 +11,8 @@ UI:
       ✔ Highlight possible moves. @done(20-09-13 18:37)
       ☐ Display pieces.
         ☐ Make animation for piece movement.
-        ☐ Make function for moving piece.
+        ✔ Make function for moving piece. @done(20-09-24 20:46)
+        ☐ Make special case for king movement when castling.
         ✔ Render_board() function: it's supposed to look trough every square and put the corresponding piece. @done(20-09-24 17:23)
 
     ☐ Make something that, when the user clicks on a square, it does things.

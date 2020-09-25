@@ -512,6 +512,9 @@ class Chess:
             destiny_line[king_x] = self.board[oy][ox]
             destiny_line[king_x + (1 * castle_dir * -1)] = self.board[dy][dx]
         else:
+            if oy == dy:
+                destiny_line[ox] = '.'
+
             origin_line[ox] = '.'
             destiny_line[dx] = self.board[oy][ox]
 
