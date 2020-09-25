@@ -695,8 +695,8 @@ def move_piece(origin_id, destiny_id, is_castle):
 
     put_piece_in_square(origin_id, 'None', 0)
     document['moving-piece'].style.zIndex = '10'
-    document['moving-piece'].y = f'{destiny.y + 3}px'
-    document['moving-piece'].x = f'{destiny.x + 1}px'
+    document['moving-piece'].style.y = destiny.style.y + '3'
+    document['moving-piece'].style.x = destiny.style.x + '1'
 
     destiny.innerHTML = document['moving-piece'].innerHTML
     C.move_piece(
