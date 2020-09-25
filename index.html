@@ -639,10 +639,10 @@ def put_piece_in_square(square_id, name, team):
     get_square(square_id).innerHTML = f'<img src="static/pieces/{team}_{name}.png" width="{PIECE_SIZE}" height="{PIECE_SIZE}">'
 
 
-def render_board(chess):
+def render_board():
     for y in range(8):
         for x in range(8):
-            name, team = chess.get_piece(x, y)
+            name, team = C.get_piece(x, y)
             if name != None:
                 put_piece_in_square(
                     str(y * 8 + x),
