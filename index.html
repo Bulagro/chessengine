@@ -636,7 +636,10 @@ def get_square(square_id):
 
 
 def put_piece_in_square(square_id, name, team):
-    get_square(square_id).innerHTML = f'<img src="static/pieces/{team}_{name}.png" width="{PIECE_SIZE}" height="{PIECE_SIZE}">'
+    if name == 'None':
+        get_square(square_id).innerHTML = ''
+    else:
+        get_square(square_id).innerHTML = f'<img src="static/pieces/{team}_{name}.png" width="{PIECE_SIZE}" height="{PIECE_SIZE}">'
 
 
 def render_board():
