@@ -1,4 +1,6 @@
 ☐ Rename get_king_status() to something else.
+☐ Fix king's movement
+  // Check if there's a rook...
 
 UI:
     ☐ Make a usable board.
