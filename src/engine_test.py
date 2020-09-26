@@ -1437,8 +1437,23 @@ class TestsForBugs(unittest.TestCase):
         )
 
         C.move_piece(3, 4, 2, 4, False)
-
         self.assertEqual(C.board[4], '..k.....')
+
+    def test_rook_prevents_castle(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+            '....K..R',
+        )
+
+        self.assertTrue((7, 7) in C.get_piece_moves(4, 7))
+
 
 if __name__ == '__main__':
     unittest.main()

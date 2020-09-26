@@ -1,7 +1,4 @@
-☐ Rename get_king_status() to something else.
-✔ Fix king's movement @done(20-09-25 12:27)
-  // Check if there's a rook...
-  // Turned out, pieces were duplicating with horizontal movement
+☐ Rename get_king_status() to something else. @low
 
 UI:
     ☐ Make a usable board.
@@ -9,15 +6,13 @@ UI:
         // The one at the top will handle the pieces.
         // The one at the bottom will have the actual board.
       ✔ Highlight possible moves. @done(20-09-13 18:37)
+      ✔ Selectable squares. @done(20-09-25 15:06)
       ☐ Display pieces.
         ☐ Make animation for piece movement.
         ✔ Make function for moving piece. @done(20-09-24 20:46)
         ☐ Make special case for king movement when castling.
         ✔ Render_board() function: it's supposed to look trough every square and put the corresponding piece. @done(20-09-24 17:23)
 
-    ☐ Make something that, when the user clicks on a square, it does things.
-      // Basically selecting between asking the engine for moves, moving a piece or just
-         canceling a selection.
 
 Retarded Sloth:
     ☐ Make retarded sloth.
@@ -37,3 +32,8 @@ Archive:
   ✔ Update King movement function to consider all the squares he can't be in. @done(20-08-06 02:02)
   ✔ Refactor use of Chess().get_piece() to use verbose variables (instead of piece[0] or piece[1]) @done(20-08-06 12:27)
   ✔ Refactor get_king_status() to set pinned_pieces for both teams, path to checking piece and in_check. @done(20-08-08 02:33)
+  ✔ Fix king's movement @done(20-09-25 12:27)
+  // Check if there's a rook...
+  // Turned out, pieces were duplicating with horizontal movement
+  ✔ Fix bishop and rook funcitons preventing castle. @high @done(20-09-25 22:41)
+  // Somehow not having both rooks avaliable makes the king unwilling to castle...

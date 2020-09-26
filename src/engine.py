@@ -276,7 +276,7 @@ class Chess:
                         else:
                             king_moves.append((0, king_y))
 
-                    r = self.get_piece(0, king_y)
+                    r = self.get_piece(7, king_y)
                     if not self.has_rook_moved[p][1] and r[0] == PieceName.ROOK and r[1] == piece_team:
                         for x in range(5, 7):
                             if (x, king_y) in bad_squares or self.get_piece(x, king_y) != EMPTY_SQUARE:
@@ -458,6 +458,7 @@ class Chess:
                     squares += self.p_attack(j, i, oposing_team, show_protected=True)
                 else:
                     squares += PIECE_MOVES[piece[0]](j, i, show_protected=True)
+                    print(piece, squares)
 
         return squares
 
