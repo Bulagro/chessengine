@@ -18,6 +18,8 @@ Retarded Sloth:
     ☐ Make retarded sloth.
 
 Archive:
+  ✔ Fix bishop and rook funcitons preventing castle. @high @done(20-09-29 11:39)
+  // Somehow not having both rooks avaliable makes the king unwilling to castle...
   ✔ Fix get_piece_moves on empty square on main branch @done(20-09-14 21:10)
   ✔ Make move_piece() function. @done(20-09-06 11:05)
   ✔ Implement Castle move. @critical @done(20-09-05 21:38)
@@ -35,5 +37,3 @@ Archive:
   ✔ Fix king's movement @done(20-09-25 12:27)
   // Check if there's a rook...
   // Turned out, pieces were duplicating with horizontal movement
-  ✔ Fix bishop and rook funcitons preventing castle. @high @done(20-09-25 22:41)
-  // Somehow not having both rooks avaliable makes the king unwilling to castle...

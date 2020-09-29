@@ -1445,10 +1445,25 @@ class TestsForBugs(unittest.TestCase):
             '........',
             '........',
             '........',
+            '.....q..',
+            '........',
+            '........',
+            '....PPPP',
+            '....K..R',
+        )
+
+        self.assertTrue((7, 7) in C.get_piece_moves(4, 7))
+
+    def test_bishop_prevents_castle(self):
+        C = Chess()
+        C.board = (
             '........',
             '........',
             '........',
             '........',
+            '..b.....',
+            '........',
+            '....PPPP',
             '....K..R',
         )
 

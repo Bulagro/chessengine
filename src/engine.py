@@ -137,7 +137,7 @@ class Chess:
                     else:
                         if target[0] != PieceName.KING:
                             output.append((tx, ty))
-                        if not show_protected:
+                        if not show_protected or target[0] != PieceName.KING:
                             break
 
                     tx = x + tempname[0] * i
@@ -205,7 +205,7 @@ class Chess:
                     else:
                         if target[0] != PieceName.KING:
                             output.append((tx, ty))
-                        if not show_protected:
+                        if not show_protected or target[0] != PieceName.KING:
                             break
 
                     tx = x + tempname[0] * i
@@ -357,6 +357,7 @@ class Chess:
                             break
                     else:
                         break
+
                 i += 1
                 tx = kx + tempname[0] * i
                 ty = ky + tempname[1] * i
@@ -452,13 +453,12 @@ class Chess:
             for j in range(8):
                 piece = self.get_piece(j, i)
 
-                if not piece or piece == EMPTY_SQUARE or piece[1] == team: continue
+                if piece == EMPTY_SQUARE or piece[1] == team: continue
 
                 if piece[0] == PieceName.PAWN:
                     squares += self.p_attack(j, i, oposing_team, show_protected=True)
                 else:
                     squares += PIECE_MOVES[piece[0]](j, i, show_protected=True)
-                    print(piece, squares)
 
         return squares
 

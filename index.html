@@ -152,7 +152,7 @@ class Chess:
                     else:
                         if target[0] != PieceName.KING:
                             output.append((tx, ty))
-                        if not show_protected:
+                        if not show_protected or target[0] != PieceName.KING:
                             break
 
                     tx = x + tempname[0] * i
@@ -220,7 +220,7 @@ class Chess:
                     else:
                         if target[0] != PieceName.KING:
                             output.append((tx, ty))
-                        if not show_protected:
+                        if not show_protected or target[0] != PieceName.KING:
                             break
 
                     tx = x + tempname[0] * i
