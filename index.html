@@ -634,12 +634,18 @@ def click(square: str):
                 del document['moving-piece']
 
         elif str(square) in possible_moves:
-            k_n, k_t = C.get_piece(int(selected_square) % 8, int(selected_square) // 8)
+            ox, oy = int(selected_square) % 8, int(selected_square) // 8
+            k_n, k_t = C.get_piece(ox, oy)
             r_n, r_t = C.get_piece(square % 8, square // 8)
 
             castle = False
             if k_n == PieceName.KING and r_n == PieceName.ROOK and k_t == r_t:
                 castle = True
+
+            team_y = 0 if k_t == PieceTeam.BLACK else 7
+            if k_n == PieceName.ROOK:
+                side = 0 if ox == 0 and oy == team_y else 1
+                C.has_rook_moved[k_t.value - 1][side] = True
 
             move_piece(selected_square, str(square), castle, k_t.name)
             del document['moving-piece']
