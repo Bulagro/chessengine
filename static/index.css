@@ -17,7 +17,6 @@
 #moving-piece {
     display: inline-block;
     position: absolute;
-    transition: 10s;
 }
 
 

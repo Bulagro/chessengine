@@ -580,7 +580,7 @@ class Chess:
 
 ####################################################################
 
-from browser import document, window
+from browser import document, window, timer
 from browser.html import TABLE, TR, TH, TD, DIV, IMG
 
 C = Chess()
@@ -588,7 +588,7 @@ selected_square = -1
 possible_moves = []
 
 PIECE_SIZE = '76px'
-
+MAX_STEPS = 20
 
 def is_white(x: int, y: int):
     return (x % 2 == 0 and y % 2 == 0) or (x % 2 != 0 and y % 2 != 0)
@@ -648,7 +648,6 @@ def click(square: str):
                 C.has_rook_moved[k_t.value - 1][side] = True
 
             move_piece(selected_square, str(square), castle, k_t.name)
-            del document['moving-piece']
 
             for s in possible_moves:
                 s = int(s)
@@ -694,7 +693,7 @@ def create_moving_piece(origin_id):
         style={
             'left'    : f'{origin.x + 3}px',
             'top'     : f'{origin.y + 1}px',
-            'z-index' : '-1',
+            'z-index' : '10',
         }
     )
     piece_div.innerHTML = origin.innerHTML
@@ -709,25 +708,45 @@ def move_piece(origin_id, destiny_id, is_castle, team=None):
     dx = int(destiny_id) % 8
     dy = int(destiny_id) // 8
 
-    if is_castle == True:
-        castle_dir = 1 if dx > ox else -1
-
-        document['moving-piece'].style.zIndex = '10'
-        destiny.innerHTML = ''
-        put_piece_in_square(str(int(origin_id + 2 * castle_dir)), 'king', team)
-        put_piece_in_square(str(int(origin_id) + castle_dir), 'rook', team)
-
-        t_value = 0 if team == 'WHITE' else 1
-
-        C.has_king_moved[t_value] = True
-        C.has_rook_moved[t_value][int(not dx == 0)] = True
-    else:
-        document['moving-piece'].style.zIndex = '10'
-        document['moving-piece'].style.y = destiny.style.y + '3'
-        document['moving-piece'].style.x = destiny.style.x + '1'
-        destiny.innerHTML = document['moving-piece'].innerHTML
-
     put_piece_in_square(origin_id, 'None', 0)
+
+    moving_piece = document['moving-piece']
+    moving_piece_img = document['moving-piece'].innerHTML
+
+    def animated_move(timestamp, x_dir, y_dir, step, max_step):
+        moving_piece.left += int(x_dir)
+        moving_piece.top += int(y_dir)
+
+        if step < max_step:
+            timer.request_animation_frame(
+                lambda timestamp:
+                animated_move(timestamp, x_dir, y_dir, step + 1, max_step)
+            )
+        else:
+            del document['moving-piece']
+            if is_castle == True:
+                castle_dir = 1 if dx > ox else -1
+
+                destiny.innerHTML = ''
+                put_piece_in_square(str(int(origin_id + 2 * castle_dir)), 'king', team)
+                put_piece_in_square(str(int(origin_id) + castle_dir), 'rook', team)
+
+                t_value = 0 if team == 'WHITE' else 1
+
+                C.has_king_moved[t_value] = True
+                C.has_rook_moved[t_value][int(not dx == 0)] = True
+            else:
+                destiny.innerHTML = moving_piece_img
+
+    x_dir = (destiny.x - origin.x) / MAX_STEPS
+    y_dir = (destiny.y - origin.y) / MAX_STEPS
+
+    timer.request_animation_frame(
+        lambda timestamp: animated_move(
+            timestamp, x_dir, y_dir, 0, MAX_STEPS
+        )
+    )
+
     C.move_piece(ox, oy, dx, dy, is_castle)
 
 
