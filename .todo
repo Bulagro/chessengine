@@ -8,9 +8,9 @@ UI:
       ✔ Highlight possible moves. @done(20-09-13 18:37)
       ✔ Selectable squares. @done(20-09-25 15:06)
       ☐ Display pieces.
-        ☐ Make animation for piece movement.
-          ☐ Make it smooth.
-          ☐ Make an exception for castling.
+        ✔ Make animation for piece movement. @done(20-10-01 18:30)
+          ☐ Make it smooth. @low
+          ✔ Make an exception for castling. @done(20-10-01 18:29)
         ✔ Make function for moving piece. @done(20-09-24 20:46)
         ✔ Make special case for king movement when castling. @done(20-09-30 21:39)
         ✔ Render_board() function: it's supposed to look trough every square and put the corresponding piece. @done(20-09-24 17:23)
