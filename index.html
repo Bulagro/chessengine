@@ -693,7 +693,7 @@ def create_moving_piece(origin_id):
         style={
             'left'    : f'{origin.x + 3}px',
             'top'     : f'{origin.y + 1}px',
-            'z-index' : '10',
+            'z-index' : '-1',
         }
     )
     piece_div.innerHTML = origin.innerHTML
@@ -711,6 +711,7 @@ def move_piece(origin_id, destiny_id, is_castle, team=None):
     put_piece_in_square(origin_id, 'None', 0)
 
     moving_piece = document['moving-piece']
+    moving_piece.style.zIndex = '10'
     moving_piece_img = document['moving-piece'].innerHTML
 
     def animated_move(timestamp, x_dir, y_dir, step, max_step):
