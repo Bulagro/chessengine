@@ -540,7 +540,7 @@ class Chess:
 
     def get_piece(self, x: int, y: int):
         """
-        Returns the piece the cursor's pointing at.
+        Returns the piece in the given x, y coordinate.
         """
 
         piece_info = {
