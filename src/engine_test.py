@@ -1422,5 +1422,53 @@ class TestCheckmate(unittest.TestCase):
         self.assertEqual([(3, 6)], C.moves_to_defend_check)
 
 
+class TestsForBugs(unittest.TestCase):
+    def test_pieces_duplicate_on_horizontal_movement(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '........',
+            '........',
+            '...k....',
+            '........',
+            '........',
+            '........',
+        )
+
+        C.move_piece(3, 4, 2, 4, False)
+        self.assertEqual(C.board[4], '..k.....')
+
+    def test_rook_prevents_castle(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '........',
+            '.....q..',
+            '........',
+            '........',
+            '....PPPP',
+            '....K..R',
+        )
+
+        self.assertTrue((7, 7) in C.get_piece_moves(4, 7))
+
+    def test_bishop_prevents_castle(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '........',
+            '........',
+            '..b.....',
+            '........',
+            '....PPPP',
+            '....K..R',
+        )
+
+        self.assertTrue((7, 7) in C.get_piece_moves(4, 7))
+
+
 if __name__ == '__main__':
     unittest.main()

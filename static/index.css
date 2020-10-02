@@ -1,0 +1,35 @@
+
+#board squares {
+    z-index: 0;
+}
+#board pieces {
+    z-index: 10;
+}
+
+#board table {
+    border: 1px solid black;
+    border-collapse: collapse;
+    position: absolute;
+    left: calc(50vw - 320px);
+    top: calc(50vh - 320px);
+}
+
+#moving-piece {
+    display: inline-block;
+    position: absolute;
+}
+
+
+td {
+    width: 80px;
+    height: 80px;
+}
+
+img {
+    padding: 0px;
+    margin: 0px;
+}
+
+body {
+    text-align: center;
+}

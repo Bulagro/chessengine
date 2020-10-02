@@ -1,3 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="static/index.css">
+        <script type="text/javascript" src="src/brython.js"></script>
+        <script type="text/javascript" src="src/brython_stdlib.js"></script>
+    </head>
+    <body onload="brython()">
+
+        <div id="board">
+            <div id="squares-div"></div>
+            <div id="pieces-div"></div>
+        </div>
+        <script type="text/python">
+####################################################################
 from enum import Enum, auto
 
 
@@ -71,7 +86,8 @@ class Chess:
 
     # Pawn moves
     def p(self, x: int, y: int, show_protected=False):
-        if p := self.get_piece(x, y):
+        p = self.get_piece(x, y)
+        if p:
             _, piece_team = p
 
             forward = 1 if piece_team == PieceTeam.BLACK else -1
@@ -117,15 +133,18 @@ class Chess:
 
     # Rook moves
     def r(self, x: int, y: int, show_protected=False):
-        if p := self.get_piece(x, y):
+        p = self.get_piece(x, y)
+        if p:
             _, piece_team = p
             output = []
 
             for tempname in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
                 i = 1
-                while (target := self.get_piece(
-                    (tx := x + tempname[0] * i),
-                    (ty := y + tempname[1] * i))) and target[1] != piece_team:
+                tx = x + tempname[0]
+                ty = y + tempname[1]
+                target = self.get_piece(tx, ty)
+
+                while target and target[1] != piece_team:
                     i += 1
 
                     if target == EMPTY_SQUARE:
@@ -133,8 +152,12 @@ class Chess:
                     else:
                         if target[0] != PieceName.KING:
                             output.append((tx, ty))
-                        if not show_protected:
+                        if not show_protected or target[0] != PieceName.KING:
                             break
+
+                    tx = x + tempname[0] * i
+                    ty = y + tempname[1] * i
+                    target = self.get_piece(tx, ty)
                 else:
                     if target:
                         target_name, _ = target
@@ -149,14 +172,17 @@ class Chess:
 
     # Knight moves
     def n(self, x: int, y: int, show_protected=False):
-        if p := self.get_piece(x, y):
+        p = self.get_piece(x, y)
+        if p:
             _, piece_team = p
             output = []
 
             for tempname in [(1, 2), (-1, 2), (1, -2), (-1, -2), (2, 1), (2, -1), (-2, 1), (-2, -1)]:
-                if (target := self.get_piece(
-                        (tx := x + tempname[0]),
-                        (ty := y + tempname[1]))) is None:
+                tx = x + tempname[0]
+                ty = y + tempname[1]
+                target = self.get_piece(tx, ty)
+
+                if target is None:
                     output.append((tx, ty))
                 else:
                     if target:
@@ -175,15 +201,18 @@ class Chess:
 
     # Bishop moves
     def b(self, x: int, y: int, show_protected=False):
-        if p := self.get_piece(x, y):
+        p = self.get_piece(x, y)
+        if p:
             _, piece_team = p
             output = []
 
             for tempname in [(1, 1), (1, -1), (-1, 1), (-1, -1)]:
                 i = 1
-                while (target := self.get_piece(
-                    (tx := x + tempname[0] * i),
-                    (ty := y + tempname[1] * i))) and target[1] != piece_team:
+                tx = x + tempname[0]
+                ty = y + tempname[1]
+                target = self.get_piece(tx, ty)
+
+                while target and target[1] != piece_team:
                     i += 1
 
                     if target == EMPTY_SQUARE:
@@ -191,8 +220,12 @@ class Chess:
                     else:
                         if target[0] != PieceName.KING:
                             output.append((tx, ty))
-                        if not show_protected:
+                        if not show_protected or target[0] != PieceName.KING:
                             break
+
+                    tx = x + tempname[0] * i
+                    ty = y + tempname[1] * i
+                    target = self.get_piece(tx, ty)
                 else:
                     if target:
                         target_name, _ = target
@@ -218,7 +251,8 @@ class Chess:
 
     # King moves
     def k(self, x: int, y: int, show_protected=False):
-        if p := self.get_piece(x, y):
+        p = self.get_piece(x, y)
+        if p:
             _, piece_team = p
             king_moves = []
 
@@ -249,14 +283,16 @@ class Chess:
 
                 # Castling!
                 if not self.has_king_moved[p] and self.in_check != piece_team:
-                    if not self.has_rook_moved[p][0]:
+                    r = self.get_piece(0, king_y)
+                    if not self.has_rook_moved[p][0] and r[0] == PieceName.ROOK and r[1] == piece_team:
                         for x in range(3, 0, -1):
                             if (x, king_y) in bad_squares or self.get_piece(x, king_y) != EMPTY_SQUARE:
                                 break
                         else:
                             king_moves.append((0, king_y))
 
-                    if not self.has_rook_moved[p][1]:
+                    r = self.get_piece(7, king_y)
+                    if not self.has_rook_moved[p][1] and r[0] == PieceName.ROOK and r[1] == piece_team:
                         for x in range(5, 7):
                             if (x, king_y) in bad_squares or self.get_piece(x, king_y) != EMPTY_SQUARE:
                                 break
@@ -300,12 +336,13 @@ class Chess:
         for tempname in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
             path = []
             remembered_piece = None
+
             i = 1
+            tx = kx + tempname[0]
+            ty = ky + tempname[1]
+            target = self.get_piece(tx, ty)
 
-            while (target := self.get_piece(
-                (tx := kx + tempname[0] * i),
-                (ty := ky + tempname[1] * i))):
-
+            while target:
                 target_name, target_team = target
 
                 if target == EMPTY_SQUARE:
@@ -336,16 +373,21 @@ class Chess:
                     else:
                         break
                 i += 1
+                tx = kx + tempname[0] * i
+                ty = ky + tempname[1] * i
+                target = self.get_piece(tx, ty)
 
         # Diagonal line.
         for tempname in [(1, 1), (1, -1), (-1, 1), (-1, -1)]:
             path = []
             remembered_piece = None
-            i = 1
 
-            while (target := self.get_piece(
-                (tx := kx + tempname[0] * i),
-                (ty := ky + tempname[1] * i))):
+            i = 1
+            tx = kx + tempname[0]
+            ty = ky + tempname[1]
+            target = self.get_piece(tx, ty)
+
+            while target:
 
                 target_name, target_team = target
 
@@ -377,13 +419,17 @@ class Chess:
                     else:
                         break
                 i += 1
+                tx = kx + tempname[0] * i
+                ty = ky + tempname[1] * i
+                target = self.get_piece(tx, ty)
 
         # Knights
         for tempname in [(1, 2), (-1, 2), (1, -2), (-1, -2), (2, 1), (2, -1), (-2, 1), (-2, -1)]:
-            if (target := self.get_piece(
-                (tx := kx + tempname[0]),
-                (ty := ky + tempname[1]))):
+            tx = kx + tempname[0]
+            ty = ky + tempname[1]
+            target = self.get_piece(tx, ty)
 
+            if target:
                 target_name, target_team = target
 
                 if target_name == PieceName.KNIGHT and target_team != team:
@@ -466,6 +512,9 @@ class Chess:
             destiny_line[king_x] = self.board[oy][ox]
             destiny_line[king_x + (1 * castle_dir * -1)] = self.board[dy][dx]
         else:
+            if oy == dy:
+                destiny_line[ox] = '.'
+
             origin_line[ox] = '.'
             destiny_line[dx] = self.board[oy][ox]
 
@@ -503,18 +552,6 @@ class Chess:
         )
 
 
-    def move_cursor(self, x, y):
-        """
-        Moves the cursor by the specified amount if possible.
-        """
-
-        if 0 <= (aux := self.cursor[0] + x) <= 7:
-            self.cursor[0] = aux
-
-        if 0 <= (aux := self.cursor[1] + y) <= 7:
-            self.cursor[1] = aux
-
-
     def get_piece(self, x: int, y: int):
         """
         Returns the piece the cursor's pointing at.
@@ -541,10 +578,222 @@ class Chess:
         else:
             return False
 
+####################################################################
 
-    def get_moves(self):
-        """
-        Gets all legal moves for whatever piece is in the cursor's position.
-        """
+from browser import document, window, timer
+from browser.html import TABLE, TR, TH, TD, DIV, IMG
 
-        pass
+C = Chess()
+selected_square = -1
+possible_moves = []
+
+PIECE_SIZE = '76px'
+MAX_STEPS = 20
+
+def is_white(x: int, y: int):
+    return (x % 2 == 0 and y % 2 == 0) or (x % 2 != 0 and y % 2 != 0)
+
+
+def click(square: str):
+    global selected_square, possible_moves
+    square = int(square)
+
+    if selected_square == -1:
+        selected_square = square
+        document[str(selected_square)].style.backgroundColor = '#49f540' if is_white(square % 8, square // 8) else '#257a21'
+
+        x, y = selected_square % 8, selected_square // 8
+
+        if C.get_piece(x, y) != EMPTY_SQUARE:
+            moves = C.get_piece_moves(x, y)
+            create_moving_piece(selected_square)
+
+            for x, y in moves:
+                _id = str((y * 8) + x)
+                possible_moves.append(_id)
+                document[_id].style.backgroundColor = '#49f540' if is_white(x, y) else '#257a21'
+        else:
+            document[str(selected_square)].style.backgroundColor = 'white' if is_white(selected_square % 8, selected_square // 8) else 'black'
+            selected_square = -1
+            return None
+
+    elif selected_square != -1:
+        document[str(selected_square)].style.backgroundColor = '#49f540' if is_white(selected_square % 8, selected_square // 8) else '#257a21'
+
+        if selected_square == square or str(square) not in possible_moves:
+            document[str(selected_square)].style.backgroundColor = 'white' if is_white(selected_square % 8, selected_square // 8) else 'black'
+            selected_square = -1
+
+            for s in possible_moves:
+                s = int(s)
+                x, y = s % 8, s // 8
+                document[str(s)].style.backgroundColor = 'white' if is_white(x, y) else 'black'
+
+            possible_moves = []
+            if 'moving-piece' in document:
+                del document['moving-piece']
+
+        elif str(square) in possible_moves:
+            ox, oy = int(selected_square) % 8, int(selected_square) // 8
+            k_n, k_t = C.get_piece(ox, oy)
+            r_n, r_t = C.get_piece(square % 8, square // 8)
+
+            castle = False
+            if k_n == PieceName.KING and r_n == PieceName.ROOK and k_t == r_t:
+                castle = True
+
+            team_y = 0 if k_t == PieceTeam.BLACK else 7
+            if k_n == PieceName.ROOK:
+                side = 0 if ox == 0 and oy == team_y else 1
+                C.has_rook_moved[k_t.value - 1][side] = True
+
+            move_piece(selected_square, str(square), castle, k_t.name)
+
+            for s in possible_moves:
+                s = int(s)
+                x, y = s % 8, s // 8
+                document[str(s)].style.backgroundColor = 'white' if is_white(x, y) else 'black'
+
+            possible_moves = []
+            document[str(selected_square)].style.backgroundColor = 'white' if is_white(selected_square % 8, selected_square // 8) else 'black'
+            selected_square = -1
+
+
+def get_square(square_id):
+    table = list(document['squares'])
+    i_square_id = int(square_id)
+
+    x, y = i_square_id % 8, i_square_id // 8
+    return list(table[y])[x]
+
+
+def put_piece_in_square(square_id, name, team):
+    if name == 'None':
+        get_square(square_id).innerHTML = ''
+    else:
+        get_square(square_id).innerHTML = f'<img src="static/pieces/{team}_{name}.png" width="{PIECE_SIZE}" height="{PIECE_SIZE}">'
+
+
+def render_board():
+    for y in range(8):
+        for x in range(8):
+            name, team = C.get_piece(x, y)
+            if name != None:
+                put_piece_in_square(
+                    str(y * 8 + x),
+                    str(name.name).lower(),
+                    str(team.name).lower(),
+                )
+
+
+def create_moving_piece(origin_id):
+    origin = get_square(origin_id)
+    piece_div = DIV(
+        Id='moving-piece',
+        style={
+            'left'    : f'{origin.x + 3}px',
+            'top'     : f'{origin.y + 1}px',
+            'z-index' : '-1',
+        }
+    )
+    piece_div.innerHTML = origin.innerHTML
+    document <= piece_div
+
+
+def move_piece(origin_id, destiny_id, is_castle, team=None):
+    origin = get_square(origin_id)
+    destiny = get_square(destiny_id)
+    ox = int(origin_id) % 8
+    oy = int(origin_id) // 8
+    dx = int(destiny_id) % 8
+    dy = int(destiny_id) // 8
+
+    put_piece_in_square(origin_id, 'None', 0)
+
+    moving_piece = document['moving-piece']
+    moving_piece.style.zIndex = '10'
+    moving_piece_img = document['moving-piece'].innerHTML
+
+    def animated_move(timestamp, x_dir, y_dir, step, max_step, castle_dir):
+        moving_piece.left += int(x_dir)
+        moving_piece.top += int(y_dir)
+
+        if step < max_step:
+            timer.request_animation_frame(
+                lambda timestamp:
+                animated_move(timestamp, x_dir, y_dir, step + 1, max_step, castle_dir)
+            )
+        else:
+            del document['moving-piece']
+            if castle_dir != 0:
+
+                destiny.innerHTML = ''
+                put_piece_in_square(str(int(origin_id + 2 * castle_dir)), 'king', team)
+                put_piece_in_square(str(int(origin_id) + castle_dir), 'rook', team)
+
+                t_value = 0 if team == 'WHITE' else 1
+
+                C.has_king_moved[t_value] = True
+                C.has_rook_moved[t_value][int(not dx == 0)] = True
+            else:
+                destiny.innerHTML = moving_piece_img
+
+    castle_dir = 0
+    if is_castle:
+        if dx > ox: castle_dir = 1
+        elif ox > dx: castle_dir = -1
+        x_dir = (get_square(int(origin_id) + (2 * castle_dir)).x - origin.x) / MAX_STEPS
+        y_dir = 0
+    else:
+        x_dir = (destiny.x - origin.x) / MAX_STEPS
+        y_dir = (destiny.y - origin.y) / MAX_STEPS
+
+    timer.request_animation_frame(
+        lambda timestamp: animated_move(
+            timestamp, x_dir, y_dir, 0, MAX_STEPS, castle_dir
+        )
+    )
+
+    C.move_piece(ox, oy, dx, dy, is_castle)
+
+
+# This is done to have this function usable in js
+window.click = click
+
+####################################################################
+
+# Create table
+s = TABLE(id='squares')
+p = TABLE(id='pieces')
+
+colors = [(0, 0, 0), (255, 255, 255)]
+
+for row in range(8):
+    sr = TR()
+    pr = TR()
+    color = row % 2 == 0
+
+    for column in range(8):
+        _id = str(row*8 + column)
+
+        sr <= TD(
+            id=_id,
+            style={'background-color' : f'rgb{colors[int(color)]}'}
+        )
+        pr <= TD(
+            id=_id,
+            onclick=f"click('{_id}');"
+        )
+        color = not color
+
+    s <= sr
+    p <= pr
+
+document['squares-div'] <= s
+document['pieces-div'] <= p
+
+render_board()
+
+        </script>
+    </body>
+</html>
