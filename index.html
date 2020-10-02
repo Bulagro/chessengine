@@ -486,7 +486,7 @@ class Chess:
             for x in range(8):
                 piece_name, piece_team = self.get_piece(x, y)
 
-                if piece_name and piece_team == team:
+                if piece_name != None and piece_team == team:
                     if self.get_piece_moves(x, y, consider_pins=True):
                         return True
 
@@ -590,12 +590,14 @@ possible_moves = []
 PIECE_SIZE = '76px'
 MAX_STEPS = 20
 
+turn = PieceTeam.WHITE
+
 def is_white(x: int, y: int):
     return (x % 2 == 0 and y % 2 == 0) or (x % 2 != 0 and y % 2 != 0)
 
 
 def click(square: str):
-    global selected_square, possible_moves
+    global selected_square, possible_moves, turn
     square = int(square)
 
     if selected_square == -1:
@@ -603,9 +605,10 @@ def click(square: str):
         document[str(selected_square)].style.backgroundColor = '#49f540' if is_white(square % 8, square // 8) else '#257a21'
 
         x, y = selected_square % 8, selected_square // 8
+        piece = C.get_piece(x, y)
 
-        if C.get_piece(x, y) != EMPTY_SQUARE:
-            moves = C.get_piece_moves(x, y)
+        if p != EMPTY_SQUARE and piece[1] == turn:
+            moves = C.get_piece_moves(x, y, consider_pins=True)
             create_moving_piece(selected_square)
 
             for x, y in moves:
@@ -657,6 +660,9 @@ def click(square: str):
             possible_moves = []
             document[str(selected_square)].style.backgroundColor = 'white' if is_white(selected_square % 8, selected_square // 8) else 'black'
             selected_square = -1
+
+            turn = PieceTeam.BLACK if turn == PieceTeam.WHITE else PieceTeam.WHITE
+            C.get_king_status(turn)
 
 
 def get_square(square_id):
