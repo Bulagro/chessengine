@@ -563,3 +563,19 @@ class Chess:
             return piece_info[self.board[y][x]]
         else:
             return False
+
+    def replace_piece(x: int, y: int, name: PieceName, team: PieceTeam):
+        piece_dict = {
+            PieceName.KING   : 'k',
+            PieceName.QUEEN  : 'q',
+            PieceName.ROOK   : 'r',
+            PieceName.BISHOP : 'b',
+            PieceName.KNIGHT : 'n',
+            PieceName.PAWN   : 'p',
+        }
+
+        new_board = list(self.board)
+        new_board[y][x] = piece_dict[name]
+
+        if team == PieceTeam.WHITE:
+            new_board[y][x] = new_board[y][x].upper()
