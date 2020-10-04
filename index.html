@@ -587,7 +587,6 @@ C = Chess()
 selected_square = -1
 possible_moves = []
 
-PIECE_SIZE = '76px'
 MAX_STEPS = 20
 
 turn = PieceTeam.WHITE
@@ -677,7 +676,7 @@ def put_piece_in_square(square_id, name, team):
     if name == 'None':
         get_square(square_id).innerHTML = ''
     else:
-        get_square(square_id).innerHTML = f'<img src="static/pieces/{team}_{name}.png" width="{PIECE_SIZE}" height="{PIECE_SIZE}">'
+        get_square(square_id).innerHTML = f'<img src="static/pieces/{team}_{name}.png">'
 
 
 def render_board():
