@@ -472,7 +472,7 @@ class Chess:
             for x in range(8):
                 piece_name, piece_team = self.get_piece(x, y)
 
-                if piece_name and piece_team == team:
+                if piece_name != None and piece_team == team:
                     if self.get_piece_moves(x, y, consider_pins=True):
                         return True
 
