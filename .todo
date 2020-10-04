@@ -1,6 +1,7 @@
 ☐ Rename get_king_status() to something else. @low
 ☐ Add usage notes for the engine.
 ☐ Use IMG instead of directly changing <...>.innerHTML = ...
+☐ Limit piece selector to be always within view.
 
 UI:
     ☐ Make a usable board.
