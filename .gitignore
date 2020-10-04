@@ -4,3 +4,5 @@
 *.DS_Store
 src/__pycache__
 .vscode
+index_code.py
+move_code.py
