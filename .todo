@@ -1,4 +1,6 @@
 ☐ Rename get_king_status() to something else. @low
+☐ Add usage notes for the engine.
+☐ Use IMG instead of directly changing <...>.innerHTML = ...
 
 UI:
     ☐ Make a usable board.
@@ -14,6 +16,12 @@ UI:
         ✔ Make function for moving piece. @done(20-09-24 20:46)
         ✔ Make special case for king movement when castling. @done(20-09-30 21:39)
         ✔ Render_board() function: it's supposed to look trough every square and put the corresponding piece. @done(20-09-24 17:23)
+      ✔ Turn pawns into other pieces once they reach the other side of the board. @done(20-10-04 11:55)
+        ✔ Block piece selection until promotion is done. @done(20-10-04 11:31)
+        ✔ Figure out how to add classes to divs... @done(20-10-04 01:51)
+          // Capitalize
+        // Finish the promotion process: for now the 'piece selector' is done
+           now the actual promotion is missing.
 
 
 Retarded Sloth:

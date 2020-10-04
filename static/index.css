@@ -1,4 +1,3 @@
-
 #board squares {
     z-index: 0;
 }
@@ -19,6 +18,24 @@
     position: absolute;
 }
 
+#piece-select {
+    display: inline-block;
+    position: absolute;
+    background-color: white;
+    border: 2px solid grey;
+    border-radius: 3px;
+}
+
+#piece-select img {
+    vertical-align: middle;
+    width: 50px;
+    height: 50px;
+    border: 1px solid lightgrey;
+}
+
+#piece-select .container :hover {
+    background-color: lightgrey;
+}
 
 table img {
     width: 76px;

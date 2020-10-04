@@ -12,7 +12,6 @@
             <div id="pieces-div"></div>
         </div>
         <script type="text/python">
-####################################################################
 from enum import Enum, auto
 
 
@@ -578,21 +577,25 @@ class Chess:
         else:
             return False
 
-    def replace_piece(x: int, y: int, name: PieceName, team: PieceTeam):
+    def replace_piece(self, x: int, y: int, name: PieceName, team: PieceTeam):
         piece_dict = {
-            PieceName.KING  : 'k',
-            PieceName.QUEEN : 'q',
-            PieceName.ROOK  : 'r',
-            PieceName.BISHOP: 'b',
-            PieceName.KNIGHT: 'n',
-            PieceName.PAWN  : 'p',
+            PieceName.KING   : 'k',
+            PieceName.QUEEN  : 'q',
+            PieceName.ROOK   : 'r',
+            PieceName.BISHOP : 'b',
+            PieceName.KNIGHT : 'n',
+            PieceName.PAWN   : 'p',
         }
 
         new_board = list(self.board)
-        new_board[y][x] = piece_dict[name]
+        line = list(new_board[y])
+        line[x] = piece_dict[name]
 
         if team == PieceTeam.WHITE:
-            new_board[y][x] = new_board[y][x].upper()
+            line[x] = line[x].upper()
+
+        new_board[y] = ''.join(line)
+        self.board = tuple(new_board)
 
 
 ####################################################################
@@ -607,13 +610,18 @@ possible_moves = []
 MAX_STEPS = 20
 
 turn = PieceTeam.WHITE
+can_move = True
 
 def is_white(x: int, y: int):
     return (x % 2 == 0 and y % 2 == 0) or (x % 2 != 0 and y % 2 != 0)
 
 
 def click(square: str):
-    global selected_square, possible_moves, turn
+    global selected_square, possible_moves, turn, can_move
+
+    if not can_move:
+        return None
+
     square = int(square)
 
     if selected_square == -1:
@@ -654,19 +662,23 @@ def click(square: str):
 
         elif str(square) in possible_moves:
             ox, oy = int(selected_square) % 8, int(selected_square) // 8
+            dx, dy = square % 8, square // 8
             origin_name, origin_team = C.get_piece(ox, oy)
-            destiny_name, destiny_team = C.get_piece(square % 8, square // 8)
+            destiny_name, destiny_team = C.get_piece(dx, dy)
 
             castle = False
             if origin_name == PieceName.KING and destiny_name == PieceName.ROOK and origin_team == destiny_team:
                 castle = True
 
-            team_y = 0 if origin_team == PieceTeam.BLACK else 7
+            castle_y = 0 if origin_team == PieceTeam.BLACK else 7
+            pawn_promotion_y = 0 if origin_team == PieceTeam.WHITE else 7
+            promotion = dy == pawn_promotion_y and origin_name == PieceName.PAWN
+
             if origin_name == PieceName.ROOK:
-                side = 0 if ox == 0 and oy == team_y else 1
+                side = 0 if ox == 0 and oy == castle_y else 1
                 C.has_rook_moved[origin_team.value - 1][side] = True
 
-            move_piece(selected_square, str(square), castle, origin_team.name)
+            move_piece(selected_square, str(square), castle, origin_team.name, promotion)
 
             for s in possible_moves:
                 s = int(s)
@@ -679,7 +691,7 @@ def click(square: str):
 
             turn = PieceTeam.BLACK if turn == PieceTeam.WHITE else PieceTeam.WHITE
             C.get_king_status(turn)
-
+            print(C.can_move(PieceTeam.BLACK))
 
 def get_square(square_id):
     table = list(document['squares'])
@@ -689,11 +701,11 @@ def get_square(square_id):
     return list(table[y])[x]
 
 
-def put_piece_in_square(square_id, name, team):
-    if name == 'None':
+def put_piece_in_square(square_id, name_str, team_str):
+    if name_str == 'None':
         get_square(square_id).innerHTML = ''
     else:
-        get_square(square_id).innerHTML = f'<img src="static/pieces/{team}_{name}.png">'
+        get_square(square_id).innerHTML = f'<img src="static/pieces/{team_str}_{name_str}.png">'
 
 
 def render_board():
@@ -703,15 +715,15 @@ def render_board():
             if name != None:
                 put_piece_in_square(
                     str(y * 8 + x),
-                    str(name.name).lower(),
-                    str(team.name).lower(),
+                    str(name.name),
+                    str(team.name),
                 )
 
 
 def create_moving_piece(origin_id):
     origin = get_square(origin_id)
     piece_div = DIV(
-        Id='moving-piece',
+        id='moving-piece',
         style={
             'left'    : f'{origin.x + 3}px',
             'top'     : f'{origin.y + 1}px',
@@ -722,7 +734,7 @@ def create_moving_piece(origin_id):
     document <= piece_div
 
 
-def move_piece(origin_id, destiny_id, is_castle, team=None):
+def move_piece(origin_id, destiny_id, is_castle, team=None, promotion):
     origin = get_square(origin_id)
     destiny = get_square(destiny_id)
     ox = int(origin_id) % 8
@@ -737,6 +749,8 @@ def move_piece(origin_id, destiny_id, is_castle, team=None):
     moving_piece_img = document['moving-piece'].innerHTML
 
     def animated_move(timestamp, x_dir, y_dir, step, max_step, castle_dir):
+        global can_move
+
         moving_piece.left += int(x_dir)
         moving_piece.top += int(y_dir)
 
@@ -746,10 +760,12 @@ def move_piece(origin_id, destiny_id, is_castle, team=None):
                 animated_move(timestamp, x_dir, y_dir, step + 1, max_step, castle_dir)
             )
         else:
+            offset = int(moving_piece.clientWidth * 0.9)
             del document['moving-piece']
-            if castle_dir != 0:
 
+            if castle_dir != 0:
                 destiny.innerHTML = ''
+
                 put_piece_in_square(str(int(origin_id + 2 * castle_dir)), 'king', team)
                 put_piece_in_square(str(int(origin_id) + castle_dir), 'rook', team)
 
@@ -759,6 +775,23 @@ def move_piece(origin_id, destiny_id, is_castle, team=None):
                 C.has_rook_moved[t_value][int(not dx == 0)] = True
             else:
                 destiny.innerHTML = moving_piece_img
+
+                if promotion == True: # Display menu for options
+                    can_move = False
+                    selection_box = DIV(id='piece-select')
+
+                    for name in (PieceName.QUEEN, PieceName.ROOK, PieceName.BISHOP, PieceName.KNIGHT):
+                        container = DIV(
+                            Class="container",
+                            onclick=f'promote_pawn({dx}, {dy}, "{name}", "{team}");'
+                        )
+                        container <= IMG(src=f'static/pieces/{team}_{name.name}.png')
+
+                        selection_box <= container
+
+                    selection_box.style.left = str(moving_piece.left + offset) + 'px'
+                    selection_box.style.top = str(moving_piece.top) + 'px'
+                    document <= selection_box
 
     castle_dir = 0
     if is_castle:
@@ -779,8 +812,19 @@ def move_piece(origin_id, destiny_id, is_castle, team=None):
     C.move_piece(ox, oy, dx, dy, is_castle)
 
 
+def promote_pawn(x: int, y: int, name: PieceName, team: PieceTeam):
+    global can_move
+
+    C.replace_piece(x, y, eval(name), eval('PieceTeam.' + team))
+    put_piece_in_square(str(y * 8 + x), eval(name).name, team)
+
+    del document['piece-select']
+    can_move = True
+
+
 # This is done to have this function usable in js
 window.click = click
+window.promote_pawn = promote_pawn
 
 ####################################################################
 
@@ -813,6 +857,17 @@ for row in range(8):
 
 document['squares-div'] <= s
 document['pieces-div'] <= p
+
+C.board = (
+    '.......k',
+    '.....Q..',
+    '.....K..',
+    '........',
+    '........',
+    '........',
+    '........',
+    '........',
+)
 
 render_board()
 
