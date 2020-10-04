@@ -1469,6 +1469,22 @@ class TestsForBugs(unittest.TestCase):
 
         self.assertTrue((7, 7) in C.get_piece_moves(4, 7))
 
+    def test_replace_piece(self):
+        C = Chess()
+        C.board = (
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+        )
+
+        C.replace_piece(0, 0, PieceName.KING, PieceTeam.WHITE)
+        self.assertEqual(C.board[0][0], 'K')
+
 
 if __name__ == '__main__':
     unittest.main()

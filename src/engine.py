@@ -564,7 +564,7 @@ class Chess:
         else:
             return False
 
-    def replace_piece(x: int, y: int, name: PieceName, team: PieceTeam):
+    def replace_piece(self, x: int, y: int, name: PieceName, team: PieceTeam):
         piece_dict = {
             PieceName.KING   : 'k',
             PieceName.QUEEN  : 'q',
@@ -575,7 +575,11 @@ class Chess:
         }
 
         new_board = list(self.board)
-        new_board[y][x] = piece_dict[name]
+        line = list(new_board[y])
+        line[x] = piece_dict[name]
 
         if team == PieceTeam.WHITE:
-            new_board[y][x] = new_board[y][x].upper()
+            line[x] = line[x].upper()
+
+        new_board[y] = ''.join(line)
+        self.board = tuple(new_board)
