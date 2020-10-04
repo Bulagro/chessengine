@@ -37,17 +37,14 @@
     background-color: lightgrey;
 }
 
-table img {
-    width: 76px;
-    height: 76px;
-}
-
 td {
     width: 80px;
     height: 80px;
 }
 
 img {
+    width: 76px;
+    height: 76px;
     padding: 0px;
     margin: 0px;
 }
