@@ -825,14 +825,15 @@ def move_piece(origin_id, destiny_id, is_castle, team=None, promotion):
     C.move_piece(ox, oy, dx, dy, is_castle)
 
 
-def promote_pawn(x: int, y: int, name: PieceName, team: PieceTeam):
+def promote_pawn(x: int, y: int, name: PieceName, team_str: str):
     global can_move
 
-    C.replace_piece(x, y, eval(name), eval('PieceTeam.' + team))
-    put_piece_in_square(str(y * 8 + x), eval(name).name, team)
+    C.replace_piece(x, y, eval(name), eval('PieceTeam.' + team_str))
+    put_piece_in_square(str(y * 8 + x), eval(name).name, team_str)
 
     del document['piece-select']
     can_move = True
+    C.get_king_status(PieceTeam.BLACK if team_str == 'WHITE' else PieceTeam.WHITE)
 
 
 # This is done to have this function usable in js
