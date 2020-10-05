@@ -26,6 +26,7 @@ class Chess:
     def __init__(self):
         self.in_check = None
         self.checkmate = None
+        self.tie = False
         self.moves_to_defend_check = []
         self.pinned_pieces = {}
 
@@ -35,11 +36,12 @@ class Chess:
                             #  WL      WR      BL      BR
         self.set()
 
+
     def get_piece_moves(self, x: int, y: int, show_protected=False, consider_pins=False):
         """
         Returns every legal move for a specific piece, given a position.
         - show_protected: add those squares protected by the selected piece.
-        - consider_pins:  takes pinned pieces into consideration.
+        - consider_pins: takes pinned pieces into consideration.
         """
 
         PIECE_MOVES = {
@@ -433,8 +435,19 @@ class Chess:
                 self.in_check = team
                 self.moves_to_defend_check = [(kx + i, ky + forward)]
 
-        if not self.can_move(team) and self.in_check == team:
-            self.checkmate = team
+        if not self.can_move(team):
+            if self.in_check == team:
+                self.checkmate = team
+            else:
+                self.tie = True
+
+        else: # Check if there're only kings
+            for line in C.board:
+                line = line.replace('.', '')
+                if line != '' and line != 'k' and line != 'K':
+                    return
+
+            self.tie = True
 
 
     def get_every_square_the_king_cant_be_in(self, team: PieceTeam):
@@ -517,10 +530,9 @@ class Chess:
         position.
         """
 
-        self.cursor = [0, 0]
-
         self.in_check = None
         self.checkmate = None
+        self.tie = False
         self.moves_to_defend_check = []
         self.pinned_pieces = {}
         self.has_king_moved = [False, False]

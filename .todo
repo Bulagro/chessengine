@@ -4,7 +4,7 @@
 ☐ Limit piece selector to be always within view.
 
 UI:
-    ☐ Make a usable board.
+    ✔ Make a usable board. @done(20-10-04 13:02)
       ✔ Making two boards: one above the other. @done(20-09-14 21:07)
         // The one at the top will handle the pieces.
         // The one at the bottom will have the actual board.
@@ -19,14 +19,11 @@ UI:
         ✔ Render_board() function: it's supposed to look trough every square and put the corresponding piece. @done(20-09-24 17:23)
       ✔ Turn pawns into other pieces once they reach the other side of the board. @done(20-10-04 11:55)
         ✔ Block piece selection until promotion is done. @done(20-10-04 11:31)
-        ✔ Figure out how to add classes to divs... @done(20-10-04 01:51)
-          // Capitalize
-        // Finish the promotion process: for now the 'piece selector' is done
-           now the actual promotion is missing.
 
 
 Retarded Sloth:
     ☐ Make retarded sloth.
+
 
 Archive:
   ✔ Fix bishop and rook funcitons preventing castle. @high @done(20-09-29 11:39)
@@ -46,5 +43,10 @@ Archive:
   ✔ Refactor use of Chess().get_piece() to use verbose variables (instead of piece[0] or piece[1]) @done(20-08-06 12:27)
   ✔ Refactor get_king_status() to set pinned_pieces for both teams, path to checking piece and in_check. @done(20-08-08 02:33)
   ✔ Fix king's movement @done(20-09-25 12:27)
-  // Check if there's a rook...
-  // Turned out, pieces were duplicating with horizontal movement
+    // Check if there's a rook...
+    // Turned out, pieces were duplicating with horizontal movement
+  ✔ Figure out how to add classes to divs... @done(20-10-04 01:51)
+    // Capitalize
+  ✔ Tie variable in engine. @done(20-10-05 15:49)
+    // A tie should happen when the only pieces on the board are kings or
+       when one player doesn't have avaliable moves.
