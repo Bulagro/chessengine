@@ -1,3 +1,21 @@
+"""
+This is The Bad Chess Engine.
+It gives you the tools to make a usable chess game.
+
+The logic is contained in the 'Chess' class.
+From this class you'll use:
+- get_piece_moves() to get some piece's moves
+- get_king_status() to determine tie, check or checkmate,
+    avaliable moves to protect against that check and
+    pinned pieces (and their possible moves).
+- move_piece() to change the position between two pieces.
+- replace_piece() to turn a piece into another or add a new one.
+
+Additionally, there are variables such as has_king_moved and has_rook_moved,
+    used to determine whether a castle (move) is possible.
+"""
+
+
 from enum import Enum, auto
 
 
