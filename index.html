@@ -787,9 +787,6 @@ def move_piece(origin_id, destiny_id, is_castle, team=None, promotion):
                 animated_move(timestamp, x_dir, y_dir, step + 1, max_step, castle_dir)
             )
         else:
-            offset = int(moving_piece.clientWidth * 0.9)
-            del document['moving-piece']
-
             if castle_dir != 0:
                 destiny.innerHTML = ''
 
@@ -817,9 +814,14 @@ def move_piece(origin_id, destiny_id, is_castle, team=None, promotion):
 
                         selection_box <= container
 
-                    selection_box.style.left = str(moving_piece.left + offset) + 'px'
-                    selection_box.style.top = str(moving_piece.top) + 'px'
+                    offset_x = (moving_piece.clientWidth // 2) - (52 * 2)
+                    offset_y = -50 if team == 'WHITE' else moving_piece.clientWidth
+
+                    selection_box.style.left = str(moving_piece.left + offset_x) + 'px'
+                    selection_box.style.top = str(moving_piece.top + offset_y) + 'px'
                     document <= selection_box
+
+            del document['moving-piece']
 
     castle_dir = 0
     if is_castle:

@@ -33,6 +33,10 @@
     border: 1px solid lightgrey;
 }
 
+#piece-select .container {
+    display: inline-block;
+}
+
 #piece-select .container :hover {
     background-color: lightgrey;
 }
