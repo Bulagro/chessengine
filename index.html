@@ -757,10 +757,12 @@ def render_board():
 
 def create_moving_piece(origin_id):
     origin = get_square(origin_id)
+    x = 4 if int(origin_id) % 8 == 0 else 3 # Idk why, but it fixes things.
+
     piece_div = DIV(
         id='moving-piece',
         style={
-            'left'    : f'{origin.x + 3}px',
+            'left'    : f'{origin.x + x}px',
             'top'     : f'{origin.y + 1}px',
             'z-index' : '-1',
         }
