@@ -1,16 +1,17 @@
-#board squares {
-    z-index: 0;
-}
-#board pieces {
-    z-index: 10;
+#board {
+    display: block;
+    /* Sends the bars towards the borders */
+    margin: 30px;
 }
 
 #board table {
     border: 1px solid black;
     border-collapse: collapse;
+}
+
+#squares-div table {
     position: absolute;
-    left: calc(50vw - 320px);
-    top: calc(50vh - 320px);
+    z-index: -1;
 }
 
 #moving-piece {
@@ -41,6 +42,20 @@
     background-color: lightgrey;
 }
 
+#lpieces, #rpieces {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 200px;
+}
+
+#lpieces img, #rpieces img {
+    width: 60px;
+    height: 60px;
+    margin: 0px;
+}
+
 td {
     width: 80px;
     height: 80px;
@@ -53,6 +68,15 @@ img {
     margin: 0px;
 }
 
-body {
+body, main {
+    margin: 0px;
+    padding: 0px;
+}
+
+main {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
 }

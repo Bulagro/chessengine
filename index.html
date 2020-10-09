@@ -6,11 +6,15 @@
         <script src="https://cdn.jsdelivr.net/npm/brython@3.8.10/brython_stdlib.js"></script>
     </head>
     <body onload="brython()">
+        <main>
+            <div id="lpieces"></div>
+            <div id="board">
+                <div id="squares-div"></div>
+                <div id="pieces-div"></div>
+            </div>
+            <div id="rpieces"></div>
+        </main>
 
-        <div id="board">
-            <div id="squares-div"></div>
-            <div id="pieces-div"></div>
-        </div>
         <script type="text/python">
 """
 This is The Bad Chess Engine.
@@ -627,6 +631,8 @@ class Chess:
 
         new_board[y] = ''.join(line)
         self.board = tuple(new_board)
+
+
 ####################################################################
 
 from browser import document, window, timer
@@ -707,7 +713,7 @@ def click(square: str):
                 side = 0 if ox == 0 and oy == castle_y else 1
                 C.has_rook_moved[origin_team.value - 1][side] = True
 
-            move_piece(selected_square, str(square), castle, origin_team.name, promotion)
+            move_piece(selected_square, str(square), castle, origin_team.name, promotion, destiny_name, destiny_team)
 
             for s in possible_moves:
                 s = int(s)
@@ -763,7 +769,7 @@ def create_moving_piece(origin_id):
     document <= piece_div
 
 
-def move_piece(origin_id, destiny_id, is_castle, team=None, promotion):
+def move_piece(origin_id, destiny_id, is_castle, team, promotion, destiny_name, destiny_team):
     origin = get_square(origin_id)
     destiny = get_square(destiny_id)
     ox = int(origin_id) % 8
@@ -821,7 +827,16 @@ def move_piece(origin_id, destiny_id, is_castle, team=None, promotion):
                     selection_box.style.top = str(moving_piece.top + offset_y) + 'px'
                     document <= selection_box
 
+            piece_columns = {
+                PieceTeam.WHITE : document['rpieces'],
+                PieceTeam.BLACK : document['lpieces'],
+            }
+
+            if destiny_name != None:
+                piece_columns[destiny_team] <= IMG(src=f'static/pieces/{destiny_team.name}_{destiny_name.name}.png')
+
             del document['moving-piece']
+
 
     castle_dir = 0
     if is_castle:
