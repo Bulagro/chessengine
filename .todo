@@ -23,7 +23,8 @@ UI:
       // On the side
       ✔ Fix spacing with multiple pieces. @done(20-10-09 17:43)
     ☐ Add sound.
-    ☐ Checkmate/Tie message.
+    ✔ Checkmate/Tie message. @done(20-10-09 20:04)
+      ☐ Reset button.
     ☐ Timer.
 
 
