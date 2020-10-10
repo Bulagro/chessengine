@@ -748,11 +748,17 @@ def render_board():
         for x in range(8):
             name, team = C.get_piece(x, y)
             if name != None:
-                put_piece_in_square(
-                    str(y * 8 + x),
-                    str(name.name),
-                    str(team.name),
-                )
+                piece_name = name.name
+                piece_team = team.name
+            else:
+                piece_name = 'None'
+                piece_team = 'None'
+
+            put_piece_in_square(
+                str(y * 8 + x),
+                piece_name,
+                piece_team,
+            )
 
 
 def create_moving_piece(origin_id):
@@ -870,18 +876,52 @@ def promote_pawn(x: int, y: int, name: PieceName, team_str: str):
     can_move = True
     display_message()
 
+
 def display_message():
     C.get_king_status(turn)
 
     document['msg'].style.visibility = 'visible'
+    can_move = False
+
     if C.checkmate != None:
+        document['msg'].className = 'button'
+        document['msg'].bind('click', reset_board)
         document['msg'].text = f'{"BLACK" if turn == PieceTeam.WHITE else "WHITE"} wins!'
     elif C.in_check != None:
         document['msg'].text = f'{turn.name} in check.'
+        can_move = True
     elif C.tie == True:
+        document['msg'].className = 'button'
+        document['msg'].bind('click', reset_board)
         document['msg'].text = 'Tie'
     else:
         document['msg'].style.visibility = 'hidden'
+        can_move = True
+        document['msg'].unbind('click', reset_board)
+
+
+def reset_board(event=None):
+    global can_move, turn, possible_moves, selected_square
+
+    document['lpieces'].innerHTML = ''
+    document['rpieces'].innerHTML = ''
+    document['msg'].style.visibility = 'hidden'
+
+    for s in possible_moves:
+        s = int(s)
+        x, y = s % 8, s // 8
+        document[str(s)].style.backgroundColor = 'white' if is_white(x, y) else 'black'
+
+    if str(selected_square) in document:
+        document[str(selected_square)].style.backgroundColor = 'white' if is_white(selected_square % 8, selected_square // 8) else 'black'
+
+    selected_square = -1
+    possible_moves = []
+    turn = PieceTeam.WHITE
+    can_move = True
+
+    C.set()
+    render_board()
 
 
 # This is done to have this function usable in js

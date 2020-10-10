@@ -24,7 +24,8 @@ UI:
       ✔ Fix spacing with multiple pieces. @done(20-10-09 17:43)
     ☐ Add sound.
     ✔ Checkmate/Tie message. @done(20-10-09 20:04)
-      ☐ Reset button.
+      ✔ Reset button. @started(20-10-10 14:27) @done(20-10-10 14:45) @lasted(18m59s)
+        // The message is the button.
     ☐ Timer.
 
 
