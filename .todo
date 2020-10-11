@@ -1,5 +1,8 @@
 ☐ Rename get_king_status() to something else. @low
 ☐ Add 'undo move' functionality
+☐ Fix game not showing 'Tie' message when black eats last white piece. @bug
+  // This just happens sometimes:)))
+☐ Fix thing where some pieces get added twice to the list of eaten pieces. @bug
 
 UI:
     ✔ Make a usable board. @done(20-10-04 13:02)
