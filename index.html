@@ -764,13 +764,14 @@ def render_board():
 def create_moving_piece(origin_id):
     origin = get_square(origin_id)
     x = 4 if int(origin_id) % 8 == 0 else 3 # Idk why, but it fixes things.
+    y = 2 if int(origin_id) < 8 else 1
 
     piece_div = DIV(
         id='moving-piece',
         style={
             'left'    : f'{origin.x + x}px',
-            'top'     : f'{origin.y + 1}px',
-            'z-index' : '-1',
+            'top'     : f'{origin.y + y}px',
+            'z-index' : -1,
         }
     )
     piece_div.innerHTML = origin.innerHTML
