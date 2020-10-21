@@ -740,7 +740,7 @@ def put_piece_in_square(square_id, name_str, team_str):
     if name_str == 'None':
         get_square(square_id).innerHTML = ''
     else:
-        get_square(square_id).innerHTML = f'<img src="static/pieces/{team_str}_{name_str}.png">'
+        get_square(square_id).innerHTML = f'<img src="static/pieces/{team_str.lower()}_{name_str.lower()}.png">'
 
 
 def render_board():
@@ -825,7 +825,7 @@ def move_piece(origin_id, destiny_id, is_castle, team_str, promotion, destiny_na
                             Class="container",
                             onclick=f'promote_pawn({dx}, {dy}, "{name}", "{team_str}");'
                         )
-                        container <= IMG(src=f'static/pieces/{team_str}_{name.name}.png')
+                        container <= IMG(src=f'static/pieces/{team_str.lower()}_{name.name.lower()}.png')
 
                         selection_box <= container
 
@@ -842,7 +842,7 @@ def move_piece(origin_id, destiny_id, is_castle, team_str, promotion, destiny_na
             }
 
             if destiny_name != None:
-                piece_columns[destiny_team] <= IMG(src=f'static/pieces/{destiny_team.name}_{destiny_name.name}.png')
+                piece_columns[destiny_team] <= IMG(src=f'static/pieces/{destiny_team.name.lower()}_{destiny_name.name.lower()}.png')
 
             turn = PieceTeam.BLACK if turn == PieceTeam.WHITE else PieceTeam.WHITE
             display_message()
