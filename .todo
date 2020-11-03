@@ -33,7 +33,11 @@ UI:
 
 
 Retarded Sloth:
-    ☐ Make retarded sloth.
+    ✔ Make minimax tree evaluator (TEST). @done(20-11-03 11:18)
+    ✔ Make board scoring function (TEST). @done(20-11-03 12:18)
+      ✔ Add points when eating piece. @done(20-11-03 12:18)
+      ✔ Add points when check. @done(20-11-03 12:11)
+    ☐ Make moves tree generator.
 
 
 Archive:
