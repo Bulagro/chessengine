@@ -2,7 +2,7 @@ from engine import *
 
 
 def evaluate_board(engine: Chess, team: PieceTeam, eaten_piece: PieceName):
-    engine.get_king_status(team)
+    engine.get_king_status(opposing_team)
 
     if engine.checkmate == team:
         return -1000
@@ -50,7 +50,6 @@ def evaluate_board(engine: Chess, team: PieceTeam, eaten_piece: PieceName):
             if pos in d:
                 score += d[pos]
 
-    engine.get_king_status(opposing_team)
     if engine.in_check == opposing_team:
         return 500
 
