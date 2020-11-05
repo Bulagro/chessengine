@@ -460,10 +460,10 @@ class Chess:
                 self.tie = True
 
         else: # Check if there're only kings
-            for line in C.board:
+            for line in self.board:
                 line = line.replace('.', '')
                 if line != '' and line != 'k' and line != 'K':
-                    return
+                    return None
 
             self.tie = True
 
@@ -613,3 +613,15 @@ class Chess:
 
         new_board[y] = ''.join(line)
         self.board = tuple(new_board)
+
+
+class RetardedSloth:
+    def __init__(self):
+        pass
+
+    def configure(self):
+        pass
+
+    def get_nex_move(self):
+        """ Returns a list with two tuples: (ox, oy), (dx, dy). """
+        pass
