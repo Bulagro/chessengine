@@ -634,11 +634,69 @@ class Chess:
 
 class RetardedSloth:
     def __init__(self):
-        pass
+        self.piece_value_dict = {
+            PieceName.PAWN   : 1,
+            PieceName.KNIGHT : 2,
+            PieceName.BISHOP : 3,
+            PieceName.ROOK   : 5,
+            PieceName.QUEEN  : 9,
+            PieceName.KING   : 0,
+            None             : 0,
+        }
 
     def configure(self):
         pass
 
     def get_nex_move(self):
-        """ Returns a list with two tuples: (ox, oy), (dx, dy). """
+        """ Returns a list with two tuples: [(ox, oy), (dx, dy)]. """
         pass
+
+    def evaluate_board(self, engine: Chess, team: PieceTeam, eaten_piece: PieceName):
+        opposing_team = PieceTeam.WHITE if team == PieceTeam.BLACK else PieceTeam.BLACK
+        engine.get_king_status(opposing_team)
+
+        if engine.checkmate == team:
+            return -1000
+        elif engine.checkmate and engine.checkmate != team:
+            return 1000
+        elif engine.tie:
+            return 0
+
+        # oking stands for "Opposing Team's King".
+        squares_the_oking_cant_be_in, pieces_count = engine.get_every_square_the_king_cant_be_in(opposing_team, True)
+        oking_x, oking_y = engine.find_king_pos(opposing_team)
+
+        score = 0
+        for piece in pieces_count:
+            score += self.piece_value_dict[piece]
+
+        center_control_points_dict = {
+            (2, 2) : 1, (3, 2) : 1, (4, 2) : 1, (5, 2) : 1,
+            (2, 5) : 1, (3, 5) : 1, (4, 5) : 1, (5, 5) : 1,
+            (3, 3) : 2, (4, 3) : 2, (3, 4) : 2, (4, 4) : 2,
+        }
+
+        king_threat_dict = {
+            (oking_x + 1, oking_y) : 2, (oking_x - 1, oking_y) : 2,
+            (oking_x, oking_y + 1) : 2, (oking_x, oking_y - 1) : 2,
+            (oking_x + 1, oking_y + 1) : 2, (oking_x - 1, oking_y - 1) : 2,
+            (oking_x + 1, oking_y - 1) : 2, (oking_x - 1, oking_y + 1) : 2,
+
+            (oking_x + 2, oking_y) : 1, (oking_x - 2, oking_y) : 1,
+            (oking_x, oking_y + 2) : 1, (oking_x, oking_y - 2) : 1,
+            (oking_x + 2, oking_y + 2) : 1, (oking_x - 2, oking_y - 2) : 1,
+            (oking_x + 2, oking_y - 2) : 1, (oking_x - 2, oking_y + 2) : 1,
+        }
+
+        for pos in squares_the_oking_cant_be_in:
+            for d in (center_control_points_dict, king_threat_dict):
+                if pos in d:
+                    score += d[pos]
+
+        if engine.in_check == opposing_team:
+            return 500
+
+        score += self.piece_value_dict[eaten_piece]
+        score += len(engine.pinned_pieces)
+
+        return score
