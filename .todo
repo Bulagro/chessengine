@@ -37,6 +37,9 @@ Retarded Sloth:
     ✔ Make board scoring function (TEST). @done(20-11-03 12:18)
       ✔ Add points when eating piece. @done(20-11-03 12:18)
       ✔ Add points when check. @done(20-11-03 12:11)
+      ☐ Add points when a piece prevents castling.
+      ✘ Add a point for each piece present on the board. @cancelled(20-11-04 21:26)
+      ✔ Add each piece's value to the score (more pieces = greater score) @done(20-11-04 21:27)
     ☐ Make moves tree generator.
 
 

@@ -1,4 +1,4 @@
-from engine import Chess, PieceTeam, PieceName
+from engine import *
 import unittest
 
 
@@ -324,6 +324,40 @@ class TestChessClassFunctions(unittest.TestCase):
 
         self.assertEqual('..kr....', C.board[0])
         self.assertEqual('.....RK.', C.board[7])
+
+    def test_get_every_square_the_king_cant_be_in_counting_pieces(self):
+        C = Chess()
+        C.board = (
+            'k.......',
+            '.p......',
+            '........',
+            '........',
+            '........',
+            '........',
+            '......P.',
+            '.......K',
+        )
+
+        _, white_count = C.get_every_square_the_king_cant_be_in(PieceTeam.WHITE, True)
+        _, black_count = C.get_every_square_the_king_cant_be_in(PieceTeam.BLACK, True)
+
+        self.assertEqual(white_count, black_count)
+
+        C.board = (
+            'k.......',
+            '........',
+            '.....p..',
+            '........',
+            '........',
+            '.....P..',
+            '........',
+            '.......K',
+        )
+
+        _, white_count = C.get_every_square_the_king_cant_be_in(PieceTeam.WHITE, True)
+        _, black_count = C.get_every_square_the_king_cant_be_in(PieceTeam.BLACK, True)
+
+        self.assertEqual(white_count, black_count)
 
 class TestPawnMovement(unittest.TestCase):
     def test_pawn_moves_starting_position(self):
