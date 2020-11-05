@@ -468,8 +468,17 @@ class Chess:
             self.tie = True
 
 
-    def get_every_square_the_king_cant_be_in(self, team: PieceTeam):
+    def get_every_square_the_king_cant_be_in(self, team: PieceTeam, count_pieces=False):
         squares = []
+        pieces_dict = {
+            PieceName.KING   : 0,
+            PieceName.QUEEN  : 0,
+            PieceName.BISHOP : 0,
+            PieceName.KNIGHT : 0,
+            PieceName.ROOK   : 0,
+            PieceName.PAWN   : 0,
+        }
+
         oposing_team = PieceTeam.BLACK if team == PieceTeam.WHITE else PieceTeam.WHITE
 
         PIECE_MOVES = {
@@ -484,12 +493,20 @@ class Chess:
             for j in range(8):
                 piece = self.get_piece(j, i)
 
-                if piece == EMPTY_SQUARE or piece[1] == team: continue
+                if piece == EMPTY_SQUARE:
+                    continue
+                elif piece[1] == team:
+                    if count_pieces:
+                        pieces_dict[piece[0]] += 1
+                    continue
 
                 if piece[0] == PieceName.PAWN:
                     squares += self.p_attack(j, i, oposing_team, show_protected=True)
                 else:
                     squares += PIECE_MOVES[piece[0]](j, i, show_protected=True)
+
+        if count_pieces:
+            return (squares, pieces_dict)
 
         return squares
 
