@@ -633,7 +633,9 @@ class Chess:
 
 
 class RetardedSloth:
-    def __init__(self):
+
+    def __init__(self, engine):
+        self.engine = engine
         self.piece_value_dict = {
             PieceName.PAWN   : 1,
             PieceName.KNIGHT : 2,
@@ -651,20 +653,25 @@ class RetardedSloth:
         """ Returns a list with two tuples: [(ox, oy), (dx, dy)]. """
         pass
 
-    def evaluate_board(self, engine: Chess, team: PieceTeam, eaten_piece: PieceName):
-        opposing_team = PieceTeam.WHITE if team == PieceTeam.BLACK else PieceTeam.BLACK
-        engine.get_king_status(opposing_team)
 
-        if engine.checkmate == team:
+    def evaluate_board(self, team: PieceTeam, eaten_piece: PieceName):
+        """
+        Returns given a borad, returns it's score.
+        """
+
+        opposing_team = PieceTeam.WHITE if team == PieceTeam.BLACK else PieceTeam.BLACK
+        self.engine.get_king_status(opposing_team)
+
+        if self.engine.checkmate == team:
             return -1000
-        elif engine.checkmate and engine.checkmate != team:
+        elif self.engine.checkmate and self.engine.checkmate != team:
             return 1000
-        elif engine.tie:
+        elif self.engine.tie:
             return 0
 
         # oking stands for "Opposing Team's King".
-        squares_the_oking_cant_be_in, pieces_count = engine.get_every_square_the_king_cant_be_in(opposing_team, True)
-        oking_x, oking_y = engine.find_king_pos(opposing_team)
+        squares_the_oking_cant_be_in, pieces_count = self.engine.get_every_square_the_king_cant_be_in(opposing_team, True)
+        oking_x, oking_y = self.engine.find_king_pos(opposing_team)
 
         score = 0
         for piece in pieces_count:
@@ -693,10 +700,10 @@ class RetardedSloth:
                 if pos in d:
                     score += d[pos]
 
-        if engine.in_check == opposing_team:
+        if self.engine.in_check == opposing_team:
             return 500
 
         score += self.piece_value_dict[eaten_piece]
-        score += len(engine.pinned_pieces)
+        score += len(self.engine.pinned_pieces)
 
         return score
