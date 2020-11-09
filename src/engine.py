@@ -654,6 +654,36 @@ class RetardedSloth:
         pass
 
 
+    def get_every_possible_board(self, team: PieceTeam):
+        boards = [] # This contains tuples like this one:
+                    # (<board>, <is_castle>, <lrook moved>, <rrook moved>, <promotion>)
+
+        for i in range(8):
+            for j in range(8):
+                origin_name, origin_team = self.engine.get_piece(j, i)
+
+                if origin_team == team:
+                    for move in self.engine.get_piece_moves(j, i, consider_pins=True):
+                        dx, dy = move
+                        dest_name, dest_team = self.engine.get_piece(dx, dy)
+                        rrook_moved, lrook_moved, promotion = False, False, False
+                        is_castle = origin_name == PieceName.KING and dest_name == PieceName.ROOK and dest_team == origin_team
+
+                        if is_castle:
+                            if dx == 0:
+                                lrook_moved = True
+                            else:
+                                rrook_moved = True
+
+                        old_board = self.engine.board
+                        self.engine.move_piece(j, i, dx, dy, is_castle)
+                        boards += [(self.engine.board, is_castle, lrook_moved, rrook_moved)]
+
+                        self.engine.board = old_board
+
+        return boards
+
+
     def evaluate_board(self, team: PieceTeam, eaten_piece: PieceName):
         """
         Returns given a borad, returns it's score.
