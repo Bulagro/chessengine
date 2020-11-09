@@ -647,10 +647,25 @@ class RetardedSloth:
         }
 
     def configure(self):
+        """
+        Changes the Sloth's behaviour.
+        """
+
         pass
 
-    def get_nex_move(self):
-        """ Returns a list with two tuples: [(ox, oy), (dx, dy)]. """
+
+    def get_next_move(self):
+        """
+        Returns a list with two tuples: [(ox, oy), (dx, dy)].
+        """
+
+        pass
+
+
+    def generate_moves_tree(self):
+        """
+        Returns a <Node()> containing every possible move from a given position.
+        """
         pass
 
 
