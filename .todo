@@ -1,46 +1,49 @@
 ☐ Rename get_king_status() to something else. @low
-☐ Add 'undo move' functionality
+
 ☐ Fix game not showing 'Tie' message when black eats last white piece. @bug
-  // This just happens sometimes:)))
 ☐ Fix thing where some pieces get added twice to the list of eaten pieces. @bug
+☐ Fix rooks added to the list of eaten pieces after castle. @bug
+☐ Castle move allowed after king move. @bug
 
 UI:
-    ✔ Make a usable board. @done(20-10-04 13:02)
-      ✔ Making two boards: one above the other. @done(20-09-14 21:07)
-        // The one at the top will handle the pieces.
-        // The one at the bottom will have the actual board.
-      ✔ Highlight possible moves. @done(20-09-13 18:37)
-      ✔ Selectable squares. @done(20-09-25 15:06)
-      ✔ Display pieces. @done(20-10-07 15:15)
-        ✔ Make animation for piece movement. @done(20-10-01 18:30)
-          ✔ Make it smooth. @low @done(20-10-07 15:15)
-          ✔ Make an exception for castling. @done(20-10-01 18:29)
-        ✔ Make function for moving piece. @done(20-09-24 20:46)
-        ✔ Make special case for king movement when castling. @done(20-09-30 21:39)
-        ✔ Render_board() function: it's supposed to look trough every square and put the corresponding piece. @done(20-09-24 17:23)
-      ✔ Turn pawns into other pieces once they reach the other side of the board. @done(20-10-04 11:55)
-        ✔ Block piece selection until promotion is done. @done(20-10-04 11:31)
-    ✔ Limit piece selector to be always within view. @started(20-10-07 22:08) @done(20-10-08 12:47) @lasted(14h39m10s)
-      // Discovered how to make it horizontal, however, still no idea why it wansn't like that in the fisrt place.
-    ✔ Display eaten pieces somewhere. @started(20-10-09 13:26) @done(20-10-09 17:43) @lasted(4h17m44s)
-      // On the side
-      ✔ Fix spacing with multiple pieces. @done(20-10-09 17:43)
-    ☐ Add sound.
-    ✔ Checkmate/Tie message. @done(20-10-09 20:04)
-      ✔ Reset button. @started(20-10-10 14:27) @done(20-10-10 14:45) @lasted(18m59s)
-        // The message is the button.
-    ☐ Timer.
-
+  ✔ Make a usable board. @done(20-10-04 13:02)
+    ✔ Making two boards: one above the other. @done(20-09-14 21:07)
+      // The one at the top will handle the pieces.
+      // The one at the bottom will have the actual board.
+    ✔ Highlight possible moves. @done(20-09-13 18:37)
+    ✔ Selectable squares. @done(20-09-25 15:06)
+    ✔ Display pieces. @done(20-10-07 15:15)
+      ✔ Make animation for piece movement. @done(20-10-01 18:30)
+        ✔ Make it smooth. @low @done(20-10-07 15:15)
+        ✔ Make an exception for castling. @done(20-10-01 18:29)
+      ✔ Make function for moving piece. @done(20-09-24 20:46)
+      ✔ Make special case for king movement when castling. @done(20-09-30 21:39)
+      ✔ Render_board() function: it's supposed to look trough every square and put the corresponding piece. @done(20-09-24 17:23)
+    ✔ Turn pawns into other pieces once they reach the other side of the board. @done(20-10-04 11:55)
+      ✔ Block piece selection until promotion is done. @done(20-10-04 11:31)
+  ✔ Limit piece selector to be always within view. @started(20-10-07 22:08) @done(20-10-08 12:47) @lasted(14h39m10s)
+    // Discovered how to make it horizontal, however, still no idea why it wansn't like that in the fisrt place.
+  ✔ Display eaten pieces somewhere. @started(20-10-09 13:26) @done(20-10-09 17:43) @lasted(4h17m44s)
+    // On the side
+    ✔ Fix spacing with multiple pieces. @done(20-10-09 17:43)
+  ☐ Add sound.
+  ✔ Checkmate/Tie message. @done(20-10-09 20:04)
+    ✔ Reset button. @started(20-10-10 14:27) @done(20-10-10 14:45) @lasted(18m59s)
+      // The message is the button.
+  ☐ Timer.
+  ☐ Add 'undo move' functionality
 
 Retarded Sloth:
-    ✔ Make minimax tree evaluator (TEST). @done(20-11-03 11:18)
-    ✔ Make board scoring function (TEST). @done(20-11-03 12:18)
-      ✔ Add points when eating piece. @done(20-11-03 12:18)
-      ✔ Add points when check. @done(20-11-03 12:11)
-      ☐ Add points when a piece prevents castling.
-      ✘ Add a point for each piece present on the board. @cancelled(20-11-04 21:26)
-      ✔ Add each piece's value to the score (more pieces = greater score) @done(20-11-04 21:27)
-    ☐ Make moves tree generator.
+  ✔ Make minimax tree evaluator (TEST). @done(20-11-03 11:18)
+  ✔ Make board scoring function (TEST). @done(20-11-03 12:18)
+    ✔ Add points when eating piece. @done(20-11-03 12:18)
+    ✔ Add points when check. @done(20-11-03 12:11)
+    ☐ Add points when a piece prevents castling.
+    ✘ Add a point for each piece present on the board. @cancelled(20-11-04 21:26)
+    ✔ Add each piece's value to the score (more pieces = greater score) @done(20-11-04 21:27)
+  ☐ Make moves tree generator.
+    ✔ Keep record of moved rooks. @done(20-11-09 14:13)
+    ☐ Add edge-case for promotions.
 
 
 Archive:
