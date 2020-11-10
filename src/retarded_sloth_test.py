@@ -121,6 +121,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 False,
                 False,
                 False,
+                False,
             )
         ]
 
@@ -155,6 +156,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 False,
                 False,
                 False,
+                False,
             ),
             (
                 ('........',
@@ -165,6 +167,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 'r.......',
                 '....K...'),
+                False,
                 False,
                 False,
                 False,
@@ -185,5 +188,233 @@ class TestTreeMovesGenerator(unittest.TestCase):
             len(R.get_every_possible_board(PieceTeam.BLACK)),
             20
         )
+
+    def test_get_every_possible_board_registeres_lrook_and_king_movement(self):
+        C = Chess()
+        R = RetardedSloth(C)
+
+        C.board = (
+            '........',
+            '.....k..',
+            '........',
+            '........',
+            '........',
+            '........',
+            'P.......',
+            'R..K....',
+        )
+
+        actual = R.get_every_possible_board(PieceTeam.WHITE)
+        expected = [
+            (
+                ('........',
+                '.....k..',
+                '........',
+                '........',
+                '........',
+                'P.......',
+                '........',
+                'R..K....'),
+                False, False, False, False, False,
+            ),
+            (
+                ('........',
+                '.....k..',
+                '........',
+                '........',
+                'P.......',
+                '........',
+                '........',
+                'R..K....'),
+                False, False, False, False, False,
+            ),
+            (
+                ('........',
+                '.....k..',
+                '........',
+                '........',
+                '........',
+                '........',
+                'P.......',
+                '.R.K....'),
+                False, False, True, False, False,
+            ),
+            (
+                ('........',
+                '.....k..',
+                '........',
+                '........',
+                '........',
+                '........',
+                'P.......',
+                '..RK....'),
+                False, False, True, False, False,
+            ),
+            (
+                ('........',
+                '.....k..',
+                '........',
+                '........',
+                '........',
+                '........',
+                'P.......',
+                'R...K...'),
+                True, False, False, False, False,
+            ),
+            (
+                ('........',
+                '.....k..',
+                '........',
+                '........',
+                '........',
+                '........',
+                'P.......',
+                'R.K.....'),
+                True, False, False, False, False,
+            ),
+            (
+                ('........',
+                '.....k..',
+                '........',
+                '........',
+                '........',
+                '........',
+                'P.K.....',
+                'R.......'),
+                True, False, False, False, False,
+            ),
+            (
+                ('........',
+                '.....k..',
+                '........',
+                '........',
+                '........',
+                '........',
+                'P..K....',
+                'R.......'),
+                True, False, False, False, False,
+            ),
+            (
+                ('........',
+                '.....k..',
+                '........',
+                '........',
+                '........',
+                '........',
+                'P...K...',
+                'R.......'),
+                True, False, False, False, False,
+            ),
+        ]
+
+        self.assertEqual(expected, actual)
+
+    def test_get_every_move_registers_rrook_movement(self):
+        C = Chess()
+        R = RetardedSloth(C)
+
+        C.board = (
+            '....k...',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+            '.......P',
+            '.....K.R',
+        )
+
+        actual = R.get_every_possible_board(PieceTeam.WHITE)
+        expected = [
+            (
+                ('....k...',
+                '........',
+                '........',
+                '........',
+                '........',
+                '.......P',
+                '........',
+                '.....K.R'),
+                False, False, False, False, False,
+            ),
+            (
+                ('....k...',
+                '........',
+                '........',
+                '........',
+                '.......P',
+                '........',
+                '........',
+                '.....K.R'),
+                False, False, False, False, False,
+            ),
+            (
+                ('....k...',
+                '........',
+                '........',
+                '........',
+                '........',
+                '........',
+                '.......P',
+                '......KR'),
+                True, False, False, False, False,
+            ),
+            (
+                ('....k...',
+                '........',
+                '........',
+                '........',
+                '........',
+                '........',
+                '.......P',
+                '....K..R'),
+                True, False, False, False, False,
+            ),
+            (
+                ('....k...',
+                '........',
+                '........',
+                '........',
+                '........',
+                '........',
+                '....K..P',
+                '.......R'),
+                True, False, False, False, False,
+            ),
+            (
+                ('....k...',
+                '........',
+                '........',
+                '........',
+                '........',
+                '........',
+                '.....K.P',
+                '.......R'),
+                True, False, False, False, False,
+            ),
+            (
+                ('....k...',
+                '........',
+                '........',
+                '........',
+                '........',
+                '........',
+                '......KP',
+                '.......R'),
+                True, False, False, False, False,
+            ),
+            (
+                ('....k...',
+                '........',
+                '........',
+                '........',
+                '........',
+                '........',
+                '.......P',
+                '.....KR.'),
+                False, False, False, True, False,
+            ),
+        ]
+
 if __name__ == "__main__":
     unittest.main()

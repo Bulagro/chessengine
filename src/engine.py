@@ -678,11 +678,21 @@ class RetardedSloth:
                 origin_name, origin_team = self.engine.get_piece(j, i)
 
                 if origin_team == team:
+                    origin_team_y = 0 if team == PieceTeam.BLACK else 7
+
                     for move in self.engine.get_piece_moves(j, i, consider_pins=True):
                         dx, dy = move
                         dest_name, dest_team = self.engine.get_piece(dx, dy)
-                        rrook_moved, lrook_moved, promotion = False, False, False
+                        rrook_moved, lrook_moved, king_moved, promotion = False, False, False, False
                         is_castle = origin_name == PieceName.KING and dest_name == PieceName.ROOK and dest_team == origin_team
+
+                        if origin_name == PieceName.KING:
+                            king_moved = True
+                        elif origin_name == PieceName.ROOK:
+                            if j == 0 and i == origin_team_y:
+                                lrook_moved = True
+                            elif j == 7 and i == origin_team_y:
+                                rrook_moved = True
 
                         if is_castle:
                             if dx == 0:
@@ -692,7 +702,7 @@ class RetardedSloth:
 
                         old_board = self.engine.board
                         self.engine.move_piece(j, i, dx, dy, is_castle)
-                        boards += [(self.engine.board, is_castle, lrook_moved, rrook_moved)]
+                        boards += [(self.engine.board, king_moved, is_castle, lrook_moved, rrook_moved, promotion)]
 
                         self.engine.board = old_board
 
