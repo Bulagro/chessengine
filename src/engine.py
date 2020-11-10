@@ -671,27 +671,30 @@ class RetardedSloth:
 
     def get_every_possible_board(self, team: PieceTeam):
         boards = [] # This contains tuples like this one:
-                    # (<board>, <is_castle>, <lrook moved>, <rrook moved>, <promotion>)
+                    # (<board>, <king moved>, <is_castle>, <lrook moved>, <rrook moved>, <eaten piece>)
 
-        for i in range(8):
-            for j in range(8):
-                origin_name, origin_team = self.engine.get_piece(j, i)
+        for oy in range(8):
+            for ox in range(8):
+                origin_name, origin_team = self.engine.get_piece(ox, oy)
 
                 if origin_team == team:
                     origin_team_y = 0 if team == PieceTeam.BLACK else 7
 
-                    for move in self.engine.get_piece_moves(j, i, consider_pins=True):
+                    for move in self.engine.get_piece_moves(ox, oy, consider_pins=True):
                         dx, dy = move
                         dest_name, dest_team = self.engine.get_piece(dx, dy)
-                        rrook_moved, lrook_moved, king_moved, promotion = False, False, False, False
+                        rrook_moved, lrook_moved, king_moved = False, False, False
+
+                        eaten_piece = dest_name
+                        promotion = origin_name == PieceName.PAWN and (dy == (0 if origin_team == PieceTeam.WHITE else 7))
                         is_castle = origin_name == PieceName.KING and dest_name == PieceName.ROOK and dest_team == origin_team
 
                         if origin_name == PieceName.KING:
                             king_moved = True
                         elif origin_name == PieceName.ROOK:
-                            if j == 0 and i == origin_team_y:
+                            if ox == 0 and oy == origin_team_y:
                                 lrook_moved = True
-                            elif j == 7 and i == origin_team_y:
+                            elif ox == 7 and oy == origin_team_y:
                                 rrook_moved = True
 
                         if is_castle:
@@ -700,10 +703,20 @@ class RetardedSloth:
                             else:
                                 rrook_moved = True
 
-                        old_board = self.engine.board
-                        self.engine.move_piece(j, i, dx, dy, is_castle)
-                        boards += [(self.engine.board, king_moved, is_castle, lrook_moved, rrook_moved, promotion)]
+                            eaten_piece = None
 
+                        old_board = self.engine.board
+                        self.engine.move_piece(ox, oy, dx, dy, is_castle)
+
+                        if promotion:
+                            for piece in (PieceName.QUEEN, PieceName.ROOK, PieceName.BISHOP, PieceName.KNIGHT):
+                                self.engine.replace_piece(dx, dy, piece, origin_team)
+                                boards += [(self.engine.board, False, False, False, False, eaten_piece)]
+
+                            self.engine.board = old_board
+                            continue
+
+                        boards += [(self.engine.board, king_moved, is_castle, lrook_moved, rrook_moved, eaten_piece)]
                         self.engine.board = old_board
 
         return boards

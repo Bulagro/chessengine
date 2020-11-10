@@ -118,10 +118,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 'r.......',
                 '......K.'),
-                False,
-                False,
-                False,
-                False,
+                True, False, False, False, None,
             )
         ]
 
@@ -153,10 +150,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 'r.......',
                 '......K.'),
-                False,
-                False,
-                False,
-                False,
+                True, False, False, False, None,
             ),
             (
                 ('........',
@@ -167,10 +161,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 'r.......',
                 '....K...'),
-                False,
-                False,
-                False,
-                False,
+                True, False, False, False, None,
             )
         ]
 
@@ -184,6 +175,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
             len(R.get_every_possible_board(PieceTeam.WHITE)),
             20
         )
+
         self.assertEqual(
             len(R.get_every_possible_board(PieceTeam.BLACK)),
             20
@@ -215,7 +207,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 'P.......',
                 '........',
                 'R..K....'),
-                False, False, False, False, False,
+                False, False, False, False, None,
             ),
             (
                 ('........',
@@ -226,7 +218,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 '........',
                 'R..K....'),
-                False, False, False, False, False,
+                False, False, False, False, None,
             ),
             (
                 ('........',
@@ -237,7 +229,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 'P.......',
                 '.R.K....'),
-                False, False, True, False, False,
+                False, False, True, False, None,
             ),
             (
                 ('........',
@@ -248,7 +240,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 'P.......',
                 '..RK....'),
-                False, False, True, False, False,
+                False, False, True, False, None,
             ),
             (
                 ('........',
@@ -259,7 +251,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 'P.......',
                 'R...K...'),
-                True, False, False, False, False,
+                True, False, False, False, None,
             ),
             (
                 ('........',
@@ -270,7 +262,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 'P.......',
                 'R.K.....'),
-                True, False, False, False, False,
+                True, False, False, False, None,
             ),
             (
                 ('........',
@@ -281,7 +273,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 'P.K.....',
                 'R.......'),
-                True, False, False, False, False,
+                True, False, False, False, None,
             ),
             (
                 ('........',
@@ -292,7 +284,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 'P..K....',
                 'R.......'),
-                True, False, False, False, False,
+                True, False, False, False, None,
             ),
             (
                 ('........',
@@ -303,7 +295,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 'P...K...',
                 'R.......'),
-                True, False, False, False, False,
+                True, False, False, False, None,
             ),
         ]
 
@@ -335,7 +327,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '.......P',
                 '........',
                 '.....K.R'),
-                False, False, False, False, False,
+                False, False, False, False, None,
             ),
             (
                 ('....k...',
@@ -346,7 +338,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 '........',
                 '.....K.R'),
-                False, False, False, False, False,
+                False, False, False, False, None,
             ),
             (
                 ('....k...',
@@ -357,7 +349,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 '.......P',
                 '......KR'),
-                True, False, False, False, False,
+                True, False, False, False, None
             ),
             (
                 ('....k...',
@@ -368,7 +360,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 '.......P',
                 '....K..R'),
-                True, False, False, False, False,
+                True, False, False, False, None,
             ),
             (
                 ('....k...',
@@ -379,7 +371,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 '....K..P',
                 '.......R'),
-                True, False, False, False, False,
+                True, False, False, False, None,
             ),
             (
                 ('....k...',
@@ -390,7 +382,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 '.....K.P',
                 '.......R'),
-                True, False, False, False, False,
+                True, False, False, False, None,
             ),
             (
                 ('....k...',
@@ -401,7 +393,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 '......KP',
                 '.......R'),
-                True, False, False, False, False,
+                True, False, False, False, None,
             ),
             (
                 ('....k...',
@@ -412,9 +404,122 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 '.......P',
                 '.....KR.'),
-                False, False, False, True, False,
+                False, False, False, True, None,
             ),
         ]
+
+        self.assertEqual(actual, expected)
+
+    def test_get_every_possible_board_adds_four_boards_when_promoting(self):
+        C = Chess()
+        R = RetardedSloth(C)
+
+        C.board = (
+            '........',
+            '.......P',
+            'k.......',
+            '........',
+            '........',
+            '........',
+            '........',
+            '..K.....',
+        )
+
+        actual = R.get_every_possible_board(PieceTeam.WHITE)
+        expected = [
+            (
+                ('.......Q',
+                '........',
+                'k.......',
+                '........',
+                '........',
+                '........',
+                '........',
+                '..K.....'),
+                False, False, False, False, None,
+            ),
+            (
+                ('.......R',
+                '........',
+                'k.......',
+                '........',
+                '........',
+                '........',
+                '........',
+                '..K.....'),
+                False, False, False, False, None,
+            ),
+            (
+                ('.......B',
+                '........',
+                'k.......',
+                '........',
+                '........',
+                '........',
+                '........',
+                '..K.....'),
+                False, False, False, False, None,
+            ),
+            (
+                ('.......N',
+                '........',
+                'k.......',
+                '........',
+                '........',
+                '........',
+                '........',
+                '..K.....'),
+                False, False, False, False, None,
+            ),
+        ]
+
+        for board in expected:
+            self.assertTrue(board in actual)
+
+    def test_get_every_possible_board_registeres_castle(self):
+        C = Chess()
+        R = RetardedSloth(C)
+
+        C.board = (
+            'r...k..r',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+            '........',
+            '...K....',
+        )
+
+        actual = R.get_every_possible_board(PieceTeam.BLACK)
+        expected = [
+            (
+                ('r....rk.',
+                '........',
+                '........',
+                '........',
+                '........',
+                '........',
+                '........',
+                '...K....'),
+                True, True, False, True, None,
+            ),
+            (
+                ('..kr...r',
+                '........',
+                '........',
+                '........',
+                '........',
+                '........',
+                '........',
+                '...K....'),
+                True, True, True, False, None,
+            ),
+        ]
+
+        for board in expected:
+            self.assertTrue(board in actual)
+
 
 if __name__ == "__main__":
     unittest.main()
