@@ -89,3 +89,4 @@ Archive:
     // This doesn't help with performance and requires a change in put_piece_in_square()'s
        super complicated logic (hehe).
   ✔ Add usage notes for the engine. @done(20-10-08 12:47)
+  ✔ Fix rooks added to the list of eaten pieces after castle. @bug @started(20-11-11 01:00) @done(20-11-11 01:05) @lasted(5m20s)

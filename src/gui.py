@@ -202,7 +202,7 @@ def move_piece(origin_id, destiny_id, is_castle, team_str, promotion, destiny_na
                 PieceTeam.BLACK : document['lpieces'],
             }
 
-            if destiny_name != None:
+            if destiny_name != None and castle_dir == 0:
                 piece_columns[destiny_team] <= IMG(src=f'static/pieces/{destiny_team.name.lower()}_{destiny_name.name.lower()}.png')
 
             turn = PieceTeam.BLACK if turn == PieceTeam.WHITE else PieceTeam.WHITE
