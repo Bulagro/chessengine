@@ -671,7 +671,7 @@ class RetardedSloth:
 
     def get_every_possible_board(self, team: PieceTeam):
         boards = [] # This contains tuples like this one:
-                    # (<board>, <king moved>, <is_castle>, <lrook moved>, <rrook moved>, <eaten piece>)
+                    # (<board>, [move], <king moved>, <is_castle>, <lrook moved>, <rrook moved>, <eaten piece>)
 
         for oy in range(8):
             for ox in range(8):
@@ -711,12 +711,12 @@ class RetardedSloth:
                         if promotion:
                             for piece in (PieceName.QUEEN, PieceName.ROOK, PieceName.BISHOP, PieceName.KNIGHT):
                                 self.engine.replace_piece(dx, dy, piece, origin_team)
-                                boards += [(self.engine.board, False, False, False, False, eaten_piece)]
+                                boards += [(self.engine.board, [(ox, oy), (dx, dy)], False, False, False, False, eaten_piece)]
 
                             self.engine.board = old_board
                             continue
 
-                        boards += [(self.engine.board, king_moved, is_castle, lrook_moved, rrook_moved, eaten_piece)]
+                        boards += [(self.engine.board, [(ox, oy), (dx, dy)], king_moved, is_castle, lrook_moved, rrook_moved, eaten_piece)]
                         self.engine.board = old_board
 
         return boards

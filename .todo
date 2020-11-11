@@ -45,8 +45,8 @@ Retarded Sloth:
     ✔ Keep record of moved rooks. @done(20-11-09 14:13)
       ✔ Not only when castling... @done(20-11-10 00:12)
     ✔ Change flag when king moves. @done(20-11-10 00:54)
-    ☐ Change flag when eating a piece.
-    ☐ Add edge-case for promotions.
+    ✔ Change flag when eating a piece. @done(20-11-10 11:27)
+    ✔ Add edge-case for promotions. @done(20-11-10 11:27)
 
 
 Archive:

@@ -118,6 +118,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 'r.......',
                 '......K.'),
+                [(5, 7), (6, 7)],
                 True, False, False, False, None,
             )
         ]
@@ -150,6 +151,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 'r.......',
                 '......K.'),
+                [(5, 7), (6, 7)],
                 True, False, False, False, None,
             ),
             (
@@ -161,6 +163,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 'r.......',
                 '....K...'),
+                [(5, 7), (4, 7)],
                 True, False, False, False, None,
             )
         ]
@@ -207,6 +210,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 'P.......',
                 '........',
                 'R..K....'),
+                [(0, 6), (0, 5)],
                 False, False, False, False, None,
             ),
             (
@@ -218,6 +222,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 '........',
                 'R..K....'),
+                [(0, 6), (0, 4)],
                 False, False, False, False, None,
             ),
             (
@@ -229,6 +234,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 'P.......',
                 '.R.K....'),
+                [(0, 7), (1, 7)],
                 False, False, True, False, None,
             ),
             (
@@ -240,6 +246,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 'P.......',
                 '..RK....'),
+                [(0, 7), (2, 7)],
                 False, False, True, False, None,
             ),
             (
@@ -251,6 +258,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 'P.......',
                 'R...K...'),
+                [(3, 7), (4, 7)],
                 True, False, False, False, None,
             ),
             (
@@ -262,6 +270,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 'P.......',
                 'R.K.....'),
+                [(3, 7), (2, 7)],
                 True, False, False, False, None,
             ),
             (
@@ -273,6 +282,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 'P.K.....',
                 'R.......'),
+                [(3, 7), (2, 6)],
                 True, False, False, False, None,
             ),
             (
@@ -284,6 +294,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 'P..K....',
                 'R.......'),
+                [(3, 7), (3, 6)],
                 True, False, False, False, None,
             ),
             (
@@ -295,6 +306,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 'P...K...',
                 'R.......'),
+                [(3, 7), (4, 6)],
                 True, False, False, False, None,
             ),
         ]
@@ -327,6 +339,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '.......P',
                 '........',
                 '.....K.R'),
+                [(7, 6), (7, 5)],
                 False, False, False, False, None,
             ),
             (
@@ -338,6 +351,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 '........',
                 '.....K.R'),
+                [(7, 6), (7, 4)],
                 False, False, False, False, None,
             ),
             (
@@ -349,6 +363,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 '.......P',
                 '......KR'),
+                [(5, 7), (6, 7)],
                 True, False, False, False, None
             ),
             (
@@ -360,6 +375,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 '.......P',
                 '....K..R'),
+                [(5, 7), (4, 7)],
                 True, False, False, False, None,
             ),
             (
@@ -371,6 +387,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 '....K..P',
                 '.......R'),
+                [(5, 7), (4, 6)],
                 True, False, False, False, None,
             ),
             (
@@ -382,6 +399,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 '.....K.P',
                 '.......R'),
+                [(5, 7), (5, 6)],
                 True, False, False, False, None,
             ),
             (
@@ -393,6 +411,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 '......KP',
                 '.......R'),
+                [(5, 7), (6, 6)],
                 True, False, False, False, None,
             ),
             (
@@ -404,6 +423,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 '.......P',
                 '.....KR.'),
+                [(7, 7), (6, 7)],
                 False, False, False, True, None,
             ),
         ]
@@ -436,6 +456,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 '........',
                 '..K.....'),
+                [(7, 1), (7, 0)],
                 False, False, False, False, None,
             ),
             (
@@ -447,6 +468,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 '........',
                 '..K.....'),
+                [(7, 1), (7, 0)],
                 False, False, False, False, None,
             ),
             (
@@ -458,6 +480,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 '........',
                 '..K.....'),
+                [(7, 1), (7, 0)],
                 False, False, False, False, None,
             ),
             (
@@ -469,6 +492,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 '........',
                 '..K.....'),
+                [(7, 1), (7, 0)],
                 False, False, False, False, None,
             ),
         ]
@@ -502,6 +526,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 '........',
                 '...K....'),
+                [(4, 0), (7, 0)],
                 True, True, False, True, None,
             ),
             (
@@ -513,6 +538,7 @@ class TestTreeMovesGenerator(unittest.TestCase):
                 '........',
                 '........',
                 '...K....'),
+                [(4, 0), (0, 0)],
                 True, True, True, False, None,
             ),
         ]
