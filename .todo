@@ -1,8 +1,8 @@
 ☐ Rename get_king_status() to something else. @low
 
+☐ Fix game on smaller screens. @bug
 ☐ Fix game not showing 'Tie' message when black eats last white piece. @bug
 ☐ Fix thing where some pieces get added twice to the list of eaten pieces. @bug
-☐ Fix rooks added to the list of eaten pieces after castle. @bug
 ☐ Castle move allowed after king move. @bug
 
 Organize stuff: @critical
@@ -37,12 +37,12 @@ UI:
   ✔ Display eaten pieces somewhere. @started(20-10-09 13:26) @done(20-10-09 17:43) @lasted(4h17m44s)
     // On the side
     ✔ Fix spacing with multiple pieces. @done(20-10-09 17:43)
-  ☐ Add sound.
+  ☐ Add sound. @low
   ✔ Checkmate/Tie message. @done(20-10-09 20:04)
     ✔ Reset button. @started(20-10-10 14:27) @done(20-10-10 14:45) @lasted(18m59s)
       // The message is the button.
-  ☐ Timer.
-  ☐ Add 'undo move' functionality
+  ☐ Timer. @low
+  ☐ Add 'undo move' functionality @high
 
 Retarded Sloth:
   ✔ Make minimax tree evaluator (TEST). @done(20-11-03 11:18)
@@ -52,7 +52,7 @@ Retarded Sloth:
     ☐ Add points when a piece prevents castling.
     ✘ Add a point for each piece present on the board. @cancelled(20-11-04 21:26)
     ✔ Add each piece's value to the score (more pieces = greater score) @done(20-11-04 21:27)
-  ☐ Make moves tree generator.
+  ☐ Make moves tree generator. @critical
     ✔ Keep record of moved rooks. @done(20-11-09 14:13)
       ✔ Not only when castling... @done(20-11-10 00:12)
     ✔ Change flag when king moves. @done(20-11-10 00:54)
