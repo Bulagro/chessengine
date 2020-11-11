@@ -5,6 +5,17 @@
 ☐ Fix rooks added to the list of eaten pieces after castle. @bug
 ☐ Castle move allowed after king move. @bug
 
+Organize stuff: @critical
+  ✘ Figure out why I added index_code.py to .gitignore. @cancelled(20-11-11 15:40)
+    // No idea
+  ✔ Make new file to store only GUI code. @done(20-11-11 15:51)
+    // Why didn't I do this in first place?
+  ✘ Figure out why move_code.py is in .gitignore. @cancelled(20-11-11 15:40)
+    // Also no idea
+  ✔ Fix move_code.py to only add that to the resulting html file. @done(20-11-11 15:51)
+  ✔ Remove both index_code.py and move_code.py from .gitignore. @done(20-11-11 15:51)
+  ✔ Make /utils folder. @done(20-11-11 15:51)
+
 UI:
   ✔ Make a usable board. @done(20-10-04 13:02)
     ✔ Making two boards: one above the other. @done(20-09-14 21:07)
