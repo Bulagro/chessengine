@@ -611,6 +611,7 @@ class Chess:
         else:
             return False
 
+
     def replace_piece(self, x: int, y: int, name: PieceName, team: PieceTeam):
         piece_dict = {
             PieceName.KING   : 'k',
@@ -630,6 +631,15 @@ class Chess:
 
         new_board[y] = ''.join(line)
         self.board = tuple(new_board)
+
+
+class Node:
+    def __init__(self, score, king_moved, lrook_moved, rrook_moved, children):
+        self.score       = score
+        self.king_moved  = king_moved
+        self.lrook_moved = lrook_moved
+        self.rrook_moved = rrook_moved
+        self.children    = children
 
 
 class RetardedSloth:
