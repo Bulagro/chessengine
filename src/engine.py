@@ -662,11 +662,67 @@ class RetardedSloth:
         pass
 
 
-    def generate_moves_tree(self):
+    def generate_moves_tree(self, original_team: PieceTeam, max_level: int):
         """
         Returns a <Node()> containing every possible move from a given position.
         """
-        pass
+
+        def add_children(node: Node, team: PieceTeam, return_moves=False):
+            boards = self.get_every_possible_board(team)
+            moves = []
+
+            for board in boards:
+                position, move, k, castle, lr, rr, ep = board
+
+                old_lr = self.engine.has_rook_moved[team.value - 1][0]
+                old_rr = self.engine.has_rook_moved[team.value - 1][1]
+                old_k  = self.engine.has_king_moved[team.value - 1]
+                old_p = self.engine.board
+                self.engine.board = position
+
+                score = self.evaluate_board(team, ep)
+
+                self.engine.board = old_p
+                self.engine.has_king_moved[team.value - 1]    = old_k
+                self.engine.has_rook_moved[team.value - 1][0] = old_lr
+                self.engine.has_rook_moved[team.value - 1][1] = old_rr
+
+                child = Node(score, k, lr, rr, [])
+
+                node.children.append(child)
+                moves += [(move, castle)]
+
+            if return_moves:
+                return moves
+
+        def traverse(node: Node, level: int, team: PieceTeam):
+            first_moves = None
+
+            if level < max_level:
+                first_moves = add_children(node, team, True)
+                score = node.children[0].score if node.children else 0
+
+                for child in node.children: # First optimization: Discard every node with a score
+                    if node.children:       # lower/higher than the max/min.
+                        if team == original_team:
+                            if child.score < score: continue
+                        else:
+                            if child.score > score: continue
+
+                    traverse(child, level + 1, PieceTeam.BLACK if team == PieceTeam.WHITE else PieceTeam.WHITE)
+
+            return first_moves
+
+
+        root = Node(0,
+                    self.engine.has_king_moved[original_team.value - 1],
+                    self.engine.has_rook_moved[original_team.value - 1][0],
+                    self.engine.has_rook_moved[original_team.value - 1][1],
+                    []
+        )
+        first_moves = traverse(root, 0, original_team)
+
+        return root, first_moves
 
 
     def get_every_possible_board(self, team: PieceTeam):

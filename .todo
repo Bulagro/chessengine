@@ -58,6 +58,11 @@ Retarded Sloth:
     ✔ Change flag when king moves. @done(20-11-10 00:54)
     ✔ Change flag when eating a piece. @done(20-11-10 11:27)
     ✔ Add edge-case for promotions. @done(20-11-10 11:27)
+    ☐ Break branch when move results in mate or tie.
+    ☐ Optimize the generator.
+      ✔ Check child score before analyzing: skip those with (higher/lower) score. @done(20-11-13 01:07)
+    ✔ Change game-state-values when analyzing particular nodes. @done(20-11-13 01:07)
+    ☐ Figure out how to test the tree generator.
 
 
 Archive:
