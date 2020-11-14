@@ -709,21 +709,17 @@ class RetardedSloth:
             if return_moves:
                 return moves
 
-        def traverse(node: Node, level: int, team: PieceTeam):
+        def traverse_make(node: Node, level: int, team: PieceTeam):
             first_moves = None
 
             if level < max_level:
                 first_moves = add_children(node, team, True)
-                score = node.children[0].score if node.children else 0
 
-                for child in node.children: # First optimization: Discard every node with a score
-                    if node.children:       # lower/higher than the max/min.
-                        if team == original_team:
-                            if child.score < score: continue
-                        else:
-                            if child.score > score: continue
+                for child in node.children:
+                    if child.score <= 0: # Don't analyze node that ends the game (checkmate or tie).
+                        continue
 
-                    traverse(child, level + 1, PieceTeam.BLACK if team == PieceTeam.WHITE else PieceTeam.WHITE)
+                    traverse_make(child, level + 1, PieceTeam.BLACK if team == PieceTeam.WHITE else PieceTeam.WHITE)
 
             return first_moves
 
@@ -734,7 +730,7 @@ class RetardedSloth:
                     self.engine.has_rook_moved[original_team.value - 1][1],
                     []
         )
-        first_moves = traverse(root, 0, original_team)
+        first_moves = traverse_make(root, 0, original_team)
 
         return root, first_moves
 
