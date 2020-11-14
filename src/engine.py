@@ -681,25 +681,28 @@ class RetardedSloth:
         Returns a <Node()> containing every possible move from a given position.
         """
 
-        def add_children(node: Node, team: PieceTeam, return_moves=False):
+        def add_children(node: Node, team: PieceTeam, evaluate_board: bool, return_moves=False):
             boards = self.get_every_possible_board(team)
             moves = []
 
             for board in boards:
                 position, move, k, castle, lr, rr, ep = board
 
-                old_lr = self.engine.has_rook_moved[team.value - 1][0]
-                old_rr = self.engine.has_rook_moved[team.value - 1][1]
-                old_k  = self.engine.has_king_moved[team.value - 1]
-                old_p = self.engine.board
-                self.engine.board = position
+                if evaluate_board:
+                    old_lr = self.engine.has_rook_moved[team.value - 1][0]
+                    old_rr = self.engine.has_rook_moved[team.value - 1][1]
+                    old_k  = self.engine.has_king_moved[team.value - 1]
+                    old_p = self.engine.board
+                    self.engine.board = position
 
-                score = self.evaluate_board(team, ep)
+                    score = self.evaluate_board(team, ep)
 
-                self.engine.board = old_p
-                self.engine.has_king_moved[team.value - 1]    = old_k
-                self.engine.has_rook_moved[team.value - 1][0] = old_lr
-                self.engine.has_rook_moved[team.value - 1][1] = old_rr
+                    self.engine.board = old_p
+                    self.engine.has_king_moved[team.value - 1]    = old_k
+                    self.engine.has_rook_moved[team.value - 1][0] = old_lr
+                    self.engine.has_rook_moved[team.value - 1][1] = old_rr
+                else:
+                    score = 1
 
                 child = Node(score, k, lr, rr, [])
 
@@ -713,7 +716,7 @@ class RetardedSloth:
             first_moves = None
 
             if level < max_level:
-                first_moves = add_children(node, team, True)
+                first_moves = add_children(node, team, level == max_level, True)
 
                 for child in node.children:
                     if child.score <= 0: # Don't analyze node that ends the game (checkmate or tie).
