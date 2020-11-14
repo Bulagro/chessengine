@@ -681,48 +681,60 @@ class RetardedSloth:
         Returns a <Node()> containing every possible move from a given position.
         """
 
-        def add_children(node: Node, team: PieceTeam, evaluate_board: bool, return_moves=False):
+        def add_children(node: Node, team: PieceTeam, evaluate_board: bool):
             boards = self.get_every_possible_board(team)
             moves = []
 
             for board in boards:
                 position, move, k, castle, lr, rr, ep = board
+                old_lr = self.engine.has_rook_moved[team.value - 1][0]
+                old_rr = self.engine.has_rook_moved[team.value - 1][1]
+                old_k  = self.engine.has_king_moved[team.value - 1]
+                old_p  = self.engine.board
+
+                self.engine.board = position
+                self.engine.has_rook_moved[team.value - 1][0] = lr
+                self.engine.has_rook_moved[team.value - 1][1] = rr
+                self.engine.has_king_moved[team.value - 1]    = k
 
                 if evaluate_board:
-                    old_lr = self.engine.has_rook_moved[team.value - 1][0]
-                    old_rr = self.engine.has_rook_moved[team.value - 1][1]
-                    old_k  = self.engine.has_king_moved[team.value - 1]
-                    old_p = self.engine.board
-                    self.engine.board = position
-
                     score = self.evaluate_board(team, ep)
-
-                    self.engine.board = old_p
-                    self.engine.has_king_moved[team.value - 1]    = old_k
-                    self.engine.has_rook_moved[team.value - 1][0] = old_lr
-                    self.engine.has_rook_moved[team.value - 1][1] = old_rr
                 else:
                     score = 1
 
-                child = Node(score, k, lr, rr, [])
+                self.engine.board = old_p
+                self.engine.has_king_moved[team.value - 1]    = old_k
+                self.engine.has_rook_moved[team.value - 1][0] = old_lr
+                self.engine.has_rook_moved[team.value - 1][1] = old_rr
 
-                node.children.append(child)
+
+                node.children.append(
+                    Node(score, k, lr, rr, [])
+                )
+
                 moves += [(move, castle)]
 
-            if return_moves:
-                return moves
+            return moves
 
         def traverse_make(node: Node, level: int, team: PieceTeam):
             first_moves = None
 
             if level < max_level:
-                first_moves = add_children(node, team, level == max_level, True)
+                average_score = sum(child.score for child in node.children) / len(node.children) if node.children else 0
+                level += 1
+                first_moves = add_children(node, team, True)
 
                 for child in node.children:
+                    if node.children: # First attempt at optimization.
+                        if team == original_team:
+                            if node.score > average_score: continue
+                        else:
+                            if node.score < average_score: continue
+
                     if child.score <= 0: # Don't analyze node that ends the game (checkmate or tie).
                         continue
 
-                    traverse_make(child, level + 1, PieceTeam.BLACK if team == PieceTeam.WHITE else PieceTeam.WHITE)
+                    traverse_make(child, level, PieceTeam.BLACK if team == PieceTeam.WHITE else PieceTeam.WHITE)
 
             return first_moves
 
