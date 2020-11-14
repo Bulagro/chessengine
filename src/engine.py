@@ -643,6 +643,9 @@ class Node:
 
 
 class RetardedSloth:
+    """
+    The terrible AI that's supposed to play against the player... actually with.
+    """
 
     def __init__(self, engine):
         self.engine = engine
@@ -655,6 +658,7 @@ class RetardedSloth:
             PieceName.KING   : 0,
             None             : 0,
         }
+
 
     def configure(self):
         """
