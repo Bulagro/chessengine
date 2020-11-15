@@ -546,15 +546,6 @@ class TestTreeMovesGenerator(unittest.TestCase):
         for board in expected:
             self.assertTrue(board in actual)
 
-    def test_tree_with_one_level_on_starting_board(self):
-        C = Chess()
-        R = RetardedSloth(C)
-
-        tree, moves = R.generate_moves_tree(PieceTeam.BLACK, 2)
-        moves_with_children = []
-
-        self.assertEqual(len(tree.children), 20)
-
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,8 +1,10 @@
+from random import choice
 from browser import document, window, timer
 from browser.html import TABLE, TR, TH, TD, DIV, IMG
 
 
 C = Chess()
+R = RetardedSloth(C)
 selected_square = -1
 possible_moves = []
 
@@ -140,19 +142,6 @@ def create_moving_piece(origin_id):
 
 
 def move_piece(origin_id, destiny_id, is_castle, team_str, promotion, destiny_name, destiny_team):
-    origin = get_square(origin_id)
-    destiny = get_square(destiny_id)
-    ox = int(origin_id) % 8
-    oy = int(origin_id) // 8
-    dx = int(destiny_id) % 8
-    dy = int(destiny_id) // 8
-
-    put_piece_in_square(origin_id, 'None', 0)
-
-    moving_piece = document['moving-piece']
-    moving_piece.style.zIndex = '10'
-    moving_piece_img = document['moving-piece'].innerHTML
-
     def animated_move(timestamp, x_dir, y_dir, step, max_step, castle_dir):
         moving_piece.left += int(x_dir)
         moving_piece.top += int(y_dir)
@@ -177,7 +166,7 @@ def move_piece(origin_id, destiny_id, is_castle, team_str, promotion, destiny_na
                 global can_move, turn
                 destiny.innerHTML = moving_piece_img
 
-                if promotion == True: # Display menu for options
+                if promotion == True and turn == PieceTeam.WHITE: # Display menu for options
                     can_move = False
                     selection_box = DIV(id='piece-select')
 
@@ -196,6 +185,11 @@ def move_piece(origin_id, destiny_id, is_castle, team_str, promotion, destiny_na
                     selection_box.style.left = str(moving_piece.left + offset_x) + 'px'
                     selection_box.style.top = str(moving_piece.top + offset_y) + 'px'
                     document <= selection_box
+
+                elif promotion == True and turn == PieceTeam.BLACK:
+                    piece = choice(['ROOK', 'BISHOP', 'KNIGHT'])
+                    C.replace_piece(dx, dy, eval('PieceName.' + piece), turn.name)
+                    put_piece_in_square(destiny_id, piece, turn.name)
 
             piece_columns = {
                 PieceTeam.WHITE : document['rpieces'],
@@ -277,6 +271,23 @@ def display_message():
         can_move = True
         document['msg'].unbind('click', reset_board)
 
+    # RetardedSloth's move
+    if turn == PieceTeam.BLACK and C.checkmate == None and C.tie == False:
+        move_list, is_castle = R.get_next_move()
+
+        ox, oy = move_list[0]
+        dx, dy = move_list[1]
+        origin_id = oy * 8 + ox
+        destiny_id = str(dy * 8 + dx)
+        origin_name, _ = C.get_piece(ox, oy)
+        destiny_name, destiny_team = C.get_piece(dx, dy)
+
+        pawn_promotion_y = 0 if turn == PieceTeam.WHITE else 7
+        promotion = dy == pawn_promotion_y and origin_name == PieceName.PAWN
+
+        create_moving_piece(origin_id)
+        move_piece(origin_id, destiny_id, is_castle, 'BLACK', promotion, destiny_name, destiny_team)
+
 
 def reset_board(event=None):
     global can_move, turn, possible_moves, selected_square
@@ -337,5 +348,16 @@ for row in range(8):
 
 document['squares-div'] <= s
 document['pieces-div'] <= p
+
+C.board = (
+    '....k...',
+    '........',
+    '........',
+    '........',
+    '........',
+    'p.......',
+    '.....K..',
+    '........',
+)
 
 render_board()

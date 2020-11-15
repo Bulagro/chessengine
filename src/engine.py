@@ -658,6 +658,8 @@ class RetardedSloth:
             PieceName.KING   : 0,
             None             : 0,
         }
+        self.team = PieceTeam.BLACK
+        self.max_level = 1
 
 
     def configure(self):
@@ -745,9 +747,9 @@ class RetardedSloth:
                 for child in node.children:
                     if node.children: # First attempt at optimization.
                         if team == original_team:
-                            if node.score > average_score: continue
-                        else:
                             if node.score < average_score: continue
+                        else:
+                            if node.score > average_score: continue
 
                     if child.score <= 0: # Don't analyze node that ends the game (checkmate or tie).
                         continue
@@ -831,7 +833,7 @@ class RetardedSloth:
 
         if self.engine.checkmate == team:
             return -1000
-        elif self.engine.checkmate and self.engine.checkmate != team:
+        elif self.engine.checkmate != None and self.engine.checkmate != team:
             return 1000
         elif self.engine.tie:
             return 0

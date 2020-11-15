@@ -481,16 +481,25 @@ class Chess:
                 self.tie = True
 
         else: # Check if there're only kings
-            for line in C.board:
+            for line in self.board:
                 line = line.replace('.', '')
                 if line != '' and line != 'k' and line != 'K':
-                    return
+                    return None
 
             self.tie = True
 
 
-    def get_every_square_the_king_cant_be_in(self, team: PieceTeam):
+    def get_every_square_the_king_cant_be_in(self, team: PieceTeam, count_pieces=False):
         squares = []
+        pieces_dict = {
+            PieceName.KING   : 0,
+            PieceName.QUEEN  : 0,
+            PieceName.BISHOP : 0,
+            PieceName.KNIGHT : 0,
+            PieceName.ROOK   : 0,
+            PieceName.PAWN   : 0,
+        }
+
         oposing_team = PieceTeam.BLACK if team == PieceTeam.WHITE else PieceTeam.WHITE
 
         PIECE_MOVES = {
@@ -505,12 +514,20 @@ class Chess:
             for j in range(8):
                 piece = self.get_piece(j, i)
 
-                if piece == EMPTY_SQUARE or piece[1] == team: continue
+                if piece == EMPTY_SQUARE:
+                    continue
+                elif piece[1] == team:
+                    if count_pieces:
+                        pieces_dict[piece[0]] += 1
+                    continue
 
                 if piece[0] == PieceName.PAWN:
                     squares += self.p_attack(j, i, oposing_team, show_protected=True)
                 else:
                     squares += PIECE_MOVES[piece[0]](j, i, show_protected=True)
+
+        if count_pieces:
+            return (squares, pieces_dict)
 
         return squares
 
@@ -615,6 +632,7 @@ class Chess:
         else:
             return False
 
+
     def replace_piece(self, x: int, y: int, name: PieceName, team: PieceTeam):
         piece_dict = {
             PieceName.KING   : 'k',
@@ -636,12 +654,258 @@ class Chess:
         self.board = tuple(new_board)
 
 
-####################################################################
+class Node:
+    def __init__(self, score, king_moved, lrook_moved, rrook_moved, children):
+        self.score       = score
+        self.king_moved  = king_moved
+        self.lrook_moved = lrook_moved
+        self.rrook_moved = rrook_moved
+        self.children    = children
 
+
+class RetardedSloth:
+    """
+    The terrible AI that's supposed to play against the player... actually with.
+    """
+
+    def __init__(self, engine):
+        self.engine = engine
+        self.piece_value_dict = {
+            PieceName.PAWN   : 1,
+            PieceName.KNIGHT : 2,
+            PieceName.BISHOP : 3,
+            PieceName.ROOK   : 5,
+            PieceName.QUEEN  : 9,
+            PieceName.KING   : 0,
+            None             : 0,
+        }
+        self.team = PieceTeam.BLACK
+        self.max_level = 1
+
+
+    def configure(self):
+        """
+        Changes the Sloth's behaviour.
+        """
+
+        pass
+
+
+    def get_next_move(self):
+        """
+        Returns a list with two tuples: [(ox, oy), (dx, dy)].
+        """
+
+        def traverse_assign(node: Node, find_min: bool):
+            if not node.children:
+                return None
+
+            for child in node.children:
+                traverse_assign(child, not find_min)
+
+            scores = (child.score for child in node.children)
+            node.score = min(scores) if find_min else max(scores)
+
+            return node.score
+
+
+        root, first_moves = self.generate_moves_tree(self.team, self.max_level)
+        move_score = traverse_assign(root, False)
+        print(move_score)
+
+        move_index = [child.score for child in root.children].index(move_score)
+
+        return first_moves[move_index]
+
+    def generate_moves_tree(self, original_team: PieceTeam, max_level: int):
+        """
+        Returns a <Node()> containing every possible move from a given position.
+        """
+
+        def add_children(node: Node, team: PieceTeam, evaluate_board: bool):
+            boards = self.get_every_possible_board(team)
+            moves = []
+
+            for board in boards:
+                position, move, k, castle, lr, rr, ep = board
+                old_lr = self.engine.has_rook_moved[team.value - 1][0]
+                old_rr = self.engine.has_rook_moved[team.value - 1][1]
+                old_k  = self.engine.has_king_moved[team.value - 1]
+                old_p  = self.engine.board
+
+                self.engine.board = position
+                self.engine.has_rook_moved[team.value - 1][0] = lr
+                self.engine.has_rook_moved[team.value - 1][1] = rr
+                self.engine.has_king_moved[team.value - 1]    = k
+
+                if evaluate_board:
+                    score = self.evaluate_board(team, ep)
+                else:
+                    score = 1
+
+                self.engine.board = old_p
+                self.engine.has_king_moved[team.value - 1]    = old_k
+                self.engine.has_rook_moved[team.value - 1][0] = old_lr
+                self.engine.has_rook_moved[team.value - 1][1] = old_rr
+
+
+                node.children.append(
+                    Node(score, k, lr, rr, [])
+                )
+
+                moves += [(move, castle)]
+
+            return moves
+
+        def traverse_make(node: Node, level: int, team: PieceTeam):
+            first_moves = None
+
+            if level < max_level:
+                average_score = sum(child.score for child in node.children) / len(node.children) if node.children else 0
+                level += 1
+                first_moves = add_children(node, team, True)
+
+                for child in node.children:
+                    if node.children: # First attempt at optimization.
+                        if team == original_team:
+                            if node.score < average_score: continue
+                        else:
+                            if node.score > average_score: continue
+
+                    if child.score <= 0: # Don't analyze node that ends the game (checkmate or tie).
+                        continue
+
+                    traverse_make(child, level, PieceTeam.BLACK if team == PieceTeam.WHITE else PieceTeam.WHITE)
+
+            return first_moves
+
+
+        root = Node(0,
+                    self.engine.has_king_moved[original_team.value - 1],
+                    self.engine.has_rook_moved[original_team.value - 1][0],
+                    self.engine.has_rook_moved[original_team.value - 1][1],
+                    []
+        )
+        first_moves = traverse_make(root, 0, original_team)
+
+        return root, first_moves
+
+
+    def get_every_possible_board(self, team: PieceTeam):
+        boards = [] # This contains tuples like this one:
+                    # (<board>, [move], <king moved>, <is_castle>, <lrook moved>, <rrook moved>, <eaten piece>)
+
+        for oy in range(8):
+            for ox in range(8):
+                origin_name, origin_team = self.engine.get_piece(ox, oy)
+
+                if origin_team == team:
+                    origin_team_y = 0 if team == PieceTeam.BLACK else 7
+
+                    for move in self.engine.get_piece_moves(ox, oy, consider_pins=True):
+                        dx, dy = move
+                        dest_name, dest_team = self.engine.get_piece(dx, dy)
+                        rrook_moved, lrook_moved, king_moved = False, False, False
+
+                        eaten_piece = dest_name
+                        promotion = origin_name == PieceName.PAWN and (dy == (0 if origin_team == PieceTeam.WHITE else 7))
+                        is_castle = origin_name == PieceName.KING and dest_name == PieceName.ROOK and dest_team == origin_team
+
+                        if origin_name == PieceName.KING:
+                            king_moved = True
+                        elif origin_name == PieceName.ROOK:
+                            if ox == 0 and oy == origin_team_y:
+                                lrook_moved = True
+                            elif ox == 7 and oy == origin_team_y:
+                                rrook_moved = True
+
+                        if is_castle:
+                            if dx == 0:
+                                lrook_moved = True
+                            else:
+                                rrook_moved = True
+
+                            eaten_piece = None
+
+                        old_board = self.engine.board
+                        self.engine.move_piece(ox, oy, dx, dy, is_castle)
+
+                        if promotion:
+                            for piece in (PieceName.QUEEN, PieceName.ROOK, PieceName.BISHOP, PieceName.KNIGHT):
+                                self.engine.replace_piece(dx, dy, piece, origin_team)
+                                boards += [(self.engine.board, [(ox, oy), (dx, dy)], False, False, False, False, eaten_piece)]
+
+                            self.engine.board = old_board
+                            continue
+
+                        boards += [(self.engine.board, [(ox, oy), (dx, dy)], king_moved, is_castle, lrook_moved, rrook_moved, eaten_piece)]
+                        self.engine.board = old_board
+
+        return boards
+
+
+    def evaluate_board(self, team: PieceTeam, eaten_piece: PieceName):
+        """
+        Returns given a borad, returns it's score.
+        """
+
+        opposing_team = PieceTeam.WHITE if team == PieceTeam.BLACK else PieceTeam.BLACK
+        self.engine.get_king_status(opposing_team)
+
+        if self.engine.checkmate == team:
+            return -1000
+        elif self.engine.checkmate != None and self.engine.checkmate != team:
+            return 1000
+        elif self.engine.tie:
+            return 0
+
+        # oking stands for "Opposing Team's King".
+        squares_the_oking_cant_be_in, pieces_count = self.engine.get_every_square_the_king_cant_be_in(opposing_team, True)
+        oking_x, oking_y = self.engine.find_king_pos(opposing_team)
+
+        score = 0
+        for piece in pieces_count:
+            score += self.piece_value_dict[piece]
+
+        center_control_points_dict = {
+            (2, 2) : 1, (3, 2) : 1, (4, 2) : 1, (5, 2) : 1,
+            (2, 5) : 1, (3, 5) : 1, (4, 5) : 1, (5, 5) : 1,
+            (3, 3) : 2, (4, 3) : 2, (3, 4) : 2, (4, 4) : 2,
+        }
+
+        king_threat_dict = {
+            (oking_x + 1, oking_y) : 2, (oking_x - 1, oking_y) : 2,
+            (oking_x, oking_y + 1) : 2, (oking_x, oking_y - 1) : 2,
+            (oking_x + 1, oking_y + 1) : 2, (oking_x - 1, oking_y - 1) : 2,
+            (oking_x + 1, oking_y - 1) : 2, (oking_x - 1, oking_y + 1) : 2,
+
+            (oking_x + 2, oking_y) : 1, (oking_x - 2, oking_y) : 1,
+            (oking_x, oking_y + 2) : 1, (oking_x, oking_y - 2) : 1,
+            (oking_x + 2, oking_y + 2) : 1, (oking_x - 2, oking_y - 2) : 1,
+            (oking_x + 2, oking_y - 2) : 1, (oking_x - 2, oking_y + 2) : 1,
+        }
+
+        for pos in squares_the_oking_cant_be_in:
+            for d in (center_control_points_dict, king_threat_dict):
+                if pos in d:
+                    score += d[pos]
+
+        if self.engine.in_check == opposing_team:
+            return 500
+
+        score += self.piece_value_dict[eaten_piece]
+        score += len(self.engine.pinned_pieces)
+
+        return score
+
+
+from random import choice
 from browser import document, window, timer
 from browser.html import TABLE, TR, TH, TD, DIV, IMG
 
+
 C = Chess()
+R = RetardedSloth(C)
 selected_square = -1
 possible_moves = []
 
@@ -779,19 +1043,6 @@ def create_moving_piece(origin_id):
 
 
 def move_piece(origin_id, destiny_id, is_castle, team_str, promotion, destiny_name, destiny_team):
-    origin = get_square(origin_id)
-    destiny = get_square(destiny_id)
-    ox = int(origin_id) % 8
-    oy = int(origin_id) // 8
-    dx = int(destiny_id) % 8
-    dy = int(destiny_id) // 8
-
-    put_piece_in_square(origin_id, 'None', 0)
-
-    moving_piece = document['moving-piece']
-    moving_piece.style.zIndex = '10'
-    moving_piece_img = document['moving-piece'].innerHTML
-
     def animated_move(timestamp, x_dir, y_dir, step, max_step, castle_dir):
         moving_piece.left += int(x_dir)
         moving_piece.top += int(y_dir)
@@ -816,7 +1067,7 @@ def move_piece(origin_id, destiny_id, is_castle, team_str, promotion, destiny_na
                 global can_move, turn
                 destiny.innerHTML = moving_piece_img
 
-                if promotion == True: # Display menu for options
+                if promotion == True and turn == PieceTeam.WHITE: # Display menu for options
                     can_move = False
                     selection_box = DIV(id='piece-select')
 
@@ -836,17 +1087,38 @@ def move_piece(origin_id, destiny_id, is_castle, team_str, promotion, destiny_na
                     selection_box.style.top = str(moving_piece.top + offset_y) + 'px'
                     document <= selection_box
 
+                elif promotion == True and turn == PieceTeam.BLACK:
+                    piece = choice(['ROOK', 'BISHOP', 'KNIGHT'])
+                    C.replace_piece(dx, dy, eval('PieceName.' + piece), turn.name)
+                    put_piece_in_square(destiny_id, piece, turn.name)
+
             piece_columns = {
                 PieceTeam.WHITE : document['rpieces'],
                 PieceTeam.BLACK : document['lpieces'],
             }
 
-            if destiny_name != None:
+            if destiny_name != None and castle_dir == 0:
                 piece_columns[destiny_team] <= IMG(src=f'static/pieces/{destiny_team.name.lower()}_{destiny_name.name.lower()}.png')
 
-            turn = PieceTeam.BLACK if turn == PieceTeam.WHITE else PieceTeam.WHITE
-            display_message()
+            if not promotion:
+                turn = PieceTeam.BLACK if turn == PieceTeam.WHITE else PieceTeam.WHITE
+
+            can_move = turn == PieceTeam.WHITE and not promotion
             del document['moving-piece']
+            display_message()
+
+    origin = get_square(origin_id)
+    destiny = get_square(destiny_id)
+    ox = int(origin_id) % 8
+    oy = int(origin_id) // 8
+    dx = int(destiny_id) % 8
+    dy = int(destiny_id) // 8
+
+    put_piece_in_square(origin_id, 'None', 0)
+
+    moving_piece = document['moving-piece']
+    moving_piece.style.zIndex = '10'
+    moving_piece_img = document['moving-piece'].innerHTML
 
     castle_dir = 0
     if is_castle:
@@ -868,13 +1140,13 @@ def move_piece(origin_id, destiny_id, is_castle, team_str, promotion, destiny_na
 
 
 def promote_pawn(x: int, y: int, name: PieceName, team_str: str):
-    global can_move
+    global can_move, turn
 
     C.replace_piece(x, y, eval(name), eval('PieceTeam.' + team_str))
     put_piece_in_square(str(y * 8 + x), eval(name).name, team_str)
 
     del document['piece-select']
-    can_move = True
+    turn = PieceTeam.BLACK if turn == PieceTeam.WHITE else PieceTeam.WHITE
     display_message()
 
 
@@ -899,6 +1171,23 @@ def display_message():
         document['msg'].style.visibility = 'hidden'
         can_move = True
         document['msg'].unbind('click', reset_board)
+
+    # RetardedSloth's move
+    if turn == PieceTeam.BLACK and C.checkmate == None and C.tie == False:
+        move_list, is_castle = R.get_next_move()
+
+        ox, oy = move_list[0]
+        dx, dy = move_list[1]
+        origin_id = oy * 8 + ox
+        destiny_id = str(dy * 8 + dx)
+        origin_name, _ = C.get_piece(ox, oy)
+        destiny_name, destiny_team = C.get_piece(dx, dy)
+
+        pawn_promotion_y = 0 if turn == PieceTeam.WHITE else 7
+        promotion = dy == pawn_promotion_y and origin_name == PieceName.PAWN
+
+        create_moving_piece(origin_id)
+        move_piece(origin_id, destiny_id, is_castle, 'BLACK', promotion, destiny_name, destiny_team)
 
 
 def reset_board(event=None):
@@ -962,7 +1251,6 @@ document['squares-div'] <= s
 document['pieces-div'] <= p
 
 render_board()
-
         </script>
     </body>
 </html>

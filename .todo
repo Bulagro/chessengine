@@ -68,6 +68,7 @@ Retarded Sloth:
       // Is C really much faster than python?
     ✔ Change game-state-values when analyzing particular nodes. @done(20-11-13 01:07)
   ☐ Figure out how to test the tree generator. @critical
+  ✔ Integrate with GUI. @done(20-11-14 19:45)
 
 
 Archive:
