@@ -205,9 +205,12 @@ def move_piece(origin_id, destiny_id, is_castle, team_str, promotion, destiny_na
             if destiny_name != None and castle_dir == 0:
                 piece_columns[destiny_team] <= IMG(src=f'static/pieces/{destiny_team.name.lower()}_{destiny_name.name.lower()}.png')
 
-            turn = PieceTeam.BLACK if turn == PieceTeam.WHITE else PieceTeam.WHITE
-            display_message()
+            if not promotion:
+                turn = PieceTeam.BLACK if turn == PieceTeam.WHITE else PieceTeam.WHITE
+
+            can_move = turn == PieceTeam.WHITE and not promotion
             del document['moving-piece']
+            display_message()
 
     castle_dir = 0
     if is_castle:
