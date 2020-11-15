@@ -10,7 +10,7 @@
     border-collapse: collapse;
 }
 
-#squares-div table {
+#squares-div table, #piece-div table {
     position: absolute;
     z-index: -1;
 }
@@ -99,4 +99,14 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+@media(max-width: 1000px) {
+    #lpieces, #rpieces {
+        display: none;
+    }
+
+    #board {
+        margin: 0px;
+    }
 }
