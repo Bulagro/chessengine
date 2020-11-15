@@ -483,10 +483,10 @@ class Chess:
         else: # Check if there're only kings
             for line in self.board:
                 line = line.replace('.', '')
-                if line != '' and line != 'k' and line != 'K':
+                if line != 'k' and line != 'K':
                     return None
-
-            self.tie = True
+            else:
+                self.tie = True
 
 
     def get_every_square_the_king_cant_be_in(self, team: PieceTeam, count_pieces=False):
