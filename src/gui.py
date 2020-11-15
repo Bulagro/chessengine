@@ -229,13 +229,13 @@ def move_piece(origin_id, destiny_id, is_castle, team_str, promotion, destiny_na
 
 
 def promote_pawn(x: int, y: int, name: PieceName, team_str: str):
-    global can_move
+    global can_move, turn
 
     C.replace_piece(x, y, eval(name), eval('PieceTeam.' + team_str))
     put_piece_in_square(str(y * 8 + x), eval(name).name, team_str)
 
     del document['piece-select']
-    can_move = True
+    turn = PieceTeam.BLACK if turn == PieceTeam.WHITE else PieceTeam.WHITE
     display_message()
 
 
