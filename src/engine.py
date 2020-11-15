@@ -673,8 +673,26 @@ class RetardedSloth:
         Returns a list with two tuples: [(ox, oy), (dx, dy)].
         """
 
-        pass
+        def traverse_assign(node: Node, find_min: bool):
+            if not node.children:
+                return None
 
+            for child in node.children:
+                traverse_assign(child, not find_min)
+
+            scores = (child.score for child in node.children)
+            node.score = min(scores) if find_min else max(scores)
+
+            return node.score
+
+
+        root, first_moves = self.generate_moves_tree(self.team, self.max_level)
+        move_score = traverse_assign(root, False)
+        print(move_score)
+
+        move_index = [child.score for child in root.children].index(move_score)
+
+        return first_moves[move_index]
 
     def generate_moves_tree(self, original_team: PieceTeam, max_level: int):
         """
