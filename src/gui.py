@@ -212,6 +212,19 @@ def move_piece(origin_id, destiny_id, is_castle, team_str, promotion, destiny_na
             del document['moving-piece']
             display_message()
 
+    origin = get_square(origin_id)
+    destiny = get_square(destiny_id)
+    ox = int(origin_id) % 8
+    oy = int(origin_id) // 8
+    dx = int(destiny_id) % 8
+    dy = int(destiny_id) // 8
+
+    put_piece_in_square(origin_id, 'None', 0)
+
+    moving_piece = document['moving-piece']
+    moving_piece.style.zIndex = '10'
+    moving_piece_img = document['moving-piece'].innerHTML
+
     castle_dir = 0
     if is_castle:
         if dx > ox: castle_dir = 1
