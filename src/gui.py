@@ -349,15 +349,4 @@ for row in range(8):
 document['squares-div'] <= s
 document['pieces-div'] <= p
 
-C.board = (
-    '....k...',
-    '........',
-    '........',
-    '........',
-    '........',
-    'p.......',
-    '.....K..',
-    '........',
-)
-
 render_board()
