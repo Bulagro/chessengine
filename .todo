@@ -1,9 +1,10 @@
 ☐ Rename get_king_status() to something else. @low
 
-☐ Fix game on smaller screens. @bug
+✔ Fix game on smaller screens. @bug @done(20-11-16 00:00)
 ☐ Fix game not showing 'Tie' message when black eats last white piece. @bug
 ☐ Fix thing where some pieces get added twice to the list of eaten pieces. @bug
 ☐ Castle move allowed after king move. @bug
+☐ Black king dissapears. @bug
 
 Organize stuff: @critical
   ✘ Figure out why I added index_code.py to .gitignore. @cancelled(20-11-11 15:40)
